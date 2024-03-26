@@ -1,0 +1,19 @@
+name: Telegram Notify
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    notification:
+        name: Send Notification
+        runs-on: ubuntu-latest
+        steps:
+            - name: Notification Sucess
+              uses: hunghg255/action-notifications@master
+              if: always()
+              with:
+                  telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+                  telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+                  telegram_message_thread_id: ${{ secrets.TELEGRAM_MESSAGE_THREAD_ID }}
+                  description: "#Github #Commit"

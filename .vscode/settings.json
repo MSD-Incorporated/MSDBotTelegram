@@ -1,0 +1,6 @@
+{
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"typescript.tsdk": "${workspaceFolder}/node_modules/typescript/lib"
+}

@@ -1,0 +1,26 @@
+{
+	"name": "msdbot_telegram",
+	"version": "2.6.0",
+	"author": "MasedMSD",
+	"main": "./dist/index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"start": "node .",
+		"bun:start": "bun src/index.ts",
+		"bun:smol": "bun --smol src/index.ts",
+		"bun:watch": "bun --watch src/index.ts",
+		"build": "tsc",
+		"format": "prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"grammy": "^1.21.1"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/node": "^20.11.30",
+		"prettier": "^3.2.5",
+		"typescript": "latest"
+	}
+}
