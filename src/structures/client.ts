@@ -11,7 +11,7 @@ export class Client {
 		process.once("SIGINT", () => this.bot.stop());
 		process.once("SIGTERM", () => this.bot.stop());
 
-		this.bot.start({
+		await this.bot.start({
 			onStart: ({ id, username }) =>
 				console.log(`${username} [${id}] started!`),
 		});
