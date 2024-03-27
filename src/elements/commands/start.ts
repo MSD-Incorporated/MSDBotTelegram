@@ -5,7 +5,7 @@ import { resolve } from "path";
 const version = require(resolve(process.cwd(), "package.json")).version;
 const rev = execSync("git rev-parse --short HEAD").toString().trim();
 
-const startCommand = async (ctx: Context) => {
+export const startCommand = async (ctx: Context) => {
 	return ctx.reply(
 		[
 			"🧑‍💻 • Ведётся разработка",
@@ -21,5 +21,3 @@ const startCommand = async (ctx: Context) => {
 		}
 	);
 };
-
-export default startCommand;
