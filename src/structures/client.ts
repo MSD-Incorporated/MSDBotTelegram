@@ -18,8 +18,7 @@ export class Client {
 
 		// TODO: Setup https://github.com/grammyjs/runner
 		await this.bot.start({
-			onStart: ({ id, username }) =>
-				console.log(`${username} [${id}] started!`),
+			onStart: ({ id, username }) => console.log(`${username} [${id}] started!`),
 		});
 	};
 }
