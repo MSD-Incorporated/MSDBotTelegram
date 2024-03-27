@@ -10,6 +10,9 @@
 		"bun:start": "bun src/index.ts",
 		"bun:smol": "bun --smol src/index.ts",
 		"bun:watch": "bun --watch src/index.ts",
+		"pm2:start": "pm2 start npm --name \"msdbot_telegram\" -- start",
+		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
+		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
 		"build": "tsc",
 		"format": "prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'"
 	},
