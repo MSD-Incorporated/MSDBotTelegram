@@ -1,4 +1,5 @@
 import { Bot, type Context } from "grammy";
+import startCommand from "../elements/commands/start";
 
 export class Client {
 	public readonly bot: Bot<Context>;
@@ -11,6 +12,9 @@ export class Client {
 		process.once("SIGINT", () => this.bot.stop());
 		process.once("SIGTERM", () => this.bot.stop());
 
+		this.bot.command("start", startCommand);
+
+		// TODO: Setup https://github.com/grammyjs/runner
 		await this.bot.start({
 			onStart: ({ id, username }) =>
 				console.log(`${username} [${id}] started!`),
