@@ -1,4 +1,4 @@
-declare type ConfigKey = "TOKEN";
+declare type ConfigKey = "TOKEN" | "TELEGRAPH";
 
 declare type EnvKeys = {
 	[key in ConfigKey]: string;

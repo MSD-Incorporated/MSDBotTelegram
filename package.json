@@ -18,7 +18,8 @@
 	},
 	"dependencies": {
 		"dotenv": "^16.4.5",
-		"grammy": "^1.21.1"
+		"grammy": "^1.21.1",
+		"telegra.ph": "^1.0.1"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
