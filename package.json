@@ -1,6 +1,6 @@
 {
 	"name": "msdbot_telegram",
-	"version": "1.0.3",
+	"version": "0.0.3",
 	"author": "MasedMSD",
 	"main": "./dist/index.js",
 	"license": "MIT",
