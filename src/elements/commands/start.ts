@@ -1,8 +1,7 @@
 import { execSync } from "child_process";
 import { InlineKeyboard, type Context } from "grammy";
-import { resolve } from "path";
 
-const version = require(resolve(process.cwd(), "package.json")).version;
+const version = process.env.npm_package_version;
 const rev = execSync("git rev-parse --short HEAD").toString().trim();
 
 export const startCommand = async (ctx: Context) => {
