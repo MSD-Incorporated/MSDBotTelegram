@@ -3,18 +3,18 @@ import Telegraph from "telegra.ph";
 import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
 import { DEVELOPERS } from "../../config";
 
-const telegraph = new Telegraph(process.env.TELEGRAPH);
-
-const getPage = async (args: string[]) => {
-	const id = args[0]!.replace("https://telegra.ph/", "");
-
-	return telegraph.getPage(id, true);
-};
-
 const getContent = (page: Page) =>
 	(page.content as NodeElement[]).filter((element) => element.tag === "img" || element.tag === "figure");
 
 export const telegraphCommand = async (ctx: Context) => {
+	const telegraph = new Telegraph(process.env.TELEGRAPH);
+
+	const getPage = async (args: string[]) => {
+		const id = args[0]!.replace("https://telegra.ph/", "");
+
+		return telegraph.getPage(id, true);
+	};
+
 	if (!(Array.isArray(DEVELOPERS) ? DEVELOPERS.includes(ctx.from?.id) : DEVELOPERS === ctx.from?.id)) return;
 
 	const args = ctx.message?.text?.split(/\s+/).slice(1);
