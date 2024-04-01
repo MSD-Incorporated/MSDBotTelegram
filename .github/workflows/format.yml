@@ -3,7 +3,6 @@ name: Format
 on:
     push:
     pull_request:
-        branches: [main]
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -24,8 +23,9 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "14.x"
-            - run: npm install --save-dev prettier
-            - run: npm run format
+
+            - name: Format
+              run: prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
 
             - name: Commit changes
               uses: stefanzweifel/git-auto-commit-action@v5
