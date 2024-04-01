@@ -25,7 +25,7 @@ jobs:
                   node-version: "14.x"
 
             - name: Format
-              run: prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
+              run: npx prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
 
             - name: Commit changes
               uses: stefanzweifel/git-auto-commit-action@v5
