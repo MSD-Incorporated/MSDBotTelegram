@@ -1,4 +1,4 @@
-import { Context, NextFunction } from "grammy";
+import type { Context, NextFunction } from "grammy";
 
 const channelIDs: number[] = [-1001528929804, -1002080023869, -1002046202850];
 

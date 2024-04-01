@@ -19,7 +19,8 @@
 		"noUncheckedIndexedAccess": true,
 		"allowUnusedLabels": true,
 		"allowUnreachableCode": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"paths": {}
 	},
 	"include": ["src"],
 	"exclude": ["dist", "node_modules"]
