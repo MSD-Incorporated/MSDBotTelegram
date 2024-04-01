@@ -7,7 +7,7 @@ const getCleaned = async (text: string) => {
 	if (typeof text !== "string") text = require("util").inspect(text, { depth: 1 });
 	text = text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 	return text;
-}
+};
 
 // @ts-ignore
 export const evalCommand = async (ctx: Context, client: Client) => {
@@ -20,11 +20,8 @@ export const evalCommand = async (ctx: Context, client: Client) => {
 	const cleaned = await getCleaned(evaled);
 	const tokenFormatted = cleaned.replaceAll(process.env.TOKEN, "****");
 
-	return ctx.reply(
-		`<pre><code className="language-javascript">${tokenFormatted}</code></pre>`,
-		{
-			parse_mode: "HTML",
-			reply_parameters: { message_id: ctx.message!.message_id },
-		}
-	);
-}
+	return ctx.reply(`<pre><code className="language-javascript">${tokenFormatted}</code></pre>`, {
+		parse_mode: "HTML",
+		reply_parameters: { message_id: ctx.message!.message_id },
+	});
+};
