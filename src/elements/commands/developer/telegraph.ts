@@ -1,7 +1,7 @@
 import type { Context } from "grammy";
 import Telegraph from "telegra.ph";
 import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
-import { DEVELOPERS } from "../../config";
+import { DEVELOPERS } from "../../../config";
 
 const getContent = (page: Page) =>
 	(page.content as NodeElement[]).filter((element) => element.tag === "img" || element.tag === "figure");

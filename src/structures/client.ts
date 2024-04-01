@@ -1,5 +1,13 @@
 import { Bot, type Context } from "grammy";
-import { autoLink, autoLinkEdited, evalCommand, shellCommand, startCommand, telegraphCommand } from "../elements";
+import {
+	autoLink,
+	autoLinkEdited,
+	evalCommand,
+	gayCommand,
+	shellCommand,
+	startCommand,
+	telegraphCommand,
+} from "../elements";
 
 export class Client {
 	public readonly bot: Bot<Context>;
@@ -16,6 +24,7 @@ export class Client {
 		this.bot.command("telegraph", telegraphCommand);
 		this.bot.command("eval", (ctx) => evalCommand(ctx, this));
 		this.bot.command("shell", shellCommand);
+		this.bot.command("gay", gayCommand);
 
 		this.bot.on("channel_post", autoLink);
 		this.bot.on("edited_channel_post", autoLinkEdited);
