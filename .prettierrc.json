@@ -15,6 +15,14 @@
 				"quoteProps": "preserve",
 				"trailingComma": "all"
 			}
+		},
+		{
+			"files": [".github/*.yml", ".github/*.yaml"],
+			"options": {
+				"parser": "yaml",
+				"useTabs": false,
+				"tabWidth": 4
+			}
 		}
 	]
 }
