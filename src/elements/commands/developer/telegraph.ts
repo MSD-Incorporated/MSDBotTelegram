@@ -4,7 +4,7 @@ import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
 import { DEVELOPERS } from "../../../config";
 
 const getContent = (page: Page) =>
-	(page.content as NodeElement[]).filter((element) => element.tag === "img" || element.tag === "figure");
+	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");
 
 export const telegraphCommand = async (ctx: Context) => {
 	if (!(Array.isArray(DEVELOPERS) ? DEVELOPERS.includes(ctx.from?.id) : DEVELOPERS === ctx.from?.id)) return;

@@ -12,7 +12,7 @@ export const autoLink = async (ctx: Context, next: NextFunction) => {
 
 	if (!entities?.length) return;
 	if (!entities.find(({ type }) => type === "hashtag")) return;
-	if (entities.find((entity) => entity.type === "text_link" && entity.url === "https://t.me/msd_inc")) return;
+	if (entities.find(entity => entity.type === "text_link" && entity.url === "https://t.me/msd_inc")) return;
 
 	const chatID = post.chat.id;
 	const message_id = post.message_id;
@@ -55,7 +55,7 @@ export const autoLinkEdited = async (ctx: Context, next: NextFunction) => {
 
 	if (!entities?.length) return;
 	if (!entities.find(({ type }) => type === "hashtag")) return;
-	if (entities.find((entity) => entity.type === "text_link" && entity.url === "https://t.me/msd_inc")) return;
+	if (entities.find(entity => entity.type === "text_link" && entity.url === "https://t.me/msd_inc")) return;
 
 	const chatID = post.chat.id;
 	const message_id = post.message_id;

@@ -22,14 +22,14 @@ export class Client {
 
 		this.bot.command("start", startCommand);
 		this.bot.command("telegraph", telegraphCommand);
-		this.bot.command("eval", (ctx) => evalCommand(ctx, this));
+		this.bot.command("eval", ctx => evalCommand(ctx, this));
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
 
 		this.bot.on("channel_post", autoLink);
 		this.bot.on("edited_channel_post", autoLinkEdited);
 
-		this.bot.catch((err) => {
+		this.bot.catch(err => {
 			console.error(err);
 
 			err.ctx.reply("Произошла неизвестная ошибка!", {
