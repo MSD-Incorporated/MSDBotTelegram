@@ -14,7 +14,7 @@
 		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
 		"build": "tsc",
-		"format": "prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'"
+		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
 	"dependencies": {
 		"dotenv": "^16.4.5",
