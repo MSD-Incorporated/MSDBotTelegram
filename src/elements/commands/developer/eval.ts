@@ -1,6 +1,5 @@
 import type { Context } from "grammy";
 import { DEVELOPERS } from "../../../config";
-import type { Client } from "../../../structures";
 
 const getCleaned = async (text: string) => {
 	if (text && text.constructor.name == "Promise") text = await text;
@@ -10,7 +9,7 @@ const getCleaned = async (text: string) => {
 };
 
 // @ts-ignore
-export const evalCommand = async (ctx: Context, client: Client) => {
+export const evalCommand = async (ctx: Context, client) => {
 	if (!(Array.isArray(DEVELOPERS) ? DEVELOPERS.includes(ctx.from?.id) : DEVELOPERS === ctx.from?.id)) return;
 
 	const args = ctx.message?.text?.split(/\s+/).slice(1);

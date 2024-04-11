@@ -1,13 +1,6 @@
 import { Bot, type Context } from "grammy";
-import {
-	autoLink,
-	autoLinkEdited,
-	evalCommand,
-	gayCommand,
-	shellCommand,
-	startCommand,
-	telegraphCommand,
-} from "../elements";
+import { evalCommand, gayCommand, shellCommand, startCommand, telegraphCommand } from "../elements/commands";
+import { autoLink, autoLinkEdited } from "../elements/handlers";
 
 export class Client {
 	public readonly bot: Bot<Context>;
