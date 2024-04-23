@@ -26,12 +26,13 @@ export class Client {
 			console.error(err);
 
 			err.ctx.reply("Произошла неизвестная ошибка!", {
-				reply_parameters: { message_id: err.ctx.message!.message_id },
+				reply_parameters: { message_id: err.ctx.message!.message_id ?? null },
 			});
 		});
 
 		// TODO: Setup https://github.com/grammyjs/runner
 		await this.bot.start({
+			drop_pending_updates: true,
 			onStart: ({ id, username }) => console.log(`${username} [${id}] started!`),
 		});
 	};
