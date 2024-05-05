@@ -16,5 +16,4 @@ updates:
           interval: "weekly"
       labels:
           - "dependencies"
-      versioning-strategy: widen
       open-pull-requests-limit: 5
