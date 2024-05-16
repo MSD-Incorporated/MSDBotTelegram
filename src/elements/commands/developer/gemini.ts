@@ -24,7 +24,7 @@ export const geminiCommand = async (ctx: Context) => {
 	const response = result.response;
 	const text = response.text();
 
-	await ctx.api.editMessageText(msg.chat.id, msg.message_id, text.replace(regex, "\\$1"), {
+	await ctx.api.editMessageText(msg.chat.id, msg.message_id, text, {
 		parse_mode: "MarkdownV2",
 	});
 };
