@@ -1,5 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { config } from "dotenv";
 import type { Context } from "grammy";
+import { resolve } from "path";
+
+config({ path: resolve(process.cwd(), ".env") });
+
+console.log(process.env);
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
