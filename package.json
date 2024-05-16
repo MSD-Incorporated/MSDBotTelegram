@@ -17,6 +17,7 @@
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
 	"dependencies": {
+		"@google/generative-ai": "^0.11.2",
 		"dotenv": "^16.4.5",
 		"grammy": "^1.22.4",
 		"telegra.ph": "^1.0.1"

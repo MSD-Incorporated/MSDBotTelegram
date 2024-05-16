@@ -1,5 +1,12 @@
 import { Bot, type Context } from "grammy";
-import { evalCommand, gayCommand, shellCommand, startCommand, telegraphCommand } from "../elements/commands";
+import {
+	evalCommand,
+	gayCommand,
+	geminiCommand,
+	shellCommand,
+	startCommand,
+	telegraphCommand,
+} from "../elements/commands";
 import { autoLink, autoLinkEdited } from "../elements/handlers";
 
 export class Client {
@@ -16,6 +23,7 @@ export class Client {
 		this.bot.command("start", startCommand);
 		this.bot.command("telegraph", telegraphCommand);
 		this.bot.command("eval", ctx => evalCommand(ctx, this));
+		this.bot.command("gemini", geminiCommand);
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
 

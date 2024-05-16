@@ -13,7 +13,7 @@ export const shellCommand = async (ctx: Context) => {
 
 	exec(args.join(" "), (err, res) => {
 		if (err) {
-			ctx.reply(`Произошла ошибка: \n\n${codeBlock(err.message.replaceAll(regex, "\\$1"), "bash")}`, {
+			ctx.reply(`Произошла ошибка: \n\n${codeBlock(err.message.replace(regex, "\\$1"), "bash")}`, {
 				parse_mode: "MarkdownV2",
 				reply_parameters: { message_id: ctx.message!.message_id },
 			});
@@ -21,7 +21,7 @@ export const shellCommand = async (ctx: Context) => {
 			return console.error(err);
 		}
 
-		ctx.reply(codeBlock(res.replaceAll(regex, "\\$1") || "Нет информации", "bash"), {
+		ctx.reply(codeBlock(res.replace(regex, "\\$1") || "Нет информации", "bash"), {
 			parse_mode: "MarkdownV2",
 			reply_parameters: { message_id: ctx.message!.message_id },
 		});
