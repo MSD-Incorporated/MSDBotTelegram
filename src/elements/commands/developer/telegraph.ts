@@ -23,7 +23,7 @@ export const telegraphCommand = async (ctx: Context) => {
 	const page = await getPage(args);
 	const elements = getContent(page);
 	const newPage = await telegraph.createPage(page.title, elements, "MSD Incorporated", "https://t.me/msd_inc");
-	const channelBased = Boolean(JSON.parse(args[1]!));
+	const channelBased = Boolean(JSON.parse(args?.[1] || "true"));
 
 	return ctx.reply(
 		channelBased
