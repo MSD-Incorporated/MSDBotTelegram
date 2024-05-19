@@ -17,7 +17,7 @@ const parser = (str: string) => {
 };
 
 export const geminiCommand = async (ctx: Context) => {
-	if (!allowedChats.includes(ctx.from!.id) && !allowedUsers.includes(ctx.from!.id)) return;
+	if (allowedChats.includes(ctx.from!.id) || allowedUsers.includes(ctx.from!.id)) return;
 
 	const args = ctx.message?.text?.split(/\s+/).slice(1);
 	if (!args?.length) return ctx.reply("Не удалось найти запрос");
