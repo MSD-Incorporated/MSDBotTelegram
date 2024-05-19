@@ -13,7 +13,19 @@ const allowedUsers = [946070039, 629401289, 654382771, 954735954];
 const allowedChats = [-1001705068191, -1001860827131];
 
 const parser = (str: string) => {
-	return str.replace(/\*\*(.*)\*\*/g, "<b>$1</b>").replace(/\*(.*)\*/g, "<b>$1</b>");
+	if (str.match(/^```(.*)\n([\s\S]*?)```$/gm)) {
+		const language = str.split(/\s+/)[0]!.slice(3);
+
+		str = str.replace(
+			/^```(.*)\n([\s\S]*?)```$/gm,
+			`<pre><code class="language-${language.replace("c#", "csharp").replace("c++", "cpp")}">${str
+				.slice(3 + language.replace("c#", "csharp").replace("c++", "cpp").length, str.length - 3)
+				.replace(/\</gm, "&lt;")
+				.replace(/\>/gm, "&gt;")}</code></pre>`
+		);
+	}
+
+	return str.replace(/\*\*(.*)\*\*/gm, "<b>$1</b>").replace(/\*(.*)\*/gm, "<b>$1</b>");
 };
 
 export const geminiCommand = async (ctx: Context) => {
