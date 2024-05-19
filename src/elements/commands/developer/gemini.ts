@@ -9,8 +9,11 @@ console.log(process.env);
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-const regex = /(\\|_|\*|\[|]|\(|\)|`|~|>|#|\+|-|=|\||\{|}|\.|!)/gm;
 const allowedUsers = [946070039, 629401289, 654382771, 954735954];
+
+const parser = (str: string) => {
+	return str.replace(/\*\*(.*)\*\*/g, "<b>$1</b>").replace(/\*(.*)\*/g, "<b>$1</b>");
+};
 
 export const geminiCommand = async (ctx: Context) => {
 	if (!allowedUsers.includes(ctx.from!.id)) return;
@@ -24,7 +27,7 @@ export const geminiCommand = async (ctx: Context) => {
 	const response = result.response;
 	const text = response.text();
 
-	await ctx.api.editMessageText(msg.chat.id, msg.message_id, text.replace(regex, "\\$1"), {
-		parse_mode: "MarkdownV2",
+	await ctx.api.editMessageText(msg.chat.id, msg.message_id, parser(text), {
+		parse_mode: "HTML",
 	});
 };
