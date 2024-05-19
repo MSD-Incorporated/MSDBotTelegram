@@ -10,13 +10,14 @@ console.log(process.env);
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 const allowedUsers = [946070039, 629401289, 654382771, 954735954];
+const allowedChats = [-1001705068191];
 
 const parser = (str: string) => {
 	return str.replace(/\*\*(.*)\*\*/g, "<b>$1</b>").replace(/\*(.*)\*/g, "<b>$1</b>");
 };
 
 export const geminiCommand = async (ctx: Context) => {
-	if (!allowedUsers.includes(ctx.from!.id)) return;
+	if (!allowedChats.includes(ctx.from!.id) && !allowedUsers.includes(ctx.from!.id)) return;
 
 	const args = ctx.message?.text?.split(/\s+/).slice(1);
 	if (!args?.length) return ctx.reply("Не удалось найти запрос");
