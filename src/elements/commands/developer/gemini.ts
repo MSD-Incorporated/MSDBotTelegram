@@ -9,7 +9,7 @@ console.log(process.env);
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-const allowedUsers: number[] = [946070039, 629401289, 654382771, 954735954]
+const allowedUsers: number[] = [946070039, 629401289, 654382771, 954735954];
 const allowedChats: number[] = [-1001705068191, -1001860827131];
 
 const parser = (str: string) => {
