@@ -9,8 +9,7 @@ console.log(process.env);
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-const allowedUsers: number[] = [946070039, 629401289, 654382771, 954735954];
-const bannedUsers: number[] = [823839281];
+const allowedUsers: number[] = [946070039, 629401289, 654382771, 954735954]
 const allowedChats: number[] = [-1001705068191, -1001860827131];
 
 const parser = (str: string) => {
@@ -30,8 +29,6 @@ const parser = (str: string) => {
 };
 
 export const geminiCommand = async (ctx: Context) => {
-	if (bannedUsers.includes(ctx.from!.id)) return;
-
 	if (!allowedChats.includes(ctx.chat!.id)) {
 		if (!allowedUsers.includes(ctx.from!.id)) return;
 	}
