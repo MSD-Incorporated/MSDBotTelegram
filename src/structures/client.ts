@@ -23,7 +23,10 @@ export class Client {
 		this.bot.command("start", startCommand);
 		this.bot.command("telegraph", telegraphCommand);
 		this.bot.command("eval", ctx => evalCommand(ctx, this));
-		this.bot.command("gemini", geminiCommand);
+		this.bot.command("gemini", async (ctx, next) => {
+			await next();
+			await geminiCommand(ctx);
+		});
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
 
