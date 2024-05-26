@@ -6,7 +6,6 @@ import {
 	shellCommand,
 	startCommand,
 	telegraphCommand,
-	testCommand,
 } from "../elements/commands";
 import { autoLink, autoLinkEdited } from "../elements/handlers";
 
@@ -29,7 +28,6 @@ export class Client {
 			await geminiCommand(ctx);
 		});
 		this.bot.command("shell", shellCommand);
-		this.bot.command("test", testCommand);
 		this.bot.command("gay", gayCommand);
 
 		this.bot.on("channel_post", autoLink);
