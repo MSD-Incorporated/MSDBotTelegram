@@ -19,14 +19,23 @@ const parser = (str: string) => {
 
 		str = str.replace(
 			/^```(.*)\n([\s\S]*?)```$/gm,
-			`<pre><code class="language-${language.replace("c#", "csharp").replace("c++", "cpp")}">${str
-				.slice(3 + language.replace("c#", "csharp").replace("c++", "cpp").length, str.length - 3)
-				.replace(/\</gm, "&lt;")
-				.replace(/\>/gm, "&gt;")}</code></pre>`
+			`<pre><code class="language-${language.replace("c#", "csharp").replace("c++", "cpp")}">${str.slice(
+				3 + language.replace("c#", "csharp").replace("c++", "cpp").length,
+				str.length - 3
+			)}</code></pre>`
 		);
 	}
 
-	return str.replace(/\*\*(.*)\*\*/gm, "<b>$1</b>").replace(/\*(.*)\*/gm, "<b>$1</b>");
+	return str
+		.replace(/^\*\s.*$/gm, val => `<b> • </b>${val.slice(2)}`)
+		.replace(/\`[^`].*\`/gm, val => `<code>${val.slice(1, val.length - 1)}</code>`)
+		.replace(
+			// Fix <code><em></code> and etc
+			/<\/?(?!b\b)(?!strong\b)(?!i\b)(?!em\b)(?!code\b)(?!s\b)(?!strike\b)(?!del\b)(?!u\b)(?!ins\b)(?!pre\b)(?!a\b)(?!blockquote\b)(?!span\b)(?!tg-spoiler\b)(?!tg-emoji\b)\b[^>]*\>/gm,
+			val => val.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+		)
+		.replace(/\*\*(.*)\*\*/gm, "<b>$1</b>")
+		.replace(/\*(.*)\*/gm, "<b>$1</b>");
 };
 
 export const geminiCommand = async (ctx: Context) => {
@@ -45,7 +54,21 @@ export const geminiCommand = async (ctx: Context) => {
 	const response = result.response;
 	const text = response.text();
 
-	await ctx.api.editMessageText(msg.chat.id, msg.message_id, parser(text), {
-		parse_mode: "HTML",
-	});
+	console.log(parser(text).slice(0, 4096));
+
+	await ctx.api
+		.editMessageText(msg.chat.id, msg.message_id, parser(text).slice(0, 4096), {
+			parse_mode: "HTML",
+		})
+		.catch(err => {
+			ctx.reply(
+				"Произошла неизвестная ошибка. Возможно потому что ответ нейросети был больше, чем лимиты на длину сообщения в Telegram",
+				{
+					reply_parameters: {
+						message_id: ctx.message!.message_id,
+					},
+				}
+			);
+			console.error(err);
+		});
 };
