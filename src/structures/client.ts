@@ -25,7 +25,7 @@ export class Client {
 		this.bot.command("eval", ctx => evalCommand(ctx, this));
 		this.bot.command("gemini", async (ctx, next) => {
 			await next();
-			await geminiCommand(ctx);
+			geminiCommand(ctx);
 		});
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
