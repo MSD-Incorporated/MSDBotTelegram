@@ -14,6 +14,8 @@ const bannedUsers: number[] = [5062777896];
 const allowedChats: number[] = [-1001705068191, -1001860827131];
 
 const parser = (str: string) => {
+	str.replace(/<[^>]+>/gm, val => val.replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+
 	if (str.match(/^```(.*)\n([\s\S]*?)```$/gm)) {
 		const language = str.split(/\s+/)[0]!.slice(3);
 
@@ -27,7 +29,6 @@ const parser = (str: string) => {
 	}
 
 	return str
-		.replace(/<[^>]+>/gm, val => val.replace(/</g, "&lt;").replace(/>/g, "&gt;"))
 		.replace(/^\*\s.*$/gm, val => `<b> • </b>${val.slice(2)}`)
 		.replace(/\`[^`].*\`/gm, val => `<code>${val.slice(1, val.length - 1)}</code>`)
 		.replace(/\*\*(.*)\*\*/gm, "<b>$1</b>")
@@ -49,8 +50,6 @@ export const geminiCommand = async (ctx: Context) => {
 	const result = await model.generateContent(args.join(" "));
 	const response = result.response;
 	const text = response.text();
-
-	console.log(parser(text).slice(0, 4096));
 
 	await ctx.api
 		.editMessageText(msg.chat.id, msg.message_id, parser(text).slice(0, 4096), {
