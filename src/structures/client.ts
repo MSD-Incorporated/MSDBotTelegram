@@ -1,4 +1,5 @@
-import { Bot, type Context } from "grammy";
+import { Bot, InputFile, type Context } from "grammy";
+import { API } from "nhentai-api";
 import {
 	evalCommand,
 	gayCommand,
@@ -29,6 +30,13 @@ export class Client {
 		});
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
+		this.bot.command("test", ctx => {
+			const api = new API();
+
+			api.getBook(177013).then(book => {
+				ctx.replyWithPhoto(api.getImageURL(book.pages[0]!));
+			});
+		});
 
 		this.bot.on("channel_post", autoLink);
 		this.bot.on("edited_channel_post", autoLinkEdited);
