@@ -27,9 +27,9 @@ const parser = (str: string) => {
 	}
 
 	return str
+		.replace(/<[^>]+>/gm, val => val.replace(/</g, "&lt;").replace(/>/g, "&gt;"))
 		.replace(/^\*\s.*$/gm, val => `<b> • </b>${val.slice(2)}`)
 		.replace(/\`[^`].*\`/gm, val => `<code>${val.slice(1, val.length - 1)}</code>`)
-		.replace(/<[^>]+>/gm, val => val.replace(/</g, "&lt;").replace(/>/g, "&gt;"))
 		.replace(/\*\*(.*)\*\*/gm, "<b>$1</b>")
 		.replace(/\*(.*)\*/gm, "<b>$1</b>");
 };
