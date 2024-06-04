@@ -1,32 +1,31 @@
 {
-  "name": "msdbot_telegram",
-  "version": "0.0.9",
-  "author": "MasedMSD",
-  "main": "./dist/index.js",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "start": "node .",
-    "bun:start": "bun src/index.ts",
-    "bun:smol": "bun --smol src/index.ts",
-    "bun:watch": "bun --watch src/index.ts",
-    "pm2:start": "pm2 start npm --name \"msdbot_telegram\" -- start",
-    "pm2:restart": "pm2 restart \"msdbot_telegram\"",
-    "pm2:stop": "pm2 stop \"msdbot_telegram\"",
-    "build": "tsc",
-    "format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
-  },
-  "dependencies": {
-    "@google/generative-ai": "^0.12.0",
-    "dotenv": "^16.4.5",
-    "grammy": "^1.24.0",
-    "nhentai-api": "^3.4.3",
-    "telegra.ph": "^1.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.13.0",
-    "prettier": "^3.3.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.4.5"
-  }
+	"name": "msdbot_telegram",
+	"version": "0.0.9",
+	"author": "MasedMSD",
+	"main": "./dist/index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"start": "node .",
+		"bun:start": "bun src/index.ts",
+		"bun:smol": "bun --smol src/index.ts",
+		"bun:watch": "bun --watch src/index.ts",
+		"pm2:start": "pm2 start npm --name \"msdbot_telegram\" -- start",
+		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
+		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
+		"build": "tsc",
+		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
+	},
+	"dependencies": {
+		"@google/generative-ai": "^0.12.0",
+		"dotenv": "^16.4.5",
+		"grammy": "^1.24.0",
+		"telegra.ph": "^1.0.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.13.0",
+		"prettier": "^3.3.0",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.5"
+	}
 }

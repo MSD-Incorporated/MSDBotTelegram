@@ -10,6 +10,8 @@ import {
 } from "../elements/commands";
 import { autoLink, autoLinkEdited } from "../elements/handlers";
 
+const api = new API();
+
 export class Client {
 	public readonly bot: Bot<Context>;
 
@@ -30,13 +32,6 @@ export class Client {
 		});
 		this.bot.command("shell", shellCommand);
 		this.bot.command("gay", gayCommand);
-		this.bot.command("test", ctx => {
-			const api = new API();
-
-			api.getBook(177013).then(book => {
-				ctx.replyWithPhoto(api.getImageURL(book.pages[0]!));
-			});
-		});
 
 		this.bot.on("channel_post", autoLink);
 		this.bot.on("edited_channel_post", autoLinkEdited);
