@@ -1,4 +1,3 @@
-import { execSync } from "child_process";
 import { InlineKeyboard, type Context } from "grammy";
 
 const version = process.env.npm_package_version;
