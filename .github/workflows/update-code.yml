@@ -12,8 +12,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    build:
-        name: Build
+    update:
+        name: Update Docker on Server
         runs-on: ubuntu-latest
         steps:
             - name: Run Docker CMD
