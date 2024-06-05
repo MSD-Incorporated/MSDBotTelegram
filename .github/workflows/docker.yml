@@ -33,4 +33,4 @@ jobs:
                   context: .
                   file: ./Dockerfile
                   push: true
-                  tags: ${{ secrets.DOCKER_HUB_USERNAME }}/masedmsd_telegram:latest
+                  tags: ${{ secrets.DOCKER_HUB_USERNAME }}/msdbot_telegram:latest
