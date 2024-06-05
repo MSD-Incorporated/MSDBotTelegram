@@ -1,5 +1,4 @@
-import { Bot, InputFile, type Context } from "grammy";
-import { API } from "nhentai-api";
+import { Bot, type Context } from "grammy";
 import {
 	evalCommand,
 	gayCommand,
@@ -9,8 +8,6 @@ import {
 	telegraphCommand,
 } from "../elements/commands";
 import { autoLink, autoLinkEdited } from "../elements/handlers";
-
-const api = new API();
 
 export class Client {
 	public readonly bot: Bot<Context>;

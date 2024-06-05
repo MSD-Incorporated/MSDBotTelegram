@@ -9,7 +9,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     npm ci
 ################################################################################
-from deps as build
+from deps as bui
 
 COPY ./src ./src
 COPY ./tsconfig.json .
