@@ -1,4 +1,4 @@
-declare type ConfigKey = "TOKEN" | "TELEGRAPH" | "GOOGLE_AI_KEY";
+declare type ConfigKey = "TOKEN" | "TELEGRAPH";
 
 declare type EnvKeys = {
 	[key in ConfigKey]: string;
