@@ -1,6 +1,7 @@
-ARG NODE_VERSION=18.20.3
+FROM alpine:3.14 as base
 
-FROM node:${NODE_VERSION}-alpine as base
+RUN apk add --no-cache --update nodejs npm
+
 WORKDIR /msdbot_telegram
 ################################################################################
 FROM base as deps
@@ -11,18 +12,20 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 ################################################################################
 from deps as build
 
-COPY ./src ./src
+COPY ./src           ./src
 COPY ./tsconfig.json .
-COPY ./package.json .
-COPY ./package-lock.json .
+COPY ./package*.json .
 
-RUN npm run build
-RUN npm prune --production
+RUN npm run build           && \
+    npm prune --production  && \
+	npm cache clean --force
 ################################################################################
 FROM base as final
 
-ENV NODE_ENV production
+RUN adduser --disabled-password --no-create-home node
+
 USER node
+ENV NODE_ENV production
 
 COPY package.json .
 COPY --from=build /msdbot_telegram/node_modules ./node_modules

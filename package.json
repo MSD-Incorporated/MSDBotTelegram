@@ -14,7 +14,7 @@
 		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
 		"docker:build": "docker build --platform=linux/amd64 -t msdbot_telegram --progress=plain .",
-		"docker:run": "docker run --restart=always --env-file=.env -itd -p 80:80 --name msdbot_telegram mased/msdbot_telegram:latest",
+		"docker:run": "docker run --restart=always --env-file=.env -itd -p 80:80 --name msdbot_telegram msdbot_telegram:latest",
 		"build": "tsc",
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
