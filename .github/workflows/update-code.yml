@@ -25,8 +25,8 @@ jobs:
                   port: ${{ secrets.SERVER_PORT }}
                   script: |
                       docker stop msdbot_telegram && docker rm msdbot_telegram
-                      docker image prune -f
                       docker pull mased/msdbot_telegram:latest
+                      docker image prune -f
                       docker run                                         \
                             --restart=always                             \
                             -itd                                         \
