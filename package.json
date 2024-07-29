@@ -19,15 +19,14 @@
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
 	"dependencies": {
-		"@grammyjs/runner": "^2.0.3",
 		"dotenv": "^16.4.5",
 		"grammy": "^1.24.0",
-		"telegra.ph": "^1.0.1",
-		"tslib": "^2.6.2"
+		"telegra.ph": "^1.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "^20.13.0",
 		"prettier": "^3.3.0",
-		"typescript": "^5.4.5"
+		"typescript": "^5.5.4",
+		"tslib": "^2.6.2"
 	}
 }
