@@ -24,6 +24,7 @@ export const sauceNaoComposer = new Composer();
 
 sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	if (!channelIDs.includes((ctx.message?.forward_origin! as Message).chat.id)) return;
+	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
 
