@@ -1,7 +1,7 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot, type Context } from "grammy";
 import type { UserFromGetMe } from "grammy/types";
-import { pingCommand, privacyCommand, startCommand } from "handlers";
+import { pingCommand, privacyCommand, startCommand } from "../handlers";
 
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
 
