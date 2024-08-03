@@ -25,7 +25,7 @@ jobs:
                   bun-version: latest
 
             - name: Format
-              run: npx prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
+              run: bunx prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
 
             - name: Commit changes
               uses: stefanzweifel/git-auto-commit-action@v5
