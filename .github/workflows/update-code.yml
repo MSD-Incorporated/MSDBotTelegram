@@ -1,0 +1,37 @@
+name: Update Docker on Server
+
+on:
+    workflow_run:
+        workflows: ["Docker Build and Push"]
+        branches: [main]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    update:
+        name: Update Docker on Server
+        runs-on: ubuntu-latest
+        steps:
+            - name: Run Docker CMD
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SERVER_HOST }}
+                  username: ${{ secrets.SERVER_USERNAME }}
+                  password: ${{ secrets.SERVER_PASSWORD }}
+                  port: ${{ secrets.SERVER_PORT }}
+                  script: |
+                      docker stop msdbot_telegram && docker rm msdbot_telegram
+                      docker image prune -f
+                      docker pull mased/msdbot_telegram:latest
+                      docker run                                          \
+                            --restart=always                              \
+                            -itd                                          \
+                            -p 80:80                                      \
+                            --name msdbot_telegram                        \
+                            -e TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"  \
+                            -e TELEGRAPH_TOKEN="${{ secrets.TELEGRAPH }}" \
+                            mased/msdbot_telegram:latest
