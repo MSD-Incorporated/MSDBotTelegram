@@ -13,7 +13,7 @@ This bot was created for channel and chat management.
 ### Bun
 
 -   Install all dependencies: `bun install`
--   Use command `bun bun:start`.
+-   Use command `bun bun:start`
 
 ### NodeJS
 
