@@ -27,11 +27,12 @@ jobs:
                       docker stop msdbot_telegram && docker rm msdbot_telegram
                       docker image prune -f
                       docker pull mased/msdbot_telegram:latest
-                      docker run                                          \
-                            --restart=always                              \
-                            -itd                                          \
-                            -p 80:80                                      \
-                            --name msdbot_telegram                        \
-                            -e TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"  \
-                            -e TELEGRAPH_TOKEN="${{ secrets.TELEGRAPH }}" \
+                      docker run                                            \
+                            --restart=always                                \
+                            -itd                                            \
+                            -p 80:80                                        \
+                            --name msdbot_telegram                          \
+                            -e TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"    \
+                            -e TELEGRAPH_TOKEN="${{ secrets.TELEGRAPH }}"   \
+                            -e SAUCENAO_TOKEN="${{secrets.SAUCENAO_TOKEN}}" \
                             mased/msdbot_telegram:latest

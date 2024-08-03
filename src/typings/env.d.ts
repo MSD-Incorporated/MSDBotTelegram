@@ -1,4 +1,4 @@
-declare type ConfigKey = "TOKEN" | "TELEGRAPH_TOKEN";
+declare type ConfigKey = "TOKEN" | "TELEGRAPH_TOKEN" | "SAUCENAO_TOKEN";
 
 declare type EnvKeys = {
 	[key in ConfigKey]: string;
