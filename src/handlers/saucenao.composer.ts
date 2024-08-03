@@ -11,7 +11,8 @@ const urlParser = (urls: string[]) => {
 	urls.forEach(url => {
 		if (url.includes("gelbooru")) sortedURLs.push(["Gelbooru", url]);
 		if (url.includes("danbooru")) sortedURLs.push(["Danbooru", url]);
-		if (url.includes("x.com") || url.includes("twitter")) sortedURLs.push(["Twitter", url]);
+		if (url.includes("x.com") || url.includes("twitter"))
+			sortedURLs.push(["Twitter", url.replace("twitter.com", "fxtwitter.com").replace("x.com", "fxtwitter.com")]);
 		if (url.includes("pixiv") || url.includes("pximg")) sortedURLs.push(["Pixiv", url]);
 		if (url.includes("patreon")) sortedURLs.push(["Patreon", url]);
 	});
