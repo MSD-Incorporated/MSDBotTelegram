@@ -23,6 +23,7 @@ export const sauceNaoComposer = new Composer();
 
 sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	if (!channelIDs.includes((ctx.message?.forward_origin! as Message).chat.id)) return;
+	if (ctx.message!.photo.length > 1) return;
 
 	const file = await ctx.getFile();
 	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
