@@ -6,7 +6,7 @@ const channelIDs: number[] = [-1001528929804];
 export const autoLinkerComposer = new Composer();
 
 autoLinkerComposer.on("channel_post::hashtag", async ctx => {
-	const post = ctx.channelPost!;
+	const post = ctx.channelPost;
 	if (!channelIDs.includes(post.chat.id)) return;
 
 	const entities = (post.caption ? post.caption_entities : post.entities)!;
@@ -23,18 +23,18 @@ autoLinkerComposer.on("channel_post::hashtag", async ctx => {
 		url: "https://t.me/msd_inc",
 	};
 
-	await (post.caption
+	return post.caption
 		? ctx.api.editMessageCaption(chatID, message_id, {
 				caption: str,
 				caption_entities: [...entities, linkEntity],
 			})
 		: ctx.api.editMessageText(chatID, message_id, str, {
 				entities: [...entities, linkEntity],
-			}));
+			});
 });
 
 autoLinkerComposer.on("edited_channel_post::hashtag", async ctx => {
-	const post = ctx.editedChannelPost!;
+	const post = ctx.editedChannelPost;
 	if (!channelIDs.includes(post.chat.id)) return;
 
 	const entities = (post.caption ? post.caption_entities : post.entities)!;
@@ -51,12 +51,12 @@ autoLinkerComposer.on("edited_channel_post::hashtag", async ctx => {
 		url: "https://t.me/msd_inc",
 	};
 
-	await (post.caption
+	return post.caption
 		? ctx.api.editMessageCaption(chatID, message_id, {
 				caption: str,
 				caption_entities: [...entities, linkEntity],
 			})
 		: ctx.api.editMessageText(chatID, message_id, str, {
 				entities: [...entities, linkEntity],
-			}));
+			});
 });
