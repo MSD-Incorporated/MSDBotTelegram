@@ -12,7 +12,7 @@ export const telegraphCommand = async (ctx: Context) => {
 	const args = ctx.message?.text?.split(/\s+/).slice(1);
 	if (!args?.length) return ctx.reply("Не удалось найти ID");
 
-	const telegraph = new Telegraph(process.env.TELEGRAPH);
+	const telegraph = new Telegraph(process.env.TELEGRAPH_TOKEN);
 
 	const getPage = async (args: string[]) => {
 		const id = args[0]!.replace("https://telegra.ph/", "");

@@ -1,4 +1,4 @@
-import { type Context } from "grammy";
+import type { Context } from "grammy";
 
 const privacyLink = "https://telegra.ph/Politika-konfidencialnosti-dlya-telegram-bota-masedmsd-bot-07-05";
 
