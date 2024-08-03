@@ -1,7 +1,7 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot, type Context } from "grammy";
 import type { UserFromGetMe } from "grammy/types";
-import { pingCommand, privacyCommand, startCommand } from "../handlers";
+import { autoLinkerComposer, pingCommand, privacyCommand, startCommand } from "../handlers";
 
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
 
@@ -17,6 +17,7 @@ export class Client {
 		process.once("SIGTERM", () => this.bot.stop());
 
 		this.bot.use(autoQuote());
+		this.bot.use(autoLinkerComposer);
 
 		this.bot.command("ping", pingCommand);
 		this.bot.command("start", startCommand);
