@@ -11,6 +11,7 @@ const urlParser = (urls: string[]) => {
 	urls.forEach(url => {
 		if (url.includes("gelbooru")) sortedURLs.push(["Gelbooru", url]);
 		if (url.includes("danbooru")) sortedURLs.push(["Danbooru", url]);
+		if (url.includes("yande.re")) sortedURLs.push(["Yandere", url]);
 		if (url.includes("x.com") || url.includes("twitter"))
 			sortedURLs.push(["Twitter", url.replace("twitter.com", "fxtwitter.com").replace("x.com", "fxtwitter.com")]);
 		if (url.includes("pixiv") || url.includes("pximg")) sortedURLs.push(["Pixiv", url]);
@@ -23,7 +24,7 @@ const urlParser = (urls: string[]) => {
 export const sauceNaoComposer = new Composer();
 
 sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (!channelIDs.includes((ctx.message?.forward_origin! as Message).chat.id)) return;
+	// if (!channelIDs.includes((ctx.message?.forward_origin! as Message).chat.id)) return;
 	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
@@ -34,6 +35,8 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	if (!res?.raw.data.creator) return;
 
+	console.log(res);
+
 	const author = res.raw.data.creator;
 	const characters = res.raw.data.characters;
 	// @ts-ignore
@@ -42,7 +45,6 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	ctx.reply(
 		[
-			// TODO: href to author
 			`• <b>Автор:</b> <code>${author || "Неизвестно"}</code>`,
 			`• <b>Персонажи:</b> <code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
 			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
