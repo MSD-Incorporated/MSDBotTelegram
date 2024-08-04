@@ -45,7 +45,7 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 			// TODO: href to author
 			`Автор: <code>${author || "Неизвестно"}</code>`,
 			`Персонажи: <code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-			`Материал: <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
+			`Откуда: <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
 			`Ссылки: ${urlParser(urls)
 				.map(([name, url]) => `<a href="${url}">${name}</a>`)
 				.join(" | ")}`,
