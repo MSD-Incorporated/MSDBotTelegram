@@ -43,10 +43,10 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	ctx.reply(
 		[
 			// TODO: href to author
-			`Автор: <code>${author || "Неизвестно"}</code>`,
-			`Персонажи: <code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-			`Откуда: <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
-			`Ссылки: ${urlParser(urls)
+			`• <b>Автор:</b> <code>${author || "Неизвестно"}</code>`,
+			`• <b>Персонажи:</b> <code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
+			`• <b>Ссылки:</b> ${urlParser(urls)
 				.map(([name, url]) => `<a href="${url}">${name}</a>`)
 				.join(" | ")}`,
 		].join("\n"),
