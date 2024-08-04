@@ -40,20 +40,18 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	const text = [
-		`<blockquote>Автор</blockquote>`,
-		`<code>${author || "Неизвестно"}</code>`,
-		`<blockquote>Персонажи:</blockquote>`,
-		`<code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-		`<blockquote>Материал</blockquote>`,
-		`<code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
-		`<blockquote>Ссылки</blockquote>`,
-		urlParser(urls)
-			.map(([name, url]) => ` • <a href="${url}">${name}</a>`)
-			.join("\n"),
-	];
-
-	ctx.reply(text.join("\n"), {
-		parse_mode: "HTML",
-	});
+	ctx.reply(
+		[
+			// TODO: href to author
+			`Автор: <code>${author || "Неизвестно"}</code>`,
+			`Персонажи: <code>${characters.split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+			`Материал: <code>${material || "Неизвестно"}</code>${material ? ` | <a href="https://gelbooru.com/index.php?page=post&s=list&tags=${material.replace(/\s+/gm, "_")}">Gelbooru</a> | <a href="https://danbooru.donmai.us/posts?tags=${material.replace(/\s+/gm, "_")}">Danbooru</a>` : ""}\n`,
+			`Ссылки: ${urlParser(urls)
+				.map(([name, url]) => `<a href="${url}">${name}</a>`)
+				.join(" | ")}`,
+		].join("\n"),
+		{
+			parse_mode: "HTML",
+		}
+	);
 });
