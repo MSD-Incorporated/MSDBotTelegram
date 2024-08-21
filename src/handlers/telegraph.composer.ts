@@ -1,5 +1,4 @@
-import { Composer, InlineKeyboard } from "grammy";
-import { MessageEntity } from "grammy/types";
+import { Composer } from "grammy";
 import Telegraph from "telegra.ph";
 import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
 
@@ -19,26 +18,6 @@ const getPage = async (args: string[]) => {
 
 export const telegraphComposer = new Composer();
 
-telegraphComposer.callbackQuery("telegraph_post_manga", async ctx => {
-	if (developerID !== ctx.callbackQuery.from.id) return;
-
-	const manga = ctx.callbackQuery.message!.entities![0] as MessageEntity.TextLinkMessageEntity;
-	const mangaName = ctx.callbackQuery.message!.text!;
-	const url = manga.url;
-
-	return ctx.api.sendMessage(
-		channelID,
-		[
-			`#Hentai #Manga`,
-			`<a href="${url}">${mangaName}</a>`,
-			`<a href="https://t.me/msd_inc">🔗┆MSD Incorporated</a>`,
-		].join("\n\n"),
-		{
-			parse_mode: "HTML",
-		}
-	);
-});
-
 telegraphComposer.command("telegraph", async ctx => {
 	if (developerID !== ctx.from!.id) return;
 
@@ -51,8 +30,5 @@ telegraphComposer.command("telegraph", async ctx => {
 
 	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
 		parse_mode: "HTML",
-		reply_markup: {
-			inline_keyboard: [[{ text: "Выложить в канал?", callback_data: "telegraph_post_manga" }]],
-		},
 	});
 });

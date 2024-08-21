@@ -26,10 +26,10 @@ export class Client {
 		process.once("SIGINT", () => this.bot.stop());
 		process.once("SIGTERM", () => this.bot.stop());
 
-		await this.database.connect();
+		// await this.database.connect();
 
-		const allUsers = await this.database.db.select().from(users);
-		console.log(allUsers);
+		// const allUsers = await this.database.db.select().from(users);
+		// console.log(allUsers);
 
 		this.bot.use(autoQuote());
 		this.bot.use(autoLinkerComposer);
