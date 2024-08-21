@@ -2,7 +2,7 @@ import { Composer } from "grammy";
 import { Message } from "grammy/types";
 import sagiri from "sagiri";
 
-const channelIDs: number[] = [-1001528929804];
+const channelID = -1001528929804;
 const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 
 const urlParser = (urls: string[]) => {
@@ -24,7 +24,7 @@ const urlParser = (urls: string[]) => {
 export const sauceNaoComposer = new Composer();
 
 sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (!channelIDs.includes((ctx.message?.forward_origin! as Message).chat.id)) return;
+	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
 	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
