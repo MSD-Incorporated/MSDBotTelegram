@@ -20,6 +20,8 @@ const getPage = async (args: string[]) => {
 export const telegraphComposer = new Composer();
 
 telegraphComposer.callbackQuery("telegraph_post_manga", async ctx => {
+	if (developerID !== ctx.callbackQuery.from.id) return;
+
 	const manga = ctx.callbackQuery.message!.entities![0] as MessageEntity.TextLinkMessageEntity;
 	const mangaName = ctx.callbackQuery.message!.text!;
 	const url = manga.url;
