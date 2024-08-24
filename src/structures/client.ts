@@ -1,4 +1,5 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
+import { eq } from "drizzle-orm";
 import { users } from "drizzle/user";
 import { Bot, type Context } from "grammy";
 import type { UserFromGetMe } from "grammy/types";
@@ -26,10 +27,16 @@ export class Client {
 		process.once("SIGINT", () => this.bot.stop());
 		process.once("SIGTERM", () => this.bot.stop());
 
-		// await this.database.connect();
+		await this.database.connect();
 
-		// const allUsers = await this.database.db.select().from(users);
-		// console.log(allUsers);
+		await this.database.db.insert(users).values({
+			user_id: Date.now(),
+			first_name: "Mased",
+			last_name: "MSD",
+		});
+
+		const allUsers = await this.database.db.select().from(users);
+		console.log(allUsers);
 
 		this.bot.use(autoQuote());
 		this.bot.use(autoLinkerComposer);
