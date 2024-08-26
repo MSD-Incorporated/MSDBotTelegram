@@ -22,7 +22,7 @@
 		"@roziscoding/grammy-autoquote": "^2.0.6",
 		"dotenv": "^16.4.5",
 		"grammy": "^1.24.0",
-		"sagiri": "^3.6.0",
+		"sagiri": "^4.0.0",
 		"telegra.ph": "^1.0.1",
 		"tslib": "^2.6.2"
 	},
