@@ -1,10 +1,10 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
-import { eq } from "drizzle-orm";
-import { users } from "drizzle/user";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Bot, type Context } from "grammy";
 import type { UserFromGetMe } from "grammy/types";
 import {
 	autoLinkerComposer,
+	dickComposer,
 	pingCommand,
 	privacyCommand,
 	sauceNaoComposer,
@@ -16,11 +16,11 @@ import { Database } from "./database";
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
 
 export class Client {
-	readonly bot: Bot<Context>;
+	readonly bot: Bot<Context & { database: NodePgDatabase }>;
 	readonly database: Database = new Database();
 
 	constructor(TOKEN?: string) {
-		this.bot = new Bot<Context>(TOKEN ?? process.env.TOKEN);
+		this.bot = new Bot(TOKEN ?? process.env.TOKEN);
 	}
 
 	readonly init = async () => {
@@ -29,19 +29,17 @@ export class Client {
 
 		await this.database.connect();
 
-		await this.database.db.insert(users).values({
-			user_id: Date.now(),
-			first_name: "Mased",
-			last_name: "MSD",
+		this.bot.use(autoQuote());
+		this.bot.use(async (ctx, next) => {
+			ctx.database = this.database.db;
+
+			await next();
 		});
 
-		const allUsers = await this.database.db.select().from(users);
-		console.log(allUsers);
-
-		this.bot.use(autoQuote());
 		this.bot.use(autoLinkerComposer);
 		this.bot.use(sauceNaoComposer);
 		this.bot.use(telegraphComposer);
+		this.bot.use(dickComposer);
 
 		this.bot.command("ping", pingCommand);
 		this.bot.command("start", startCommand);
