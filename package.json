@@ -4,7 +4,6 @@
 	"author": "MasedMSD",
 	"main": "./dist/index.js",
 	"license": "MIT",
-	"type": "module",
 	"private": true,
 	"scripts": {
 		"start": "node .",
