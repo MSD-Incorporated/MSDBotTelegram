@@ -3,7 +3,6 @@ import { Message } from "grammy/types";
 import sagiri from "sagiri";
 
 const channelID = -1001528929804;
-const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
@@ -31,6 +30,8 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	const file = await ctx.getFile();
 	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+
+	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(url);
 
 	if (!res?.raw.data.creator) return;
