@@ -12,6 +12,7 @@ export const dickComposer: Composer<Context & { database: NodePgDatabase }> = ne
 dickComposer.command("dick", async ctx => {
 	const user = ctx.from!;
 
+	// TODO: Fix that shitcode
 	let db_user = (await ctx.database.select().from(users).where(eq(users.user_id, user.id)))[0]!;
 	if (!db_user) {
 		await ctx.database
@@ -38,7 +39,7 @@ dickComposer.command("dick", async ctx => {
 			.utc(false)
 			.format("HH:mm:ss");
 		return ctx.reply(
-			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см`,
+			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см \n\nТаблицы лидеров и истории на данный момент нет - ожидайте в будущем`,
 			{ parse_mode: "HTML" }
 		);
 	}
