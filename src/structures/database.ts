@@ -3,7 +3,7 @@ import { Client } from "pg";
 
 export class Database {
 	readonly client = new Client({
-		host: "localhost",
+		host: process.env.NODE_ENV == "production" ? "database" : "localhost",
 		port: 5432,
 		user: process.env.POSTGRES_USER,
 		password: process.env.POSTGRES_PASSWORD,
