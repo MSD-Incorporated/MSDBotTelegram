@@ -1,4 +1,5 @@
 export * from "./autolinker.composer";
+export * from "./dick.composer";
 export * from "./saucenao.composer";
 export * from "./telegraph.composer";
 

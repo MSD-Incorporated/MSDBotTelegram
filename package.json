@@ -15,19 +15,27 @@
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
 		"docker:build": "docker build --platform=linux/amd64 -t msdbot_telegram --progress=plain .",
 		"docker:run": "docker run --restart=always --env-file=.env -itd -p 80:80 --name msdbot_telegram msdbot_telegram:latest",
+		"docker:compose": "docker compose up -d",
+		"drizzle:generate": "drizzle-kit generate",
+		"drizzle:migrate": "drizzle-kit migrate",
 		"build": "tsc",
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
 	"dependencies": {
 		"@roziscoding/grammy-autoquote": "^2.0.6",
 		"dotenv": "^16.4.5",
+		"drizzle-orm": "^0.33.0",
 		"grammy": "^1.24.0",
-		"sagiri": "3.6.0",
+		"moment": "^2.30.1",
+		"pg": "^8.12.0",
+		"sagiri": "^3.6.0",
 		"telegra.ph": "^1.0.1",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
 		"@types/node": "^22.0.0",
+		"@types/pg": "^8.11.6",
+		"drizzle-kit": "^0.24.0",
 		"prettier": "^3.3.0",
 		"typescript": "^5.5.4"
 	}
