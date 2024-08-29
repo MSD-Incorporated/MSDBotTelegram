@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { dick_history, dicks } from "drizzle/dick";
-import { users } from "drizzle/user";
 import { Composer, type Context } from "grammy";
 import moment from "moment";
+import { dick_history, dicks } from "../drizzle/dick";
+import { users } from "../drizzle/user";
 
 const timeout = 12 * 60 * 60;
 
