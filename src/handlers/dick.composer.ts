@@ -5,7 +5,7 @@ import moment from "moment";
 import { dick_history, dicks } from "../drizzle/dick";
 import { users } from "../drizzle/user";
 
-const timeout = 1 * 1;
+const timeout = 12 * 60 * 60;
 
 export const dickComposer: Composer<Context & { database: NodePgDatabase }> = new Composer();
 
@@ -51,10 +51,7 @@ dickComposer.command("dick", async ctx => {
 		.set({ size: size + difference, timestamp: new Date(now) })
 		.where(eq(dicks.user_id, user.id));
 
-	await ctx.database
-		.insert(dick_history)
-		.values({ user_id: user.id, size, difference })
-		.catch(err => console.error(err));
+	await ctx.database.insert(dick_history).values({ user_id: user.id, size, difference });
 
 	const phrase =
 		difference < 0

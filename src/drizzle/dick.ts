@@ -21,7 +21,6 @@ export const dick_history = pgTable("dick_history", {
 	id: serial("id").notNull().unique(),
 	user_id: bigint("user_id", { mode: "number" })
 		.notNull()
-		.primaryKey()
 		.references(() => dicks.user_id),
 	size: integer("size").default(0).notNull(),
 	difference: integer("difference").notNull(),
