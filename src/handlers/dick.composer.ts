@@ -5,7 +5,7 @@ import moment from "moment";
 import { dick_history, dicks } from "../drizzle/dick";
 import { users } from "../drizzle/user";
 
-const timeout = 12 * 60 * 60;
+const timeout = 1 * 1;
 
 export const dickComposer: Composer<Context & { database: NodePgDatabase }> = new Composer();
 

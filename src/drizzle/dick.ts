@@ -22,7 +22,7 @@ export const dick_history = pgTable("dick_history", {
 	user_id: bigint("user_id", { mode: "number" })
 		.notNull()
 		.primaryKey()
-		.references(() => users.user_id),
+		.references(() => dicks.user_id),
 	size: integer("size").default(0).notNull(),
 	difference: integer("difference").notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow(),
