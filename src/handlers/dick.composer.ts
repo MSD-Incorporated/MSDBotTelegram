@@ -51,7 +51,10 @@ dickComposer.command("dick", async ctx => {
 		.set({ size: size + difference, timestamp: new Date(now) })
 		.where(eq(dicks.user_id, user.id));
 
-	await ctx.database.insert(dick_history).values({ user_id: user.id, size, difference });
+	await ctx.database
+		.insert(dick_history)
+		.values({ user_id: user.id, size, difference })
+		.catch(err => console.error(err));
 
 	const phrase =
 		difference < 0
