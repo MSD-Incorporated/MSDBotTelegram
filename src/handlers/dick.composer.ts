@@ -39,7 +39,7 @@ dickComposer.command("dick", async ctx => {
 			.utc(false)
 			.format("HH:mm:ss");
 		return ctx.reply(
-			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см \n\nТаблицы лидеров и истории на данный момент нет - ожидайте в будущем`,
+			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см \n\nИстории на данный момент нет - ожидайте в будущем`,
 			{ parse_mode: "HTML" }
 		);
 	}
