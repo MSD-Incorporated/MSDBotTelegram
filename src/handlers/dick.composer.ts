@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Composer, type Context } from "grammy";
 import moment from "moment";
@@ -61,6 +61,24 @@ dickComposer.command("dick", async ctx => {
 				: "не изменился";
 
 	return ctx.reply(`Ваш pp ${phrase} \n\nВаш текущий размер pp: <code>${size + difference}</code> см`, {
+		parse_mode: "HTML",
+	});
+});
+
+dickComposer.command("leaderboard", async ctx => {
+	const allUsers = await ctx.database.select().from(dicks).orderBy(desc(dicks.size)).limit(10);
+	if (allUsers.length < 0) return ctx.reply("Таблица лидеров пуста");
+
+	const filtered = allUsers.filter(({ size }) => size > 0);
+	const text = filtered.map(async (user, index) => {
+		const user_data = await ctx.database.select().from(users).where(eq(users.user_id, user.user_id)).limit(1)!;
+		const name =
+			user_data[0]!.first_name + (user_data[0]?.last_name == undefined ? "" : ` ${user_data[0].last_name}`);
+
+		return `<b>${index + 1}.</b> ${name}: <code>${user.size}</code> см`;
+	});
+
+	return ctx.reply((await Promise.all(text)).join("\n"), {
 		parse_mode: "HTML",
 	});
 });
