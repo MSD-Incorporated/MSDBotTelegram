@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Composer, type Context } from "grammy";
 import moment from "moment";
@@ -66,10 +66,28 @@ dickComposer.command("dick", async ctx => {
 });
 
 dickComposer.command("leaderboard", async ctx => {
-	const allUsers = await ctx.database.select().from(dicks).orderBy(desc(dicks.size)).limit(10);
+	return ctx.reply("Выберите тип таблицы", {
+		reply_markup: {
+			inline_keyboard: [
+				[
+					{ text: "📈 По возрастанию", callback_data: "leaderboard_asc" },
+					{ text: "📉 По убыванию", callback_data: "leaderboard_desc" },
+				],
+			],
+		},
+	});
+});
+
+dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx => {
+	const type = ctx.callbackQuery.data === "leaderboard_asc" ? "asc" : "desc";
+	const allUsers = await ctx.database
+		.select()
+		.from(dicks)
+		.orderBy(type === "desc" ? desc(dicks.size) : asc(dicks.size))
+		.limit(10);
 	if (allUsers.length < 0) return ctx.reply("Таблица лидеров пуста");
 
-	const filtered = allUsers.filter(({ size }) => size > 0);
+	const filtered = allUsers.filter(({ size }) => size !== 0);
 	const text = filtered.map(async (user, index) => {
 		const user_data = await ctx.database.select().from(users).where(eq(users.user_id, user.user_id)).limit(1)!;
 		const name =
@@ -78,7 +96,10 @@ dickComposer.command("leaderboard", async ctx => {
 		return `<b>${index + 1}.</b> ${name}: <code>${user.size}</code> см`;
 	});
 
-	return ctx.reply((await Promise.all(text)).join("\n"), {
-		parse_mode: "HTML",
-	});
+	return ctx.api.editMessageText(
+		ctx.callbackQuery.message?.chat.id!,
+		ctx.callbackQuery.message?.message_id!,
+		(await Promise.all(text)).join("\n"),
+		{ parse_mode: "HTML" }
+	);
 });
