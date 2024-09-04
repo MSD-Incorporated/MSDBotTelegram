@@ -83,7 +83,7 @@ dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx =>
 	const allUsers = await ctx.database
 		.select()
 		.from(dicks)
-		.orderBy(type === "desc" ? desc(dicks.size) : asc(dicks.size))
+		.orderBy(type === "desc" ? asc(dicks.size) : desc(dicks.size))
 		.limit(10);
 	if (allUsers.length < 0) return ctx.reply("Таблица лидеров пуста");
 
