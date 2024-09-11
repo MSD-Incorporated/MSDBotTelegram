@@ -65,7 +65,7 @@ dickComposer.command("dick", async ctx => {
 	});
 });
 
-dickComposer.command("leaderboard", async ctx => {
+dickComposer.command(["lb", "leaderboard"], async ctx => {
 	return ctx.reply("Выберите тип таблицы", {
 		reply_markup: {
 			inline_keyboard: [
