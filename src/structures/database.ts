@@ -1,4 +1,4 @@
-import { eq, type BuildQueryResult, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
+import { eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 import type { User as TelegramUser } from "typegram";
@@ -13,11 +13,6 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema,
 	TSchema[TableName]
 >["with"];
-
-export type InferResultType<
-	TableName extends keyof TSchema,
-	With extends IncludeRelation<TableName> | undefined = undefined,
-> = BuildQueryResult<TSchema, TSchema[TableName], { with: With }>;
 
 export class Database {
 	readonly client = new Client({
@@ -75,8 +70,8 @@ export class Database {
 			.execute();
 	};
 
-	readonly updateUser = async <U extends TelegramUser, D extends schema.TUser>(user: U, data: Partial<D>) => {
-		this.db.update(schema.users).set(data).where(eq(schema.users.user_id, user.id)).execute();
+	readonly updateUser = async <U extends TelegramUser, D extends schema.TUser>({ id }: U, data: Partial<D>) => {
+		this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
 	readonly resolveDick = async <
@@ -113,8 +108,8 @@ export class Database {
 			.execute();
 	};
 
-	readonly updateDick = async <U extends TelegramUser, D extends schema.TDick>(user: U, data: Partial<D>) => {
-		this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, user.id)).execute();
+	readonly updateDick = async <U extends TelegramUser, D extends schema.TDick>({ id }: U, data: Partial<D>) => {
+		this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
 	};
 
 	readonly resolveDickHistory = async <
@@ -161,9 +156,9 @@ export class Database {
 	};
 
 	readonly updateDickHistory = async <U extends TelegramUser, D extends schema.TDickHistory>(
-		user: U,
+		{ id }: U,
 		data: Partial<D>
 	) => {
-		this.db.update(schema.dick_history).set(data).where(eq(schema.dick_history.user_id, user.id)).execute();
+		this.db.update(schema.dick_history).set(data).where(eq(schema.dick_history.user_id, id)).execute();
 	};
 }

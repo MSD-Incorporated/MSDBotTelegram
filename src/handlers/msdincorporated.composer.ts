@@ -1,8 +1,9 @@
 import { Composer } from "grammy";
 import sagiri from "sagiri";
-import type { Message } from "typegram";
+import type { Message, MessageEntity } from "typegram";
 
 const channelID = -1001528929804;
+const chatChannelID = -1001528929804;
 
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
@@ -20,10 +21,38 @@ const urlParser = (urls: string[]) => {
 	return sortedURLs;
 };
 
-export const sauceNaoComposer = new Composer();
+export const msdIncorporatedComposer = new Composer();
 
-sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
+msdIncorporatedComposer.on(["channel_post::hashtag", "edited_channel_post::hashtag"], async ctx => {
+	const post = ctx.channelPost || ctx.editedChannelPost;
+	if (channelID !== post.chat.id) return;
+
+	const entities = (post.caption ? post.caption_entities : post.entities)!;
+	if (entities.find(entity => entity.type === "text_link" && entity.url === "https://t.me/msd_inc")) return;
+
+	const chatID = post.chat.id;
+	const message_id = post.message_id;
+	const original = post.caption ? post.caption : post.text;
+	const str = original + "\n\n" + "🔗┆MSD Incorporated";
+	const linkEntity: MessageEntity = {
+		length: "🔗┆MSD Incorporated".length,
+		offset: str.length - "🔗┆MSD Incorporated".length,
+		type: "text_link",
+		url: "https://t.me/msd_inc",
+	};
+
+	return post.caption
+		? ctx.api.editMessageCaption(chatID, message_id, {
+				caption: str,
+				caption_entities: [...entities, linkEntity],
+			})
+		: ctx.api.editMessageText(chatID, message_id, str, {
+				entities: [...entities, linkEntity],
+			});
+});
+
+msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
+	if (chatChannelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
 	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
@@ -35,8 +64,6 @@ sauceNaoComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const [res] = await sauceNao(url);
 
 	if (!res?.raw.data.creator) return;
-
-	console.log(res);
 
 	const author = res.raw.data.creator;
 	const characters = res.raw.data.characters;

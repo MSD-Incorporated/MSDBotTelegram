@@ -5,6 +5,8 @@ import type { Database } from "structures/database";
 import { dicks } from "../drizzle/dick";
 
 const timeout = 12 * 60 * 60;
+const random = (min: number, max: number, includeMax?: boolean) =>
+	Math.floor(Math.random() * (max - min + 1) + (includeMax ? min : 0));
 
 export const dickComposer: Composer<Context & { database: Database }> = new Composer();
 
@@ -23,12 +25,16 @@ dickComposer.command("dick", async ctx => {
 			.format("HH:mm:ss");
 
 		return ctx.reply(
-			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см \n\nИстории на данный момент нет - ожидайте в будущем`,
+			[
+				`Попробуйте через <code>${timeLeft}</code>`,
+				`Ваш текущий размер pp: <code>${size}</code> см`,
+				"Истории на данный момент нет - ожидайте в будущем",
+			].join("\n\n"),
 			{ parse_mode: "HTML" }
 		);
 	}
 
-	const difference = Math.floor(Math.random() * (7 - -7 + 1)) + -7;
+	const difference = random(-7, 7, true);
 
 	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
 	await ctx.database.writeDickHistory({ id: user.id, size, difference });

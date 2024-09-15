@@ -1,17 +1,8 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
-import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Bot, type Context } from "grammy";
-import type { UserFromGetMe } from "grammy/types";
-import {
-	autoLinkerComposer,
-	dickComposer,
-	pingCommand,
-	privacyCommand,
-	sauceNaoComposer,
-	startCommand,
-	telegraphComposer,
-} from "../handlers";
-import { Database, type Schema } from "./database";
+import type { UserFromGetMe } from "typegram";
+import { dickComposer, msdIncorporatedComposer, privacyCommand, startCommand, telegraphComposer } from "../handlers";
+import { Database } from "./database";
 
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
 
@@ -57,12 +48,10 @@ export class Client {
 			await next();
 		});
 
-		this.bot.use(autoLinkerComposer);
-		this.bot.use(sauceNaoComposer);
+		this.bot.use(msdIncorporatedComposer);
 		this.bot.use(telegraphComposer);
 		this.bot.use(dickComposer);
 
-		this.bot.command("ping", pingCommand);
 		this.bot.command("start", startCommand);
 		this.bot.command("privacy", privacyCommand);
 

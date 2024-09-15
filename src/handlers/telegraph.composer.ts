@@ -3,9 +3,7 @@ import Telegraph from "telegra.ph";
 import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
 
 const telegraph = new Telegraph(process.env.TELEGRAPH_TOKEN);
-const version = process.env.npm_package_version;
 const developerID = 946070039;
-const channelID = -1001528929804;
 
 const getContent = (page: Page) =>
 	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");

@@ -1,8 +1,6 @@
-export * from "./autolinker.composer";
 export * from "./dick.composer";
-export * from "./saucenao.composer";
+export * from "./msdincorporated.composer";
 export * from "./telegraph.composer";
 
-export * from "./ping.command";
 export * from "./privacy.command";
 export * from "./start.command";
