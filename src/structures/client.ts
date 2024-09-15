@@ -36,6 +36,26 @@ export class Client {
 			await next();
 		});
 
+		this.bot.use(async (ctx, next) => {
+			const user = ctx.from;
+
+			const dbuser = await this.database.resolveUser(user!, true);
+
+			if (
+				user?.first_name !== dbuser?.first_name ||
+				user?.last_name !== dbuser?.last_name ||
+				user?.username !== dbuser?.username
+			) {
+				await this.database.updateUser(user!, {
+					first_name: user?.first_name,
+					last_name: user?.last_name,
+					username: user?.username,
+				});
+			}
+
+			await next();
+		});
+
 		this.bot.use(autoLinkerComposer);
 		this.bot.use(sauceNaoComposer);
 		this.bot.use(telegraphComposer);
