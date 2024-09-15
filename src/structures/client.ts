@@ -11,12 +11,12 @@ import {
 	startCommand,
 	telegraphComposer,
 } from "../handlers";
-import { Database } from "./database";
+import { Database, type Schema } from "./database";
 
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
 
 export class Client {
-	readonly bot: Bot<Context & { database: NodePgDatabase }>;
+	readonly bot: Bot<Context & { database: Database }>;
 	readonly database: Database = new Database();
 
 	constructor(TOKEN?: string) {
@@ -31,7 +31,7 @@ export class Client {
 
 		this.bot.use(autoQuote());
 		this.bot.use(async (ctx, next) => {
-			ctx.database = this.database.db;
+			ctx.database = this.database;
 
 			await next();
 		});

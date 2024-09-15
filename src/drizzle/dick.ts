@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
 import { bigint, integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./user";
 
@@ -26,3 +27,6 @@ export const dick_history = pgTable("dick_history", {
 	difference: integer("difference").notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow(),
 });
+
+export type TDick = InferSelectModel<typeof dicks>;
+export type TDickHistory = InferSelectModel<typeof dick_history>;

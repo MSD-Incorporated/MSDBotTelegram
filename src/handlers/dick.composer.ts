@@ -1,33 +1,16 @@
 import { asc, desc, eq } from "drizzle-orm";
-import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Composer, type Context } from "grammy";
 import moment from "moment";
-import { dick_history, dicks } from "../drizzle/dick";
-import { users } from "../drizzle/user";
+import type { Database } from "structures/database";
+import { dicks } from "../drizzle/dick";
 
 const timeout = 12 * 60 * 60;
 
-export const dickComposer: Composer<Context & { database: NodePgDatabase }> = new Composer();
+export const dickComposer: Composer<Context & { database: Database }> = new Composer();
 
 dickComposer.command("dick", async ctx => {
-	const user = ctx.from!;
-
-	// TODO: Fix that shitcode
-	let db_user = (await ctx.database.select().from(users).where(eq(users.user_id, user.id)))[0]!;
-	if (!db_user) {
-		await ctx.database
-			.insert(users)
-			.values({ user_id: user.id, first_name: user.first_name, last_name: user.last_name });
-
-		db_user = (await ctx.database.select().from(users).where(eq(users.user_id, user.id)))[0]!;
-	}
-
-	let db_user_dick = (await ctx.database.select().from(dicks).where(eq(dicks.user_id, user.id)))[0]!;
-	if (!db_user_dick) {
-		await ctx.database.insert(dicks).values({ user_id: user.id });
-
-		db_user_dick = (await ctx.database.select().from(dicks).where(eq(dicks.user_id, user.id)))[0]!;
-	}
+	const user = ctx.msg.from!;
+	const db_user_dick = (await ctx.database.resolveDick(user, true))!;
 
 	const size = db_user_dick.size;
 
@@ -38,6 +21,7 @@ dickComposer.command("dick", async ctx => {
 		const timeLeft = moment((timeout - lastUsed) * 1000)
 			.utc(false)
 			.format("HH:mm:ss");
+
 		return ctx.reply(
 			`Попробуйте через <code>${timeLeft}</code> \n\nВаш текущий размер pp: <code>${size}</code> см \n\nИстории на данный момент нет - ожидайте в будущем`,
 			{ parse_mode: "HTML" }
@@ -46,12 +30,8 @@ dickComposer.command("dick", async ctx => {
 
 	const difference = Math.floor(Math.random() * (7 - -7 + 1)) + -7;
 
-	await ctx.database
-		.update(dicks)
-		.set({ size: size + difference, timestamp: new Date(now) })
-		.where(eq(dicks.user_id, user.id));
-
-	await ctx.database.insert(dick_history).values({ user_id: user.id, size, difference });
+	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
+	await ctx.database.writeDickHistory({ id: user.id, size, difference });
 
 	const phrase =
 		difference < 0
@@ -80,7 +60,7 @@ dickComposer.command(["lb", "leaderboard"], async ctx => {
 
 dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx => {
 	const type = ctx.callbackQuery.data === "leaderboard_asc" ? "asc" : "desc";
-	const allUsers = await ctx.database
+	const allUsers = await ctx.database.db
 		.select()
 		.from(dicks)
 		.orderBy(type === "desc" ? asc(dicks.size) : desc(dicks.size))
@@ -88,18 +68,16 @@ dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx =>
 	if (allUsers.length < 0) return ctx.reply("Таблица лидеров пуста");
 
 	const filtered = allUsers.filter(({ size }) => size !== 0);
-	const text = filtered.map(async (user, index) => {
-		const user_data = await ctx.database.select().from(users).where(eq(users.user_id, user.user_id)).limit(1)!;
-		const name =
-			user_data[0]!.first_name + (user_data[0]?.last_name == undefined ? "" : ` ${user_data[0].last_name}`);
+	const text = filtered.map(async ({ user_id, size }, index) => {
+		const user_data = (await ctx.database.resolveUser({ id: user_id }, true))!;
+		const name = user_data.first_name + (user_data?.last_name == undefined ? "" : ` ${user_data.last_name}`);
 
-		return `<b>${index + 1}.</b> ${name}: <code>${user.size}</code> см`;
+		return `<b>${index + 1}.</b> ${name}: <code>${size}</code> см`;
 	});
 
-	return ctx.api.editMessageText(
-		ctx.callbackQuery.message?.chat.id!,
-		ctx.callbackQuery.message?.message_id!,
-		(await Promise.all(text)).join("\n"),
-		{ parse_mode: "HTML" }
-	);
+	const message = ctx.callbackQuery.message;
+
+	return ctx.api.editMessageText(message?.chat.id!, message?.message_id!, (await Promise.all(text)).join("\n"), {
+		parse_mode: "HTML",
+	});
 });
