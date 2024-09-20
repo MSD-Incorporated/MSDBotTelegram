@@ -92,14 +92,14 @@ dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx =>
 
 dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 	const user_id = Number(ctx.callbackQuery.data.split("_")[2]);
-	if (ctx.callbackQuery.from!.id !== user_id) return;
+	if (ctx.callbackQuery.from!.id !== user_id) return ctx.answerCallbackQuery("Эта кнопка предназначена не вам!");
 
 	const inline_keyboard = ctx.callbackQuery.message?.reply_markup?.inline_keyboard!;
 	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
 	const currentPage = Number(totalPagesButton?.text.split("/")[0]);
 	const page = Number(ctx.callbackQuery.data.split("_")[3]);
 
-	if (currentPage == page) return ctx.answerCallbackQuery("Вы уже в этой странице");
+	if (currentPage == page) return ctx.answerCallbackQuery("Вы уже в этой странице!");
 
 	const dick_history = await ctx.database.resolveDickHistory(ctx.callbackQuery.from, true);
 	const pagesLength = Math.ceil(dick_history.length / 10);
