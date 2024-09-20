@@ -108,7 +108,7 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 		.slice(page * 10 - 10 + (page > 1 ? 1 : 0), page * 10)
 		.map(({ size, difference, created_at }, index) => {
 			return [
-				`${index + 1}) <code>${moment(created_at).utc(false).format("DD.MM.YYYY HH:mm")} UTC</code>`,
+				`${page * 10 - 10 + index + 1}) <code>${moment(created_at).utc(false).format("DD.MM.YYYY HH:mm")} UTC</code>`,
 				`• Получено: <code>${difference}</code>`,
 				`• Всего: <code>${size + difference}</code>`,
 			].join("\n");
