@@ -105,7 +105,8 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 	const pagesLength = Math.ceil(dick_history.length / 10);
 
 	const history = dick_history
-		.slice(page * 10 - 10 + (page > 1 ? 1 : 0), page * 10)
+		.reverse()
+		.slice(Math.max(page * 10 - 10, 0), Math.min(page * 10, dick_history.length))
 		.map(({ size, difference, created_at }, index) => {
 			return [
 				`${page * 10 - 10 + index + 1}) <code>${moment(created_at).utc(false).format("DD.MM.YYYY HH:mm")} UTC</code>`,
