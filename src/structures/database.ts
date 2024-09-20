@@ -1,4 +1,4 @@
-import { eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
+import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 import type { User as TelegramUser } from "typegram";
@@ -138,7 +138,7 @@ export class Database {
 		}
 
 		return this.db.query.dick_history
-			.findFirst({ where: eq(schema.dick_history.user_id, user.id), with: include })
+			.findMany({ where: eq(schema.dick_history.user_id, user.id), with: include })
 			.execute();
 	};
 
@@ -155,10 +155,14 @@ export class Database {
 			.execute();
 	};
 
-	readonly updateDickHistory = async <U extends TelegramUser, D extends schema.TDickHistory>(
-		{ id }: U,
+	readonly updateDickHistory = async <U extends TelegramUser & { dick_id: number }, D extends schema.TDickHistory>(
+		{ id, dick_id }: U,
 		data: Partial<D>
 	) => {
-		this.db.update(schema.dick_history).set(data).where(eq(schema.dick_history.user_id, id)).execute();
+		this.db
+			.update(schema.dick_history)
+			.set(data)
+			.where(and(eq(schema.dick_history.user_id, id), eq(schema.dick_history.id, dick_id)))
+			.execute();
 	};
 }
