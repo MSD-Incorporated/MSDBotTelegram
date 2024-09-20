@@ -3,7 +3,7 @@ import { Composer, type Context } from "grammy";
 import moment from "moment";
 import type { Database } from "structures/database";
 import type { InlineKeyboardButton } from "typegram";
-import { dicks } from "../drizzle/dick";
+import { dicks } from "../drizzle";
 
 const timeout = 12 * 60 * 60;
 const random = (min: number, max: number, includeMax?: boolean) =>
@@ -60,33 +60,62 @@ dickComposer.command(["lb", "leaderboard"], async ctx => {
 		reply_markup: {
 			inline_keyboard: [
 				[
-					{ text: "📈 По возрастанию", callback_data: "leaderboard_asc" },
-					{ text: "📉 По убыванию", callback_data: "leaderboard_desc" },
+					{ text: "📈 По возрастанию", callback_data: "leaderboard_asc_1" },
+					{ text: "📉 По убыванию", callback_data: "leaderboard_desc_1" },
 				],
 			],
 		},
 	});
 });
 
-dickComposer.callbackQuery(["leaderboard_asc", "leaderboard_desc"], async ctx => {
-	const type = ctx.callbackQuery.data === "leaderboard_asc" ? "asc" : "desc";
+dickComposer.callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
+	const inline_keyboard = ctx.callbackQuery.message?.reply_markup?.inline_keyboard!;
+	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
+	const currentPage = Number(totalPagesButton?.text.split("/")[0]);
+	const page = Number(ctx.callbackQuery.data.split("_")[2]);
+
+	if (currentPage == page) return ctx.answerCallbackQuery("Вы уже в этой странице!");
+
+	const type = ctx.callbackQuery.data.includes("leaderboard_asc") ? "asc" : "desc";
 	const allUsers = await ctx.database.db
-		.select()
+		.select({ user_id: dicks.user_id, size: dicks.size })
 		.from(dicks)
-		.orderBy(type === "desc" ? asc(dicks.size) : desc(dicks.size))
-		.limit(10);
+		.orderBy(({ size }) => (type === "asc" ? asc(size) : desc(size)));
+
 	if (allUsers.length < 0) return ctx.reply("Таблица лидеров пуста");
 
-	const filtered = allUsers.filter(({ size }) => size !== 0);
-	const text = filtered.map(async ({ user_id, size }, index) => {
-		const user_data = (await ctx.database.resolveUser({ id: user_id }, true))!;
-		const name = user_data.first_name + (user_data?.last_name == undefined ? "" : ` ${user_data.last_name}`);
+	const pagesLength = Math.ceil(allUsers.length / 10);
+	const text = allUsers
+		.slice(Math.max(page * 10 - 10, 0), Math.min(page * 10, allUsers.length))
+		.map(async ({ user_id, size }, index) => {
+			const user_data = (await ctx.database.resolveUser({ id: user_id }, true))!;
+			const name = user_data.first_name + (user_data?.last_name == undefined ? "" : ` ${user_data.last_name}`);
 
-		return `<b>${index + 1}.</b> ${name}: <code>${size}</code> см`;
+			return `<b>${page * 10 - 10 + index + 1}.</b> ${name}: <code>${size}</code> см`;
+		});
+
+	const keyboard: InlineKeyboardButton[][] = [[]];
+
+	if (page > 1)
+		keyboard[0]?.push({
+			callback_data: `leaderboard_${type}_${page - 1}`,
+			text: `Назад`,
+		});
+
+	keyboard[0]?.push({
+		callback_data: `leaderboard_${type}_${page}`,
+		text: `${page}/${pagesLength}`,
 	});
+
+	if (page < pagesLength)
+		keyboard[0]?.push({
+			callback_data: `leaderboard_${type}_${page + 1}`,
+			text: `Вперёд`,
+		});
 
 	return ctx.api.editMessageText(ctx.chatId!, ctx.msgId!, (await Promise.all(text)).join("\n"), {
 		parse_mode: "HTML",
+		reply_markup: { inline_keyboard: keyboard },
 	});
 });
 
@@ -109,7 +138,7 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 		.slice(Math.max(page * 10 - 10, 0), Math.min(page * 10, dick_history.length))
 		.map(({ size, difference, created_at }, index) => {
 			return [
-				`${page * 10 - 10 + index + 1}) <code>${moment(created_at).utc(false).format("DD.MM.YYYY HH:mm")} UTC</code>`,
+				`${page * 10 - 10 + index + 1}. <code>${moment(created_at).utc(false).format("DD.MM.YYYY HH:mm")} UTC</code>`,
 				`• Получено: <code>${difference}</code>`,
 				`• Всего: <code>${size + difference}</code>`,
 			].join("\n");
