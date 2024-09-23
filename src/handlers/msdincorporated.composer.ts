@@ -65,8 +65,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	if (!res?.raw.data.creator) return;
 
-	const author = res.raw.data.creator;
-	const characters = res.raw.data.characters;
+	const { author, characters } = res.raw.data;
 	// @ts-ignore
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);

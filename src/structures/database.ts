@@ -14,14 +14,16 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema[TableName]
 >["with"];
 
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, DATABASE_URL } = process.env;
+
 export class Database {
 	readonly client = new Client({
 		host: "localhost",
 		port: 5432,
-		user: process.env.POSTGRES_USER,
-		password: process.env.POSTGRES_PASSWORD,
-		database: process.env.POSTGRES_DB,
-		ssl: process.env.DATABASE_URL ? true : false,
+		user: POSTGRES_USER,
+		password: POSTGRES_PASSWORD,
+		database: POSTGRES_DB,
+		ssl: DATABASE_URL ? true : false,
 	});
 
 	public db: NodePgDatabase<Schema>;
@@ -44,16 +46,10 @@ export class Database {
 		include: I = {} as I
 	) => {
 		const searchResult = await this.db.query.users
-			.findFirst({ where: eq(schema.users.user_id, user.id) })
+			.findFirst({ where: eq(schema.users.user_id, user.id), with: include })
 			.execute();
 
-		if (
-			!searchResult &&
-			createIfNotExists &&
-			(user as TelegramUser)?.first_name &&
-			(user as TelegramUser)?.last_name &&
-			(user as TelegramUser)?.username
-		) {
+		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
 			await this.writeUser(user as TelegramUser);
 		}
 
@@ -87,13 +83,7 @@ export class Database {
 			.findFirst({ where: eq(schema.dicks.user_id, user.id) })
 			.execute();
 
-		if (
-			!searchResult &&
-			createIfNotExists &&
-			(user as TelegramUser)?.first_name &&
-			(user as TelegramUser)?.last_name &&
-			(user as TelegramUser)?.username
-		) {
+		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
 			await this.resolveUser(user as TelegramUser, true);
 			await this.writeDick(user as TelegramUser);
 		}
@@ -125,13 +115,7 @@ export class Database {
 			.findFirst({ where: eq(schema.dick_history.user_id, user.id) })
 			.execute();
 
-		if (
-			!searchResult &&
-			createIfNotExists &&
-			(user as TelegramUser)?.first_name &&
-			(user as TelegramUser)?.last_name &&
-			(user as TelegramUser)?.username
-		) {
+		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
 			await this.resolveUser(user as TelegramUser, true);
 			await this.resolveDick(user as TelegramUser, true);
 			await this.writeDickHistory(user);
