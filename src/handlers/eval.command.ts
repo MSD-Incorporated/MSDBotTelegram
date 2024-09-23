@@ -28,6 +28,8 @@ function getCircularReplacer(): (key: string, value: unknown) => unknown {
 }
 
 export const evalCommand = async (ctx: Context) => {
+	if (ctx.from!.id !== 946070039) return;
+
 	const prompt = ctx.match?.toString().replace(/(^`{3}(\w+)?|`{3}$)/gm, "")!;
 	const res = await eval(await clean(prompt));
 	let JSONed = JSON.stringify(res, getCircularReplacer(), 4).slice(0, 4092);
