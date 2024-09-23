@@ -1,7 +1,14 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot, type Context } from "grammy";
 import type { UserFromGetMe } from "typegram";
-import { dickComposer, msdIncorporatedComposer, privacyCommand, startCommand, telegraphComposer } from "../handlers";
+import {
+	dickComposer,
+	evalCommand,
+	msdIncorporatedComposer,
+	privacyCommand,
+	startCommand,
+	telegraphComposer,
+} from "../handlers";
 import { Database } from "./database";
 
 const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
@@ -52,6 +59,7 @@ export class Client {
 		this.bot.use(telegraphComposer);
 		this.bot.use(dickComposer);
 
+		this.bot.command("eval", evalCommand);
 		this.bot.command("start", startCommand);
 		this.bot.command("privacy", privacyCommand);
 
