@@ -2,6 +2,7 @@
 	"name": "msdbot_telegram",
 	"version": "0.2.4",
 	"author": "MasedMSD",
+	"module": "./src/index.ts",
 	"main": "./dist/index.js",
 	"license": "MIT",
 	"private": true,
