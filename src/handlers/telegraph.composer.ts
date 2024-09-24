@@ -12,17 +12,17 @@ const getPage = async ([id]: string[]) => telegraph.getPage(id!.replace("https:/
 
 export const telegraphComposer = new Composer();
 
-telegraphComposer.command("telegraph", async ({ from, msg, reply }) => {
-	if (developerID !== from!.id) return;
+telegraphComposer.command("telegraph", async ctx => {
+	if (developerID !== ctx.from!.id) return;
 
-	const args = msg.text.split(/\s+/).slice(1);
-	if (!args?.length) return reply("Не удалось найти ID");
+	const args = ctx.msg.text.split(/\s+/).slice(1);
+	if (!args?.length) return ctx.reply("Не удалось найти ID");
 
 	const page = await getPage(args);
 	const elements = getContent(page);
 	const newPage = await telegraph.createPage(page.title, elements, "MSD Incorporated", "https://t.me/msd_inc");
 
-	return reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
+	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
 		parse_mode: "HTML",
 	});
 });
