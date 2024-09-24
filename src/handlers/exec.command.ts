@@ -7,7 +7,7 @@ export const execCommand = async (ctx: Context) => {
 	const prompt = ctx.match?.toString()!;
 	const res = await $`${{ raw: prompt }}`.text("utf8");
 
-	return ctx.reply(`<pre class="tg-pre-code">${res}</pre>`, {
+	return ctx.reply(`<pre class="tg-pre-code">${res.slice(0, 4092)}</pre>`, {
 		parse_mode: "HTML",
 	});
 };
