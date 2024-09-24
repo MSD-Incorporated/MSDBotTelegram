@@ -4,6 +4,7 @@ import type { UserFromGetMe } from "typegram";
 import {
 	dickComposer,
 	evalCommand,
+	execCommand,
 	msdIncorporatedComposer,
 	privacyCommand,
 	startCommand,
@@ -60,6 +61,7 @@ export class Client {
 		this.bot.use(dickComposer);
 
 		this.bot.command("eval", evalCommand);
+		this.bot.command("exec", execCommand);
 		this.bot.command("start", startCommand);
 		this.bot.command("privacy", privacyCommand);
 
