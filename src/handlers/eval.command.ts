@@ -32,10 +32,10 @@ export const evalCommand = async (ctx: Context) => {
 
 	const prompt = ctx.match?.toString().replace(/(^`{3}(\w+)?|`{3}$)/gm, "")!;
 	const res = await eval(await clean(prompt));
-	let JSONed = JSON.stringify(res, getCircularReplacer(), 4).slice(0, 4092);
+
+	let JSONed = res == undefined ? "Результата нет" : JSON.stringify(res, getCircularReplacer(), 4).slice(0, 4092);
 
 	Object.values(envs).forEach(value => (JSONed = JSONed.replace(new RegExp(value!, "g"), "*".repeat(value!.length))));
-
 	return ctx.reply(`<pre class="tg-pre-code">${JSONed}</pre>`, {
 		parse_mode: "HTML",
 	});
