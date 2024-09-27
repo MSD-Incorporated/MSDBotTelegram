@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"@types/bun": "^1.1.10",
-		"@types/node": "^22.0.0",
+		"@types/node": "^22.7.3",
 		"@types/pg": "^8.11.6",
 		"drizzle-kit": "^0.24.0",
 		"prettier": "^3.3.0",
