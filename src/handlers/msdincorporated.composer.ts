@@ -33,11 +33,11 @@ msdIncorporatedComposer.on(["channel_post::hashtag", "edited_channel_post::hasht
 	const chatID = post.chat.id;
 	const message_id = post.message_id;
 	const original = post.caption ? post.caption : post.text;
-	const str = original + "\n\n" + "MSD Incorporated" + "\n\n" + " | Donate";
+	const str = original + "\n\n" + "MSD Incorporated" + " | Donate";
 
 	const linkEntity: MessageEntity = {
 		length: "MSD Incorporated".length,
-		offset: str.length - "\n\n | Donate".length - "MSD Incorporated".length,
+		offset: str.length - " | Donate".length - "MSD Incorporated".length,
 		type: "text_link",
 		url: "https://t.me/msd_inc",
 	};
