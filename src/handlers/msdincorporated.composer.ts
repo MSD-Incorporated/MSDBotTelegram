@@ -37,7 +37,7 @@ msdIncorporatedComposer.on(["channel_post::hashtag", "edited_channel_post::hasht
 
 	const linkEntity: MessageEntity = {
 		length: "MSD Incorporated".length,
-		offset: str.length - " | Donate".length - "MSD Incorporated".length,
+		offset: str.length - "\n\n | Donate".length - "MSD Incorporated".length,
 		type: "text_link",
 		url: "https://t.me/msd_inc",
 	};
