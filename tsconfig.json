@@ -9,7 +9,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"importHelpers": true,
 		"lib": ["ESNext", "DOM"],
-		"module": "CommonJS",
+		"module": "ESNext",
 		"moduleResolution": "Node",
 		"newLine": "lf",
 		"noImplicitThis": true,
