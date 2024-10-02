@@ -8,6 +8,7 @@ import {
 	githubLinkComposer,
 	msdIncorporatedComposer,
 	privacyCommand,
+	randomEmojiComposer,
 	startCommand,
 	telegraphComposer,
 } from "../handlers";
@@ -60,6 +61,7 @@ export class Client {
 		this.bot.use(dickComposer);
 		this.bot.use(githubLinkComposer);
 		this.bot.use(msdIncorporatedComposer);
+		this.bot.use(randomEmojiComposer);
 		this.bot.use(telegraphComposer);
 
 		this.bot.command("eval", evalCommand);
