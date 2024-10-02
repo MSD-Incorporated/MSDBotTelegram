@@ -5,6 +5,7 @@ import {
 	dickComposer,
 	evalCommand,
 	execCommand,
+	githubLinkComposer,
 	msdIncorporatedComposer,
 	privacyCommand,
 	startCommand,
@@ -56,9 +57,10 @@ export class Client {
 			await next();
 		});
 
+		this.bot.use(dickComposer);
+		this.bot.use(githubLinkComposer);
 		this.bot.use(msdIncorporatedComposer);
 		this.bot.use(telegraphComposer);
-		this.bot.use(dickComposer);
 
 		this.bot.command("eval", evalCommand);
 		this.bot.command("exec", execCommand);

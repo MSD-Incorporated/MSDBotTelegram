@@ -1,4 +1,5 @@
 export * from "./dick.composer";
+export * from "./githubLink.composer";
 export * from "./msdincorporated.composer";
 export * from "./telegraph.composer";
 
