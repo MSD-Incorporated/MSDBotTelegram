@@ -13,7 +13,7 @@ export const dickComposer: Composer<Context & { database: Database }> = new Comp
 
 dickComposer.command("dick", async ctx => {
 	if (ctx.chat.id == -1001705068191 || ctx.chat.type !== "private")
-		return ctx.reply("Пожалуйста, используйте эту команду в личных сообщениях или другом чате!");
+		return ctx.reply("Пожалуйста, используйте эту команду в личных сообщениях бота или другом чате!");
 
 	const user = ctx.msg.from!;
 	const db_user_dick = (await ctx.database.resolveDick(user, true))!;
