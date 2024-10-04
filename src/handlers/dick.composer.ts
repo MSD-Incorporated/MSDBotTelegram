@@ -12,9 +12,6 @@ const random = (min: number, max: number, includeMax?: boolean) =>
 export const dickComposer: Composer<Context & { database: Database }> = new Composer();
 
 dickComposer.command("dick", async ctx => {
-	if (ctx.chat.id == -1001705068191 || ctx.chat.type !== "private")
-		return ctx.reply("Пожалуйста, используйте эту команду в личных сообщениях бота или другом чате!");
-
 	const user = ctx.msg.from!;
 	const db_user_dick = (await ctx.database.resolveDick(user, true))!;
 
@@ -28,7 +25,7 @@ dickComposer.command("dick", async ctx => {
 			.utc(false)
 			.format("HH:mm:ss");
 
-		return ctx.reply(
+		const sentMessage = await ctx.reply(
 			[`Попробуйте через <code>${timeLeft}</code>`, `Ваш текущий размер pp: <code>${size}</code> см`].join(
 				"\n\n"
 			),
@@ -39,6 +36,13 @@ dickComposer.command("dick", async ctx => {
 				},
 			}
 		);
+
+		setTimeout(() => {
+			ctx.deleteMessage();
+			ctx.api.deleteMessage(sentMessage.chat.id!, sentMessage.message_id!);
+		}, 60 * 1000);
+
+		return;
 	}
 
 	const difference = random(-7, 7, true);
@@ -53,9 +57,19 @@ dickComposer.command("dick", async ctx => {
 				? `увеличился на <code>${difference}</code> см!`
 				: "не изменился";
 
-	return ctx.reply(`Ваш pp ${phrase} \n\nВаш текущий размер pp: <code>${size + difference}</code> см`, {
-		parse_mode: "HTML",
-	});
+	const sentMessage = await ctx.reply(
+		`Ваш pp ${phrase} \n\nВаш текущий размер pp: <code>${size + difference}</code> см`,
+		{
+			parse_mode: "HTML",
+		}
+	);
+
+	setTimeout(() => {
+		ctx.deleteMessage();
+		ctx.api.deleteMessage(sentMessage.chat.id!, sentMessage.message_id!);
+	}, 60 * 1000);
+
+	return;
 });
 
 dickComposer.command(["lb", "leaderboard"], async ctx => {
