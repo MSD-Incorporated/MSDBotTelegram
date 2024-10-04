@@ -25,7 +25,7 @@ dickComposer.command("dick", async ctx => {
 			.utc(false)
 			.format("HH:mm:ss");
 
-		const sentMessage = await ctx.reply(
+		return ctx.reply(
 			[`Попробуйте через <code>${timeLeft}</code>`, `Ваш текущий размер pp: <code>${size}</code> см`].join(
 				"\n\n"
 			),
@@ -36,13 +36,6 @@ dickComposer.command("dick", async ctx => {
 				},
 			}
 		);
-
-		setTimeout(() => {
-			ctx.deleteMessage();
-			ctx.api.deleteMessage(sentMessage.chat.id!, sentMessage.message_id!);
-		}, 60 * 1000);
-
-		return;
 	}
 
 	const difference = random(-7, 7, true);
@@ -57,19 +50,9 @@ dickComposer.command("dick", async ctx => {
 				? `увеличился на <code>${difference}</code> см!`
 				: "не изменился";
 
-	const sentMessage = await ctx.reply(
-		`Ваш pp ${phrase} \n\nВаш текущий размер pp: <code>${size + difference}</code> см`,
-		{
-			parse_mode: "HTML",
-		}
-	);
-
-	setTimeout(() => {
-		ctx.deleteMessage();
-		ctx.api.deleteMessage(sentMessage.chat.id!, sentMessage.message_id!);
-	}, 60 * 1000);
-
-	return;
+	return ctx.reply(`Ваш pp ${phrase} \n\nВаш текущий размер pp: <code>${size + difference}</code> см`, {
+		parse_mode: "HTML",
+	});
 });
 
 dickComposer.command(["lb", "leaderboard"], async ctx => {
