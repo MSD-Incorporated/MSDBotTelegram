@@ -11,10 +11,10 @@ const urlParser = (urls: string[]) => {
 	urls.forEach(url => {
 		if (url.includes("gelbooru")) sortedURLs.push(["Gelbooru", url]);
 		if (url.includes("danbooru")) sortedURLs.push(["Danbooru", url]);
-		if (url.includes("yande.re")) sortedURLs.push(["Yandere", url]);
 		if (url.includes("x.com") || url.includes("twitter"))
 			sortedURLs.push(["Twitter", url.replace("twitter.com", "fxtwitter.com").replace("x.com", "fxtwitter.com")]);
 		if (url.includes("pixiv")) sortedURLs.push(["Pixiv", url]);
+		if (url.includes("yande.re")) sortedURLs.push(["Yandere", url]);
 		if (url.includes("patreon")) sortedURLs.push(["Patreon", url]);
 	});
 
@@ -78,7 +78,9 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	ctx.reply(
+	if (!url.length) return;
+
+	return ctx.reply(
 		[
 			`• <b>Автор:</b> <code>${author || "Неизвестно"}</code>`,
 			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
