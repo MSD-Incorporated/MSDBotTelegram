@@ -7,7 +7,6 @@ import {
 	execCommand,
 	githubLinkComposer,
 	msdIncorporatedComposer,
-	privacyCommand,
 	randomEmojiComposer,
 	startCommand,
 	telegraphComposer,
@@ -67,7 +66,6 @@ export class Client {
 		this.bot.command("eval", evalCommand);
 		this.bot.command("exec", execCommand);
 		this.bot.command("start", startCommand);
-		this.bot.command("privacy", privacyCommand);
 
 		this.bot.catch(console.error);
 		await this.bot.init();

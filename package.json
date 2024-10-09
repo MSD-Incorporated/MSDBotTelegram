@@ -26,21 +26,21 @@
 	"dependencies": {
 		"@roziscoding/grammy-autoquote": "^2.0.6",
 		"dotenv": "^16.4.5",
-		"drizzle-orm": "^0.33.0",
+		"drizzle-orm": "^0.34.1",
 		"grammy": "^1.24.0",
 		"moment": "^2.30.1",
 		"pg": "^8.12.0",
-		"sagiri": "^3.6.0",
+		"sagiri": "^4.2.0",
 		"telegra.ph": "^1.0.1",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.10",
-		"@types/node": "^22.7.3",
+		"@types/bun": "^1.1.11",
+		"@types/node": "^22.7.5",
 		"@types/pg": "^8.11.6",
-		"drizzle-kit": "^0.24.0",
+		"drizzle-kit": "^0.25.0",
 		"prettier": "^3.3.0",
 		"typegram": "^5.2.0",
-		"typescript": "^5.5.4"
+		"typescript": "^5.6.3"
 	}
 }
