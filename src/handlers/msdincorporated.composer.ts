@@ -71,7 +71,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(url);
 
-	if (!res?.raw.data.creator) return;
+	if (!res?.raw.data.ext_urls.length) return;
 
 	const { author, characters } = res.raw.data;
 	// @ts-ignore
