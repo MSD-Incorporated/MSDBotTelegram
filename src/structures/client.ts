@@ -38,7 +38,7 @@ export class Client {
 
 		this.bot.use(async (ctx, next) => {
 			const user = ctx.from;
-			if (!user || user.is_bot) return await next();
+			if (!user || user.is_bot || user.id == 777000) return await next();
 
 			const dbuser = await this.database.resolveUser(user!, true);
 
