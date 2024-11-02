@@ -10,6 +10,7 @@ import {
 	randomEmojiComposer,
 	startCommand,
 	telegraphComposer,
+	YTDLComposer,
 } from "../handlers";
 import { Database } from "./database";
 
@@ -62,6 +63,7 @@ export class Client {
 		this.bot.use(msdIncorporatedComposer);
 		this.bot.use(randomEmojiComposer);
 		this.bot.use(telegraphComposer);
+		this.bot.use(YTDLComposer);
 
 		this.bot.command("eval", evalCommand);
 		this.bot.command("exec", execCommand);
