@@ -67,6 +67,10 @@ export class Client {
 		this.bot.command("exec", execCommand);
 		this.bot.command("start", startCommand);
 
+		this.bot.on("::mention", ctx => {
+			if (ctx.message?.text == `@${this.bot.botInfo.username}`) return ctx.reply("Я тут!");
+		});
+
 		this.bot.catch(console.error);
 		await this.bot.init();
 		await this.bot.start({ drop_pending_updates: true, onStart });
