@@ -74,7 +74,7 @@ export class Client {
 		});
 
 		this.bot.on(":new_chat_members", async ctx => {
-			if (ctx.chat.id !== -4550624067) return;
+			if (ctx.chat.id !== -1001705068191) return;
 			ctx.replyWithAnimation(new InputFile(resolve(cwd(), "src", "media", "welcome.gif")));
 		});
 
