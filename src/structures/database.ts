@@ -1,5 +1,5 @@
 import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
-import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 import type { User as TelegramUser } from "typegram";
 import * as schema from "../drizzle/index";

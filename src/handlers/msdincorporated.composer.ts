@@ -1,9 +1,11 @@
-import { Composer } from "grammy";
+import { Composer, InputFile } from "grammy";
+import { resolve } from "path";
+import { cwd } from "process";
 import sagiri from "sagiri";
 import type { Message, MessageEntity } from "typegram";
 
 const channelID = -1001528929804;
-const chatChannelID = -1001528929804;
+const chatChannelID = -1001705068191;
 
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
@@ -60,7 +62,7 @@ msdIncorporatedComposer.on(["channel_post::hashtag", "edited_channel_post::hasht
 });
 
 msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (chatChannelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
+	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
 	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
@@ -93,4 +95,9 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 			parse_mode: "HTML",
 		}
 	);
+});
+
+msdIncorporatedComposer.on(":new_chat_members", async ctx => {
+	if (ctx.chat.id !== chatChannelID) return;
+	ctx.replyWithAnimation(new InputFile(resolve(cwd(), "src", "media", "welcome.gif")));
 });
