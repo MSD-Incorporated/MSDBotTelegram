@@ -1,5 +1,7 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot, InputFile, type Context } from "grammy";
+import { resolve } from "path";
+import { cwd } from "process";
 import type { UserFromGetMe } from "typegram";
 import {
 	dickComposer,
@@ -73,9 +75,7 @@ export class Client {
 
 		this.bot.on(":new_chat_members", async ctx => {
 			if (ctx.chat.id !== -1001705068191) return;
-			ctx.replyWithAnimation(
-				"AAMCAgADHQJloUafAAEDeE9nMiZi1SoZuDd7RkI9dDJCKOHyCAACeicAAkAa6Eo4JnSpkt4gxwEAB20AAzYE"
-			);
+			ctx.replyWithVideo(new InputFile(resolve(cwd(), "src", "media", "welcome.gif")));
 		});
 
 		this.bot.catch(console.error);
