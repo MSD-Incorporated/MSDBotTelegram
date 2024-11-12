@@ -1,5 +1,5 @@
 import { autoQuote } from "@roziscoding/grammy-autoquote";
-import { Bot, type Context } from "grammy";
+import { Bot, InputFile, type Context } from "grammy";
 import type { UserFromGetMe } from "typegram";
 import {
 	dickComposer,
@@ -69,6 +69,13 @@ export class Client {
 
 		this.bot.on("::mention", ctx => {
 			if (ctx.message?.text == `@${this.bot.botInfo.username}`) return ctx.reply("Я тут!");
+		});
+
+		this.bot.on(":new_chat_members", async ctx => {
+			if (ctx.chat.id !== -1001705068191) return;
+			ctx.replyWithAnimation(
+				"AAMCAgADHQJloUafAAEDeE9nMiZi1SoZuDd7RkI9dDJCKOHyCAACeicAAkAa6Eo4JnSpkt4gxwEAB20AAzYE"
+			);
 		});
 
 		this.bot.catch(console.error);
