@@ -11,14 +11,12 @@ const random = (min: number, max: number, includeMax?: boolean) =>
 
 export const dickComposer: Composer<Context & { database: Database }> = new Composer();
 
-dickComposer.command("dick", async ctx => {
+dickComposer.command(["dick", "cock", "dck"], async ctx => {
 	const user = ctx.msg.from!;
-	const db_user_dick = (await ctx.database.resolveDick(user, true))!;
-
-	const size = db_user_dick.size;
+	const { size, timestamp } = (await ctx.database.resolveDick(user, true))!;
 
 	const now = moment().unix();
-	const lastUsed = now - db_user_dick.timestamp.getTime();
+	const lastUsed = now - timestamp.getTime();
 
 	if (lastUsed < timeout) {
 		const timeLeft = moment((timeout - lastUsed) * 1000)
