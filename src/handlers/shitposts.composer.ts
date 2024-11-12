@@ -2,7 +2,7 @@ import { checkText } from "@artemis69/yandex-speller";
 import { Composer } from "grammy";
 import type { Message } from "typegram";
 
-const channelID = -1002277829990;
+const channelID = -1002118873453;
 
 export const shitpostsComposer = new Composer();
 
@@ -25,7 +25,5 @@ shitpostsComposer.on("message", async ctx => {
 
 	const textToSend = [`<b>Я нашёл возможные ошибки в тексте:</b>\n\n`, formattedRows.join("\n\n")].join("");
 
-	return ctx.reply(textToSend, {
-		parse_mode: "HTML",
-	});
+	return ctx.reply(textToSend, { parse_mode: "HTML" });
 });
