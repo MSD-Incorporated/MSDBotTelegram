@@ -3,7 +3,6 @@ import { Database } from "../structures/database";
 
 export const autoCaching = async (ctx: Context & { database: Database }, database: Database, next: NextFunction) => {
 	ctx.database = database;
-	await next();
 
 	const user = ctx.from;
 	if (!user || user.is_bot || user.id == 777000) return await next();
@@ -21,4 +20,6 @@ export const autoCaching = async (ctx: Context & { database: Database }, databas
 			username: user?.username,
 		});
 	}
+
+	await next();
 };

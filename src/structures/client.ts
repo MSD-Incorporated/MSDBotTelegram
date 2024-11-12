@@ -7,6 +7,7 @@ import {
 	githubLinkComposer,
 	msdIncorporatedComposer,
 	randomShitComposer,
+	shitpostsComposer,
 	startCommand,
 	telegraphComposer,
 } from "handlers";
@@ -35,6 +36,7 @@ export class Client {
 		this.bot.use(githubLinkComposer);
 		this.bot.use(msdIncorporatedComposer);
 		this.bot.use(randomShitComposer);
+		this.bot.use(shitpostsComposer);
 		this.bot.use(telegraphComposer);
 
 		this.bot.command("exec", execCommand);

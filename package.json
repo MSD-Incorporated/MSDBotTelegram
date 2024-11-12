@@ -24,6 +24,7 @@
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'"
 	},
 	"dependencies": {
+		"@artemis69/yandex-speller": "^0.1.1",
 		"@roziscoding/grammy-autoquote": "^2.0.6",
 		"drizzle-orm": "^0.36.1",
 		"grammy": "^1.31.2",
