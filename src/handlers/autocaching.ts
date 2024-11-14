@@ -5,7 +5,7 @@ export const autoCaching = async (ctx: Context & { database: Database }, databas
 	ctx.database = database;
 
 	const user = ctx.from;
-	if (!user || user.is_bot || user.id == 777000) return await next();
+	if (!user || user.is_bot || user.id == 777000) return next();
 
 	const dbuser = await database.resolveUser(user!, true);
 
@@ -21,5 +21,5 @@ export const autoCaching = async (ctx: Context & { database: Database }, databas
 		});
 	}
 
-	await next();
+	return next();
 };

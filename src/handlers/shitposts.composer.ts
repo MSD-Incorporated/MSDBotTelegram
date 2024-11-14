@@ -8,12 +8,12 @@ export const shitpostsComposer = new Composer();
 
 const safeWord = (word: string) => word.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-shitpostsComposer.on("message", async ctx => {
-	if (!ctx.message.forward_origin) return;
-	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
+shitpostsComposer.on("message", async (ctx, next) => {
+	if (!ctx.message.forward_origin) return next();
+	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return next();
 
 	const text = ctx.message.text || ctx.message.caption;
-	if (!text) return;
+	if (!text) return next();
 
 	const rows = text.split("\n");
 	const words = await checkText(text, {});
