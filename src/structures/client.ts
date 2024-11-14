@@ -5,6 +5,7 @@ import {
 	dickComposer,
 	execCommand,
 	githubLinkComposer,
+	infoComposer,
 	msdIncorporatedComposer,
 	randomShitComposer,
 	shitpostsComposer,
@@ -30,14 +31,17 @@ export class Client {
 
 		await this.database.connect();
 
-		this.bot.use(autoQuote());
-		this.bot.use(async (ctx, next) => autoCaching(ctx, this.database, next));
-		this.bot.use(dickComposer);
-		this.bot.use(githubLinkComposer);
-		this.bot.use(msdIncorporatedComposer);
-		this.bot.use(randomShitComposer);
-		this.bot.use(shitpostsComposer);
-		this.bot.use(telegraphComposer);
+		this.bot.use(
+			autoQuote(),
+			async (ctx, next) => autoCaching(ctx, this.database, next),
+			dickComposer,
+			githubLinkComposer,
+			infoComposer,
+			msdIncorporatedComposer,
+			randomShitComposer,
+			shitpostsComposer,
+			telegraphComposer
+		);
 
 		this.bot.command("exec", execCommand);
 		this.bot.command("start", startCommand);
