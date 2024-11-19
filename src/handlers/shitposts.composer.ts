@@ -18,6 +18,8 @@ shitpostsComposer.on("message", async (ctx, next) => {
 	const rows = text.split("\n");
 	const words = await checkText(text, {});
 
+	if (!words.length) return;
+
 	const formattedRows = words.map(({ word, s, row }) => {
 		console.log(word, s[0], new RegExp(`${safeWord(word)}.\s`, "gm"));
 
