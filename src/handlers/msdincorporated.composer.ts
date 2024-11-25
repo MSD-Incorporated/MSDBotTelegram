@@ -75,7 +75,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	if (!res?.raw.data.ext_urls.length) return;
 
-	const { author, characters } = res.raw.data;
+	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
@@ -84,7 +84,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 	return ctx.reply(
 		[
-			`• <b>Автор:</b> <code>${author || "Неизвестно"}</code>`,
+			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
 			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
 			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
 			`• <b>Ссылки:</b> ${urlParser(urls)
