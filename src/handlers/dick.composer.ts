@@ -7,7 +7,7 @@ import { dicks } from "../drizzle";
 
 const timeout = 12 * 60 * 60;
 const random = (min: number, max: number, includeMax?: boolean) =>
-	Math.floor(Math.random() * (max - min + 1) + (includeMax ? min : 0));
+	Math.floor(Math.random() * (max - min + (includeMax ? 1 : 0)) + min);
 
 export const dickComposer: Composer<Context & { database: Database }> = new Composer();
 
