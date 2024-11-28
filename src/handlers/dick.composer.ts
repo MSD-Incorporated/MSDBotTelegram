@@ -5,7 +5,7 @@ import type { Database } from "structures/database";
 import type { InlineKeyboardButton } from "typegram";
 import { dicks } from "../drizzle";
 
-const timeout = 12 * 60 * 60;
+const timeout = 30 * 60;
 const random = (min: number, max: number, includeMax?: boolean) =>
 	Math.floor(Math.random() * (max - min + (includeMax ? 1 : 0)) + min);
 
@@ -36,7 +36,7 @@ dickComposer.command(["dick", "cock", "dck"], async ctx => {
 		);
 	}
 
-	const difference = random(-10, 10, true);
+	const difference = random(-50, 50, true);
 
 	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
 	await ctx.database.writeDickHistory({ id: user.id, size, difference });
