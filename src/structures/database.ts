@@ -1,3 +1,5 @@
+// TODO: Recode
+
 import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
@@ -57,12 +59,12 @@ export class Database {
 	};
 
 	readonly writeUser = async <U extends TelegramUser, D extends schema.TUser>(
-		{ id, first_name, last_name, username }: U,
+		{ id, first_name, last_name, username, is_premium }: U,
 		data?: Partial<D>
 	) => {
 		this.db
 			.insert(schema.users)
-			.values({ ...data, user_id: id, first_name, last_name, username })
+			.values({ ...data, user_id: id, first_name, last_name, username, is_premium })
 			.execute();
 	};
 

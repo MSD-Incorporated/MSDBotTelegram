@@ -1,1 +1,3 @@
-import { Bot } from "grammy";
+import { Client } from "./structures/client";
+
+new Client().init();

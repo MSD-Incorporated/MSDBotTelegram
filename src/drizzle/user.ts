@@ -1,5 +1,5 @@
-import type { InferSelectModel } from "drizzle-orm";
-import { bigint, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { InferSelectModel } from "drizzle-orm";
+import { bigint, boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // https://limits.tginfo.me
 export const users = pgTable("users", {
@@ -8,7 +8,7 @@ export const users = pgTable("users", {
 	first_name: varchar("first_name", { length: 64 }).notNull(),
 	last_name: varchar("last_name", { length: 64 }),
 	username: varchar("username", { length: 32 }),
-	status: varchar("status", { enum: ["user", "trusted", "owner"] }),
+	is_premium: boolean("is_premium").default(false).notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow(),
 	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
 		.defaultNow()
