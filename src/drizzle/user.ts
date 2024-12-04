@@ -1,7 +1,6 @@
 import { InferSelectModel } from "drizzle-orm";
 import { bigint, boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
-// https://limits.tginfo.me
 export const users = pgTable("users", {
 	id: serial("id").notNull().unique(),
 	user_id: bigint("user_id", { mode: "number" }).notNull().unique().primaryKey(),

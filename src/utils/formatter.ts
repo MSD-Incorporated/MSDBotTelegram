@@ -15,12 +15,12 @@ export class Formatter {
 		this.type = type ?? "HTML";
 	}
 
-	readonly blockqoute = (content: string): string => {
-		return `<blockquote class="tg-blockquote">${textSanitaizer(content)}</blockquote>`;
+	readonly blockqoute = <C extends string>(content: C): `<blockquote class="tg-blockquote">${C}</blockquote>` => {
+		return `<blockquote class="tg-blockquote">${textSanitaizer(content) as C}</blockquote>`;
 	};
 
-	readonly bold = (content: string): string => {
-		return `<b class="tg-bold">${textSanitaizer(content)}</b>`;
+	readonly bold = <C extends string>(content: C): `<b class="tg-bold">${C}</b>` => {
+		return `<b class="tg-bold">${textSanitaizer(content) as C}</b>`;
 	};
 
 	readonly pre = (content: string, language?: string): string => {
