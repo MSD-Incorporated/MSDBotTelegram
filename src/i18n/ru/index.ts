@@ -1,7 +1,8 @@
-import type { BaseTranslation } from "../i18n-types.js";
+import { bold } from "../../utils/formatter";
+import type { BaseTranslation } from "../i18n-types";
 
 const ru = {
-	hi: "Hello world",
+	hi: `Привет, world`,
 } satisfies BaseTranslation;
 
 export default ru;

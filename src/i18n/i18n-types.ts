@@ -14,14 +14,14 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * H​e​l​l​o​ ​w​o​r​l​d
+	 * П​р​и​в​е​т​,​ ​w​o​r​l​d
 	 */
 	hi: string
 }
 
 export type TranslationFunctions = {
 	/**
-	 * Hello world
+	 * Привет, world
 	 */
 	hi: () => LocalizedString
 }
