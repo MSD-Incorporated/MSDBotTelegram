@@ -1,4 +1,3 @@
-import { bold } from "../../utils/formatter";
 import type { BaseTranslation } from "../i18n-types";
 
 const ru = {
