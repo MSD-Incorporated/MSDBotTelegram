@@ -3,7 +3,7 @@ import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
 import L from "i18n/i18n-node";
 import type { Locales, TranslationFunctions } from "i18n/i18n-types";
-import { Database } from "../structures/database";
+import type { Database } from "../structures/database";
 
 interface ExtendedContextFlavor {
 	database: Database;

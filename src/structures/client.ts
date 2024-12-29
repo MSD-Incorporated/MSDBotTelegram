@@ -8,7 +8,11 @@ export const client = new Bot<Context>(process.env.TOKEN, {
 	ContextConstructor: createContextConstructor({ database: new Database() }),
 });
 
+process.once("SIGINT", () => client.stop());
+process.once("SIGTERM", () => client.stop());
+
 client.use(autoQuote());
 client.api.config.use(parseMode("HTML"));
 
+client.catch(console.error);
 client.init();

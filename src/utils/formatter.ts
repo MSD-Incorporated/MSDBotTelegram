@@ -18,8 +18,14 @@ export const code = <C extends string>(content: C): `<code class="tg-code">${C}<
 	return `<code class="tg-code">${textSanitaizer(content) as C}</code>`;
 };
 
-export const pre = (content: string, language?: string): string => {
+export function pre<C extends string>(content: C): `<pre class="tg-pre-code"><code>${C}</code></pre>`;
+export function pre<C extends string, L extends string>(
+	content: C,
+	language: L
+): `<pre class="tg-pre-code"><code class="language-${L}">${C}</code></pre>`;
+
+export function pre(content: string, language?: string) {
 	return language === undefined
 		? `<pre class="tg-pre-code"><code>${textSanitaizer(content)}</code></pre>`
 		: `<pre class="tg-pre-code"><code class="language-${language}">${textSanitaizer(content)}</code></pre>`;
-};
+}
