@@ -59,7 +59,10 @@ export class Database {
 		return this.db.query.dicks.findFirst({ where: eq(schema.dicks.user_id, user.id), with: include }).execute();
 	};
 
-	readonly writeDick = async <U extends TelegramUser, D extends schema.TDick>({ id }: U, data?: Partial<D>) => {
+	readonly writeDick = async <U extends TelegramUser | { id: number }, D extends schema.TDick>(
+		{ id }: U,
+		data?: Partial<D>
+	) => {
 		this.db
 			.insert(schema.dicks)
 			.values({ ...data, user_id: id })
@@ -172,7 +175,7 @@ export class Database {
 		return this.db.query.referrals.findFirst({ where: eq(schema.referrals.referrer, id), with: include }).execute();
 	};
 
-	readonly writeReferral = async <U extends TelegramUser & { id: number }, D extends schema.TRefferal>(
+	readonly writeReferral = async <U extends TelegramUser | { id: number }, D extends schema.TRefferal>(
 		referral: U,
 		referrer: U,
 		data?: Partial<D>

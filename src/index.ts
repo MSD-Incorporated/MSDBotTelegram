@@ -1,3 +1,3 @@
-import { client } from "./structures/client";
+import { client, onStart } from "./structures/client";
 
-client.start();
+client.start({ onStart, drop_pending_updates: true });
