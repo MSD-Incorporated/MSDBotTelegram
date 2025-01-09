@@ -11,7 +11,7 @@ startComposer.command("start", async ctx => {
 	const bun_version = Bun.version;
 
 	if (ctx.match) {
-		const refferal_id = Number(ctx.match);
+		const refferal_id = Number(ctx.match.slice("ref_".length));
 		const refferal = await ctx.database.resolveUser({ id: refferal_id });
 		const refferer = await ctx.database.resolveDick({ id: ctx.from!.id });
 

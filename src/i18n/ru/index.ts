@@ -23,6 +23,7 @@ const ru = {
 		`• Присоединился к экосистеме MSD: ${code("{created_at:string}")}`,
 		`• Роль: ${code("{status:string}")}`,
 	].join("\n"),
+	userinfo_refferal_button: `{emoji:string} • Рефферальная ссылка`,
 } satisfies BaseTranslation;
 
 export default ru;

@@ -21,6 +21,20 @@ userinfoComposer.command("userinfo", async ctx => {
 			id,
 			created_at: dateFormatter.format(created_at),
 			status: roles[status],
-		})
+		}),
+		{
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{
+							text: ctx.t.userinfo_refferal_button({ emoji: "👥" }),
+							copy_text: {
+								text: `https://t.me/${ctx.me.username}?start=ref_${user_id}`,
+							},
+						},
+					],
+				],
+			},
+		}
 	);
 });

@@ -51,6 +51,11 @@ type RootTranslation = {
 	 * @param {string} username
 	 */
 	userinfo: RequiredParams<'created_at' | 'first_name' | 'fullname' | 'id' | 'id' | 'last_name' | 'status' | 'user_id' | 'username'>
+	/**
+	 * {​e​m​o​j​i​}​ ​•​ ​Р​е​ф​ф​е​р​а​л​ь​н​а​я​ ​с​с​ы​л​к​а
+	 * @param {string} emoji
+	 */
+	userinfo_refferal_button: RequiredParams<'emoji'>
 }
 
 export type TranslationFunctions = {
@@ -80,6 +85,10 @@ export type TranslationFunctions = {
 • Роль: <code class="tg-code">{status}</code>
 	 */
 	userinfo: (arg: { created_at: string, first_name: string, fullname: string, id: number, last_name: string, status: string, user_id: number, username: string }) => LocalizedString
+	/**
+	 * {emoji} • Рефферальная ссылка
+	 */
+	userinfo_refferal_button: (arg: { emoji: string }) => LocalizedString
 }
 
 export type Formatters = {}
