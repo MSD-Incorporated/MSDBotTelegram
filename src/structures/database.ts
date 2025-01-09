@@ -155,6 +155,49 @@ export class Database {
 		this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
+	readonly resolveUserButtons = async <U extends TelegramUser | { id: number }, I extends IncludeRelation<"users">>(
+		user: U,
+		include: I = {} as I
+	) => {
+		return this.db.query.user_buttons
+			.findMany({ where: eq(schema.user_buttons.user_id, user.id), with: include })
+			.execute();
+	};
+
+	readonly writeUserButton = async <
+		U extends TelegramUser | { id: number },
+		B extends { link: string; text: string },
+		D extends schema.TUserButton,
+	>(
+		{ id }: U,
+		{ link, text }: B,
+		data?: Partial<D>
+	) => {
+		this.db
+			.insert(schema.user_buttons)
+			.values({ ...data, user_id: id, text: text ?? null, link: link ?? null })
+			.execute();
+	};
+
+	readonly writeDeleteUserButton = async <
+		U extends TelegramUser | { id: number },
+		B extends { link: string; text: string },
+	>(
+		{ id }: U,
+		{ link, text }: B
+	) => {
+		this.db
+			.delete(schema.user_buttons)
+			.where(
+				and(
+					eq(schema.user_buttons.user_id, id),
+					eq(schema.user_buttons.link, link),
+					eq(schema.user_buttons.text, text)
+				)
+			)
+			.execute();
+	};
+
 	/**
 	 * Resolves referrers of user
 	 */
