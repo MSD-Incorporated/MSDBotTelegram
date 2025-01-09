@@ -2,7 +2,7 @@ import { parseMode } from "@grammyjs/parse-mode";
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot } from "grammy";
 import type { UserFromGetMe } from "typegram";
-import { startComposer } from "../elements";
+import { startComposer, userinfoComposer } from "../elements";
 import { autoCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
@@ -23,6 +23,7 @@ client.use(async (ctx, next) => autoCaching(ctx, database, next));
 client.api.config.use(parseMode("HTML"));
 
 client.use(startComposer);
+client.use(userinfoComposer);
 
 client.catch(console.error);
 client.init();
