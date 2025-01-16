@@ -26,7 +26,7 @@
 	"dependencies": {
 		"@artemis69/yandex-speller": "^0.1.1",
 		"@roziscoding/grammy-autoquote": "^2.0.6",
-		"drizzle-orm": "^0.37.0",
+		"drizzle-orm": "^0.38.4",
 		"grammy": "^1.31.2",
 		"moment": "^2.30.1",
 		"pg": "^8.13.1",
