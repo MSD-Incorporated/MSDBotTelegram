@@ -14,6 +14,14 @@ const ru = {
 	].join("\n\n"),
 	start_channel_button: "Информационный канал",
 	// Dick Composer
+	dick_timeout_text: [
+		`Попробуйте через ${code("{timeLeft:string}")}`,
+		`Ваш текущий размер pp: ${code("{size:number}")} см`,
+	].join("\n"),
+	dick_history_button: "История",
+	dick_success_text: [`Ваш pp {phrase:string}`, `Ваш текущий размер pp: ${code("{current_size:number}")} см`].join(
+		"\n\n"
+	),
 	dick_leaderboard_choose_text: [
 		"{emoji:string} Выберите тип таблицы\n",
 		`• По возрастанию — этот тип таблицы означает, что ${bold("сначала показываются пользователи с самым маленьким размером")}`,
