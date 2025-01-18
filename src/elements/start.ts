@@ -3,11 +3,12 @@ import type { Context } from "../utils/context";
 
 export const startComposer = new Composer<Context>();
 
-const button = { text: "Информационный канал", url: "https://t.me/msdbot_information" };
 const replyStartCommand = (ctx: Context, { version, bun_version }: { version: string; bun_version: string }) =>
 	ctx.reply(ctx.t.start_command({ version, bun_version }), {
 		link_preview_options: { is_disabled: true },
-		reply_markup: { inline_keyboard: [[button]] },
+		reply_markup: {
+			inline_keyboard: [[{ text: ctx.t.start_channel_button(), url: "https://t.me/msdbot_information" }]],
+		},
 	});
 
 startComposer.command("start", async ctx => {

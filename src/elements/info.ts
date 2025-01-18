@@ -39,8 +39,8 @@ infoComposer.command(["userinfo", "ui"], async ctx => {
 		ctx.t.userinfo({
 			user_id,
 			first_name,
-			last_name: last_name ?? "Нету",
-			username: username ?? "Нету",
+			last_name: last_name ?? ctx.t.userinfo_null_property(),
+			username: username ?? ctx.t.userinfo_null_property(),
 			fullname: first_name + (last_name ? ` ${last_name}` : ""),
 			id,
 			created_at: dateFormatter.format(created_at),
