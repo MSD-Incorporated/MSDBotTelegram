@@ -16,7 +16,7 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema[TableName]
 >["with"];
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, DATABASE_URL } = process.env;
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, DATABASE_URL } = process.env;
 
 export class Database {
 	readonly client = new Client({
@@ -24,7 +24,7 @@ export class Database {
 		port: 5432,
 		user: POSTGRES_USER,
 		password: POSTGRES_PASSWORD,
-		database: POSTGRES_DB,
+		database: POSTGRES_DATABASE,
 		ssl: DATABASE_URL ? true : false,
 	});
 
