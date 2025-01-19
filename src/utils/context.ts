@@ -27,7 +27,7 @@ export function createContextConstructor({ database }: Dependencies) {
 
 			this.database = database;
 			this.t = locales.includes(this.update.message?.from?.language_code as Locales)
-				? L[this.update.message?.from?.language_code as Locales];
+				? L[this.update.message?.from?.language_code as Locales]
 				: L["ru"];
 		}
 	} as unknown as new (update: Update, api: Api, me: UserFromGetMe) => Context;
