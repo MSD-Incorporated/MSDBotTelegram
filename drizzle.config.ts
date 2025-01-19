@@ -9,7 +9,7 @@ export default defineConfig({
 		port: 5432,
 		user: process.env.POSTGRES_USER,
 		password: process.env.POSTGRES_PASSWORD,
-		database: "msdbot_telegram",
+		database: process.env.POSTGRES_DATABASE!,
 		ssl: process.env.DATABASE_URL ? true : false,
 	},
 });
