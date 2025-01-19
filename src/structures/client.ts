@@ -1,52 +1,31 @@
+import { parseMode } from "@grammyjs/parse-mode";
 import { autoQuote } from "@roziscoding/grammy-autoquote";
-import { Bot, type Context } from "grammy";
-import {
-	autoCaching,
-	dickComposer,
-	execCommand,
-	githubLinkComposer,
-	infoComposer,
-	msdIncorporatedComposer,
-	randomShitComposer,
-	shitpostsComposer,
-	startCommand,
-	telegraphComposer,
-} from "handlers";
+import { Bot } from "grammy";
 import type { UserFromGetMe } from "typegram";
+import { dickComposer, extraComposer, infoComposer, startComposer } from "../elements";
+import { autoCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
-const onStart = ({ id, username }: UserFromGetMe) => console.log(`${username} [${id}] started!`);
+const database = new Database();
+await database.connect();
 
-export class Client {
-	readonly bot: Bot<Context & { database: Database }>;
-	readonly database: Database = new Database();
+export const client = new Bot<Context>(process.env.TOKEN, {
+	ContextConstructor: createContextConstructor({ database }),
+});
 
-	constructor(TOKEN?: string) {
-		this.bot = new Bot(TOKEN ?? process.env.TOKEN);
-	}
+export const onStart = ({ username, id }: UserFromGetMe) => console.log(`${username} [${id}] started`);
 
-	readonly init = async () => {
-		process.once("SIGINT", () => this.bot.stop());
-		process.once("SIGTERM", () => this.bot.stop());
+process.once("SIGINT", () => client.stop());
+process.once("SIGTERM", () => client.stop());
 
-		await this.database.connect();
+client.use(autoQuote());
+client.use(async (ctx, next) => autoCaching(ctx, database, next));
+client.api.config.use(parseMode("HTML"));
 
-		this.bot.use(autoQuote());
-		this.bot.use(async (ctx, next) => autoCaching(ctx, this.database, next));
-		this.bot.use(dickComposer);
-		this.bot.use(githubLinkComposer);
-		this.bot.use(infoComposer);
-		this.bot.use(msdIncorporatedComposer);
-		this.bot.use(randomShitComposer);
-		this.bot.use(shitpostsComposer);
-		this.bot.use(telegraphComposer);
+client.use(dickComposer);
+client.use(extraComposer);
+client.use(infoComposer);
+client.use(startComposer);
 
-		this.bot.command("exec", execCommand);
-		this.bot.command("start", startCommand);
-
-		this.bot.catch(console.error);
-
-		await this.bot.init();
-		await this.bot.start({ drop_pending_updates: true, onStart });
-	};
-}
+client.catch(console.error);
+client.init();

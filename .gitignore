@@ -32,3 +32,6 @@ jspm_packages/
 drizzle/*.sql
 drizzle/meta/*.json
 !drizzle/meta/_journal.json
+
+# i18n
+i18n/
