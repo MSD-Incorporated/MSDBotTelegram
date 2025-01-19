@@ -7,7 +7,7 @@ export const infoComposer = new Composer<Context>();
 const dateFormatter = new Intl.DateTimeFormat("ru", { timeZone: "+00:00" });
 
 const discordRegex = /discord_[a-zA-Z0-9]{2,32}/gm;
-const steamRegex = /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9]+/gm;
+const steamRegex = /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9_]+/gm;
 const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_]{1,25}$/gm;
 
 infoComposer.command(["userinfo", "ui"], async ctx => {
