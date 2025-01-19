@@ -2,6 +2,13 @@ import { bold, boldAndTextLink, code, text_mention } from "../../utils/formatter
 import type { BaseTranslation } from "../i18n-types.js";
 
 const ru = {
+	// Global
+	keyboard_same_page: "Вы уже на этой странице",
+	keyboard_wrong_user: "Эта кнопка предназначена не вам",
+	keyboard_back_page: "Назад",
+	keyboard_current_page: "{page:number}/{totalPages:number}",
+	keyboard_next_page: "Вперёд",
+
 	// Start Composer
 	start_command: [
 		`Добро пожаловать!\n`,
@@ -31,8 +38,15 @@ const ru = {
 		`${bold("Пример:")}`,
 		`<blockquote class="tg-blockquote">${bold("1.")} MSDBot: ${code("5")} см\n${bold("2.")} Mased: ${code("-10")} см</blockquote>`,
 	].join("\n"),
+	dick_leaderboard_user: `${bold("{rank:number}.")} {name:string}: ${code("{size:number}")} см`,
 	dick_leaderboard_ascending_button: "{emoji:string} По возрастанию",
 	dick_leaderboard_descending_button: "{emoji:string} По убыванию",
+	dick_leaderboard_empty: "Таблица лидеров пуста",
+	dick_history_user: [
+		`${bold("{rank:number}.")} ${code("{date:string} UTC")}`,
+		`• Получено: ${code("{difference:number}")}`,
+		`• Всего: ${code("{total:number}")}`,
+	].join("\n"),
 	// Userinfo Composer
 	userinfo: [
 		`Вот информация о ${text_mention("{fullname:string}", "{id:number}")}\n`,

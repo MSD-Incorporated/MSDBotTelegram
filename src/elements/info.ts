@@ -4,7 +4,7 @@ import { roles } from "i18n/formatters";
 import type { Context } from "../utils/context";
 
 export const infoComposer = new Composer<Context>();
-const dateFormatter = new Intl.DateTimeFormat("ru");
+const dateFormatter = new Intl.DateTimeFormat("ru", { timeZone: "+00:00" });
 
 const discordRegex = /discord_[a-zA-Z0-9]{2,32}/gm;
 const steamRegex = /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9]+/gm;
