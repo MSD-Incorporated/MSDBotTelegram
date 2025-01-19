@@ -3,6 +3,7 @@ import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
 import L from "i18n/i18n-node";
 import type { Locales, TranslationFunctions } from "i18n/i18n-types";
+import { locales } from "i18n/i18n-util";
 import type { Database } from "../structures/database";
 
 interface ExtendedContextFlavor {
@@ -25,7 +26,9 @@ export function createContextConstructor({ database }: Dependencies) {
 			super(update, api, me);
 
 			this.database = database;
-			this.t = L[(this.update.message?.from?.language_code ?? "ru") as Locales];
+			this.t = locales.includes(this.update.message?.from?.language_code as Locales)
+				? L["ru"]
+				: L[this.update.message?.from?.language_code as Locales];
 		}
 	} as unknown as new (update: Update, api: Api, me: UserFromGetMe) => Context;
 }
