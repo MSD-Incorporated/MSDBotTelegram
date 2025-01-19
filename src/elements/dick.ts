@@ -101,7 +101,7 @@ dickComposer.callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
 		.select({ user_id: dicks.user_id, size: dicks.size })
 		.from(dicks)
 		.orderBy(({ size }) => (type === "asc" ? asc(size) : desc(size)));
-	if (allUsers.length < 0) return ctx.reply(ctx.t.dick_leaderboard_empty());
+	if (allUsers.length <= 0) return ctx.reply(ctx.t.dick_leaderboard_empty());
 
 	const pagesLength = Math.ceil(allUsers.length / 10);
 	const text = allUsers
@@ -132,8 +132,9 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 	if (currentPage == page) return ctx.answerCallbackQuery(ctx.t.keyboard_same_page());
 
 	const dick_history = await ctx.database.resolveDickHistory(ctx.callbackQuery.from, true);
-	const pagesLength = Math.ceil(dick_history.length / 10);
+	if (dick_history.length <= 0) return ctx.reply(ctx.t.dick_history_empty());
 
+	const pagesLength = Math.ceil(dick_history.length / 10);
 	const history = dick_history
 		.reverse()
 		.slice(Math.max(page * 10 - 10, 0), Math.min(page * 10, dick_history.length))

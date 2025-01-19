@@ -26,6 +26,7 @@ const ru = {
 		`Ваш текущий размер pp: ${code("{size:number}")} см`,
 	].join("\n"),
 	dick_history_button: "История",
+	dick_history_empty: "История использования пуста",
 	dick_success_text: [`Ваш pp {phrase:string}`, `Ваш текущий размер pp: ${code("{current_size:number}")} см`].join(
 		"\n\n"
 	),
