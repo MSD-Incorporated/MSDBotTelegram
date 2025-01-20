@@ -2,7 +2,7 @@ import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
 import { cwd } from "process";
 import sagiri from "sagiri";
-import type { Message, MessageEntity } from "typegram";
+import type { Message } from "typegram";
 import type { Context } from "../utils";
 
 const channelID = -1001528929804;

@@ -2,7 +2,14 @@ import { parseMode } from "@grammyjs/parse-mode";
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot } from "grammy";
 import type { UserFromGetMe } from "typegram";
-import { dickComposer, extraComposer, infoComposer, startComposer } from "../elements";
+import {
+	dickComposer,
+	extraComposer,
+	infoComposer,
+	msdIncorporatedComposer,
+	shitpostsComposer,
+	startComposer,
+} from "../elements";
 import { autoCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
@@ -25,6 +32,8 @@ client.api.config.use(parseMode("HTML"));
 client.use(dickComposer);
 client.use(extraComposer);
 client.use(infoComposer);
+client.use(msdIncorporatedComposer);
+client.use(shitpostsComposer);
 client.use(startComposer);
 
 client.catch(console.error);
