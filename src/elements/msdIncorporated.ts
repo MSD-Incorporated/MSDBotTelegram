@@ -36,29 +36,22 @@ msdIncorporatedComposer.on(["channel_post::hashtag", "edited_channel_post::hasht
 	const chatID = post.chat.id;
 	const message_id = post.message_id;
 	const original = post.caption ? post.caption : post.text;
-	const str = original + "\n\n" + "MSD Incorporated" + " | Donate";
+	const str = original + "\n\n" + "MSD Incorporated";
 
 	const linkEntity: MessageEntity = {
 		length: "MSD Incorporated".length,
-		offset: str.length - " | Donate".length - "MSD Incorporated".length,
+		offset: str.length - "MSD Incorporated".length,
 		type: "text_link",
 		url: "https://t.me/msd_inc",
-	};
-
-	const donateEntity: MessageEntity = {
-		length: "Donate".length,
-		offset: str.length - "Donate".length,
-		type: "text_link",
-		url: "https://t.me/msd_inc/14",
 	};
 
 	return post.caption
 		? ctx.api.editMessageCaption(chatID, message_id, {
 				caption: str,
-				caption_entities: [...entities, linkEntity, donateEntity],
+				caption_entities: [...entities, linkEntity],
 			})
 		: ctx.api.editMessageText(chatID, message_id, str, {
-				entities: [...entities, linkEntity, donateEntity],
+				entities: [...entities, linkEntity],
 			});
 });
 
