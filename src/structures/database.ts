@@ -1,5 +1,4 @@
 // TODO: Recode
-
 import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";

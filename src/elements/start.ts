@@ -1,10 +1,14 @@
 import { Composer } from "grammy";
+import { resolve } from "path";
 import type { Context } from "../utils/context";
 
 export const startComposer = new Composer<Context>();
 
-const replyStartCommand = (ctx: Context, { version, bun_version }: { version: string; bun_version: string }) =>
-	ctx.reply(ctx.t.start_command({ version, bun_version }), {
+const replyStartCommand = (
+	ctx: Context,
+	{ version, bun_version, msdbot_version }: { version: string; bun_version: string; msdbot_version: string }
+) =>
+	ctx.reply(ctx.t.start_command({ version, bun_version, msdbot_version }), {
 		link_preview_options: { is_disabled: true },
 		reply_markup: {
 			inline_keyboard: [[{ text: ctx.t.start_channel_button(), url: "https://t.me/msdbot_information" }]],
@@ -13,6 +17,7 @@ const replyStartCommand = (ctx: Context, { version, bun_version }: { version: st
 
 startComposer.command("start", async ctx => {
 	const version = process.version;
+	const msdbot_version = (await import(resolve(process.cwd(), "package.json"))).version;
 	const bun_version = Bun.version;
 
 	if (ctx.match) {
@@ -20,7 +25,7 @@ startComposer.command("start", async ctx => {
 		const refferal = await ctx.database.resolveUser({ id: refferal_id });
 		const refferer = await ctx.database.resolveDick({ id: ctx.from!.id });
 
-		if (!refferal || refferer) return replyStartCommand(ctx, { version, bun_version });
+		if (!refferal || refferer) return replyStartCommand(ctx, { version, bun_version, msdbot_version });
 
 		await ctx.database.writeReferral({ id: refferal_id }, { id: ctx.from!.id });
 		await ctx.database.writeDick({ id: ctx.from!.id });
@@ -33,5 +38,5 @@ startComposer.command("start", async ctx => {
 		);
 	}
 
-	return replyStartCommand(ctx, { version, bun_version });
+	return replyStartCommand(ctx, { version, bun_version, msdbot_version });
 });

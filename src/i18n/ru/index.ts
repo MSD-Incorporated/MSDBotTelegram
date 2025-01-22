@@ -12,7 +12,8 @@ const ru = {
 	// Start Composer
 	start_command: [
 		`Добро пожаловать!\n`,
-		`• Текущая версия ${boldAndTextLink("MSDBot", "https://github.com/MSD-Incorporated/MSDBotTelegram")} — ${code("{version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("MSDBot", "https://github.com/MSD-Incorporated/MSDBotTelegram")} — ${code("{msdbot_version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("NodeJS", "nodejs.org")} — ${code("{version:string}")}`,
 		`• Текущая версия ${boldAndTextLink("Bun", "https://bun.sh")} — ${code("v{bun_version:string}")}`,
 	].join("\n"),
 	start_refferal_command: [

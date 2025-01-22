@@ -19,6 +19,7 @@
 		"paths": {},
 		"removeComments": false,
 		"verbatimModuleSyntax": true,
+		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ESNext"

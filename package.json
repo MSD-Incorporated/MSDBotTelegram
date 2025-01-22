@@ -44,7 +44,7 @@
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
-		"@types/bun": "1.1.17",
+		"@types/bun": "^1.1.18",
 		"@types/node": "^22.10.7",
 		"@types/pg": "^8.11.6",
 		"drizzle-kit": "^0.30.2",
