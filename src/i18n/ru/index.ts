@@ -64,7 +64,7 @@ const ru = {
 	].join("\n"),
 	dick_referral_timeout_text: [
 		`Попробуйте через ${code("{timeLeft:string}")}`,
-		`На данный момент вы имеет ${code("{referrals:number}")} рефералов.`,
+		`На данный момент вы имеете ${code("{referrals:number}")} реферал(ов).`,
 	].join("\n\n"),
 	dick_referral_success: `Вы успешно {type:string} ваш dick на ${code(`{value:number}`)} см!`,
 	// Userinfo Composer
