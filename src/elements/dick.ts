@@ -181,7 +181,7 @@ dickComposer.command("referrals", async ctx => {
 	if (lastUsed < referral_timeout) {
 		const timeLeft = formatTime(referral_timeout - lastUsed);
 
-		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft }));
+		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: referrals.length }));
 	}
 
 	const keyboard: InlineKeyboardButton[][] = [[]];
@@ -226,8 +226,9 @@ dickComposer.callbackQuery(/referrals_(\d+)_(remove|add)_(\d+)/, async ctx => {
 
 	if (lastUsed < referral_timeout) {
 		const timeLeft = formatTime(referral_timeout - lastUsed);
+		const referrals = await ctx.database.resolveReferrers(user);
 
-		return ctx.answerCallbackQuery(ctx.t.dick_referral_timeout_text({ timeLeft }));
+		return ctx.answerCallbackQuery(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: referrals.length }));
 	}
 
 	await ctx.database.updateDick(user, {

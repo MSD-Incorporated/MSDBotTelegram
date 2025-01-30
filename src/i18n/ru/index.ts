@@ -62,7 +62,10 @@ const ru = {
 		`• Подписаны на канал: ${code("{isSubscribed:string}")}`,
 		`• {canGet:string}`,
 	].join("\n"),
-	dick_referral_timeout_text: "Попробуйте через {timeLeft:string}",
+	dick_referral_timeout_text: [
+		`Попробуйте через ${code("{timeLeft:string}")}`,
+		`На данный момент вы имеет ${code("{referrals:number}")} рефералов.`,
+	].join("\n\n"),
 	dick_referral_success: `Вы успешно {type:string} ваш dick на ${code(`{value:number}`)} см!`,
 	// Userinfo Composer
 	userinfo: [
