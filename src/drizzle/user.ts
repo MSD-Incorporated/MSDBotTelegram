@@ -1,5 +1,7 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { dicks } from "./dick";
+import { referrals } from "./refferals";
 
 export const users = pgTable("users", {
 	id: serial("id").unique().notNull(),
@@ -31,3 +33,24 @@ export const user_buttons = pgTable("user_buttons", {
 });
 
 export type TUserButton = InferSelectModel<typeof user_buttons>;
+
+export const userButtonsRelations = relations(user_buttons, ({ one }) => ({
+	user: one(users, {
+		fields: [user_buttons.user_id],
+		references: [users.user_id],
+		relationName: "user_buttons",
+	}),
+}));
+
+export const userRelations = relations(users, ({ one, many }) => ({
+	referrals: many(referrals, {
+		relationName: "referrals",
+	}),
+	buttons: many(user_buttons, {
+		relationName: "user_buttons",
+	}),
+	dick: one(dicks, {
+		fields: [users.user_id],
+		references: [dicks.user_id],
+	}),
+}));

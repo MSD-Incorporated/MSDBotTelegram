@@ -10,6 +10,8 @@ extraComposer.on("message:text", async (ctx, next) => {
 	if (Math.random() < 0.01) return ctx.react("👀");
 });
 
-extraComposer.on("::mention", ctx => {
+extraComposer.on("::mention", async (ctx, next) => {
+	await next();
+
 	if (ctx.message?.text == `@${ctx.me.username}`) return ctx.reply("Я тут!");
 });

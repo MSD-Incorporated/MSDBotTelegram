@@ -154,7 +154,10 @@ export class Database {
 		this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
-	readonly resolveUserButtons = async <U extends TelegramUser | { id: number }, I extends IncludeRelation<"users">>(
+	readonly resolveUserButtons = async <
+		U extends TelegramUser | { id: number },
+		I extends IncludeRelation<"user_buttons">,
+	>(
 		user: U,
 		include: I = {} as I
 	) => {

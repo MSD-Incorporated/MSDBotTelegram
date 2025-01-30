@@ -2,7 +2,8 @@ import { dicks } from "drizzle";
 import { asc, desc } from "drizzle-orm";
 import { Composer } from "grammy";
 import type { InlineKeyboardButton } from "grammy/types";
-import { code, random, type Context } from "../utils";
+import type { TranslationFunctions } from "i18n/i18n-types";
+import { random, type Context } from "../utils";
 
 const timeout = 12 * 60 * 60 * 1000;
 const dateFormatter = new Intl.DateTimeFormat("ru", {
@@ -17,10 +18,10 @@ const dateFormatter = new Intl.DateTimeFormat("ru", {
 
 export const dickComposer = new Composer<Context>();
 
-const getPhrase = (difference: number) => {
-	if (difference < 0) return `уменьшился на ${code(difference.toString().slice(1))} см!`;
-	if (difference > 0) return `увеличился на ${code(difference.toString())} см!`;
-	return "не изменился!";
+const getPhrase = (difference: number, t: TranslationFunctions) => {
+	if (difference < 0) return t.dick_decreased({ difference: difference.toString().slice(1) });
+	if (difference > 0) return t.dick_increased({ difference: difference.toString() });
+	return t.dick_not_changed();
 };
 
 dickComposer.command(["dick", "cock"], async ctx => {
@@ -46,7 +47,9 @@ dickComposer.command(["dick", "cock"], async ctx => {
 	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
 	await ctx.database.writeDickHistory({ id: user.id, size, difference });
 
-	return ctx.reply(ctx.t.dick_success_text({ phrase: getPhrase(difference), current_size: size + difference }));
+	return ctx.reply(
+		ctx.t.dick_success_text({ phrase: getPhrase(difference, ctx.t), current_size: size + difference })
+	);
 });
 
 dickComposer.command(["lb", "leaderboard"], async ctx => {

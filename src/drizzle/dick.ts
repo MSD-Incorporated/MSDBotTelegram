@@ -1,4 +1,4 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./user";
 
@@ -30,3 +30,17 @@ export const dick_history = pgTable("dick_history", {
 
 export type TDick = InferSelectModel<typeof dicks>;
 export type TDickHistory = InferSelectModel<typeof dick_history>;
+
+export const dicksRelations = relations(dicks, ({ many }) => ({
+	history: many(dick_history, {
+		relationName: "dick_history",
+	}),
+}));
+
+export const dicksHistoryRelations = relations(dick_history, ({ one }) => ({
+	dick: one(dicks, {
+		fields: [dick_history.user_id],
+		references: [dicks.user_id],
+		relationName: "dick_history",
+	}),
+}));

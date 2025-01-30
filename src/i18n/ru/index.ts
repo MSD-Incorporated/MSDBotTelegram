@@ -22,6 +22,9 @@ const ru = {
 	].join("\n\n"),
 	start_channel_button: "Информационный канал",
 	// Dick Composer
+	dick_increased: `увеличился на ${code("{difference:string}")} см!`,
+	dick_decreased: `уменьшился на ${code("{difference:string}")} см!`,
+	dick_not_changed: "не изменился!",
 	dick_timeout_text: [
 		`Попробуйте через ${code("{timeLeft:string}")}`,
 		`Ваш текущий размер pp: ${code("{size:number}")} см`,

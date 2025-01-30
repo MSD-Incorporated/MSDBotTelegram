@@ -1,4 +1,4 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./user";
 
@@ -14,3 +14,11 @@ export const referrals = pgTable("referrals", {
 });
 
 export type TRefferal = InferSelectModel<typeof referrals>;
+
+export const referralsRelations = relations(referrals, ({ one }) => ({
+	referral: one(users, {
+		fields: [referrals.referral],
+		references: [users.user_id],
+		relationName: "referrals",
+	}),
+}));
