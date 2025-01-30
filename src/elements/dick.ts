@@ -3,9 +3,10 @@ import { asc, desc } from "drizzle-orm";
 import { Composer } from "grammy";
 import type { InlineKeyboardButton } from "grammy/types";
 import type { TranslationFunctions } from "i18n/i18n-types";
-import { random, type Context } from "../utils";
+import { boldAndTextLink, code, isSubscriber, random, text_link, type Context } from "../utils";
 
 const timeout = 12 * 60 * 60 * 1000;
+const referral_timeout = 72 * 60 * 60 * 1000;
 const dateFormatter = new Intl.DateTimeFormat("ru", {
 	day: "2-digit",
 	month: "2-digit",
@@ -15,6 +16,15 @@ const dateFormatter = new Intl.DateTimeFormat("ru", {
 	second: "numeric",
 	timeZone: "+00:00",
 });
+
+const formatTime = (milliseconds: number): string => {
+	const totalSeconds = Math.floor(milliseconds / 1000);
+	const hours = Math.floor(totalSeconds / 3600);
+	const minutes = Math.floor((totalSeconds % 3600) / 60);
+	const seconds = totalSeconds % 60;
+	const pad = (num: number) => num.toString().padStart(2, "0");
+	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};
 
 export const dickComposer = new Composer<Context>();
 
@@ -155,4 +165,81 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 	return ctx.api.editMessageText(ctx.chatId!, ctx.msgId!, history.join("\n\n"), {
 		reply_markup: { inline_keyboard: keyboard },
 	});
+});
+
+dickComposer.command("referrals", async ctx => {
+	const user = ctx.from!;
+	const referrals = await ctx.database.resolveReferrers(user);
+	const isSubscribed = await isSubscriber(ctx, user.id, -1002336315136);
+	const value = referrals.length + Number(isSubscribed);
+
+	const { referral_timestamp } = (await ctx.database.resolveDick(user, true))!;
+
+	const now = Date.now();
+	const lastUsed = now - referral_timestamp.getTime();
+
+	if (lastUsed < referral_timeout) {
+		const timeLeft = formatTime(referral_timeout - lastUsed);
+
+		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft }));
+	}
+
+	const keyboard: InlineKeyboardButton[][] = [[]];
+
+	if (value !== 0) {
+		keyboard[0]?.push({
+			text: `➖ Убрать ${value} см`,
+			callback_data: `referrals_${user.id}_remove_${value}`,
+		});
+
+		keyboard[0]?.push({
+			text: `➕ Добавить ${value} см`,
+			callback_data: `referrals_${user.id}_add_${value}`,
+		});
+	}
+
+	return ctx.reply(
+		ctx.t.dick_refferal_text({
+			canGet:
+				value == 0
+					? `Вы не можете получить ни одного дополнительного сантиметра`
+					: `Вы можете получить ${code(`${value}`)} см!`,
+			isSubscribed: isSubscribed ? "Да" : "Нет",
+			referrals_count: referrals.length,
+		}),
+		{ reply_markup: { inline_keyboard: keyboard }, link_preview_options: { is_disabled: true } }
+	);
+});
+
+dickComposer.callbackQuery(/referrals_(\d+)_(remove|add)_(\d+)/, async ctx => {
+	const user = ctx.from;
+	const type: "add" | "remove" = ctx.callbackQuery.data.split("_")[2] as "add" | "remove";
+	const value: number = Number(ctx.callbackQuery.data.split("_")[3]);
+
+	if (user.id !== Number(ctx.callbackQuery.data.split("_")[1]))
+		return ctx.answerCallbackQuery(ctx.t.keyboard_wrong_user());
+
+	const { size, referral_timestamp } = (await ctx.database.resolveDick(user, true))!;
+
+	const now = Date.now();
+	const lastUsed = now - referral_timestamp.getTime();
+
+	if (lastUsed < referral_timeout) {
+		const timeLeft = formatTime(referral_timeout - lastUsed);
+
+		return ctx.answerCallbackQuery(ctx.t.dick_referral_timeout_text({ timeLeft }));
+	}
+
+	await ctx.database.updateDick(user, {
+		size: type == "add" ? size + value : size - value,
+		referral_timestamp: new Date(Date.now()),
+	});
+
+	await ctx.database.writeDickHistory({
+		id: user.id,
+		size: type == "add" ? size + value : size - value,
+		difference: value,
+	});
+
+	return ctx.editMessageText(ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value }));
 });

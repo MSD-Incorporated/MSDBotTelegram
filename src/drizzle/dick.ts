@@ -11,6 +11,7 @@ export const dicks = pgTable("dicks", {
 		.notNull(),
 	size: integer("size").default(0).notNull(),
 	timestamp: timestamp("timestamp", { mode: "date", precision: 3 }).default(new Date(0)).notNull(),
+	referral_timestamp: timestamp("referral_timestamp", { mode: "date", precision: 3 }).default(new Date(0)).notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
 	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
 		.defaultNow()
@@ -31,16 +32,16 @@ export const dick_history = pgTable("dick_history", {
 export type TDick = InferSelectModel<typeof dicks>;
 export type TDickHistory = InferSelectModel<typeof dick_history>;
 
-export const dicksRelations = relations(dicks, ({ many }) => ({
-	history: many(dick_history, {
-		relationName: "dick_history",
-	}),
-}));
-
 export const dicksHistoryRelations = relations(dick_history, ({ one }) => ({
 	dick: one(dicks, {
 		fields: [dick_history.user_id],
 		references: [dicks.user_id],
-		relationName: "dick_history",
+		relationName: "history",
+	}),
+}));
+
+export const dicksRelations = relations(dicks, ({ many }) => ({
+	history: many(dick_history, {
+		relationName: "history",
 	}),
 }));

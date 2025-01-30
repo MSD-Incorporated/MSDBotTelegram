@@ -52,6 +52,18 @@ const ru = {
 		`• Получено: ${code("{difference:number}")}`,
 		`• Всего: ${code("{total:number}")}`,
 	].join("\n"),
+	dick_refferal_text: [
+		"Наша реферальная система позволяет получать дополнительные сантиметры к dick",
+		`Однако только в том случае, если вы пригласили участника или подписались на ${boldAndTextLink("канал!", "https://t.me/msdbot_information")}\n`,
+		`За каждого приглашённого участника, который запустит бота по вашей реферальной ссылке и использует /dick вы получаете ${code(`1`)} см`,
+		`Также, если вы подписались на наш ${boldAndTextLink("информационный канал", "https://t.me/msdbot_information")}, то вы тоже получаете ${code(`1`)} см`,
+		`Все эти сантиметры суммируются и затем, раз в ${code(`72`)} часа, вы можете прибавить или отнять их у себя!\n`,
+		`Количество рефералов: ${code(`{referrals_count:number}`)}\n`,
+		`Подписаны на канал: ${code("{isSubscribed:string}")}`,
+		`{canGet:string}`,
+	].join("\n"),
+	dick_referral_timeout_text: "Попробуйте через {timeLeft:string}",
+	dick_referral_success: `Вы успешно {type:string} ваш dick на ${code(`{value:number}`)} см!`,
 	// Userinfo Composer
 	userinfo: [
 		`Вот информация о ${text_mention("{fullname:string}", "{id:number}")}\n`,
