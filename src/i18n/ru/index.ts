@@ -1,4 +1,4 @@
-import { bold, boldAndTextLink, code, text_mention } from "../../utils/formatter";
+import { bold, boldAndTextLink, code, getNoun, text_mention } from "../../utils/formatter";
 import type { BaseTranslation } from "../i18n-types.js";
 
 const ru = {
@@ -64,7 +64,7 @@ const ru = {
 	].join("\n"),
 	dick_referral_timeout_text: [
 		`Попробуйте через ${code("{timeLeft:string}")}.`,
-		`На данный момент вы имеете ${code("{referrals:number}")} реферал(ов).`,
+		`На данный момент вы имеете ${code("{referrals:number}")} {{рефералов|реферал|реферала|реферала|рефералов}}.`,
 	].join("\n\n"),
 	dick_referral_success: `Вы успешно {type:string} ваш dick на ${code(`{value:number}`)} см!`,
 	// Userinfo Composer
