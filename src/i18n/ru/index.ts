@@ -1,4 +1,4 @@
-import { bold, boldAndTextLink, code, getNoun, text_mention } from "../../utils/formatter";
+import { bold, boldAndTextLink, code, text_mention } from "../../utils/formatter";
 import type { BaseTranslation } from "../i18n-types.js";
 
 const ru = {
