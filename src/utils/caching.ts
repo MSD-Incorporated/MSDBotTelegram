@@ -70,7 +70,7 @@ export const autoChatMemberCaching = async (
 
 	const chatMember = await database.resolveChatMember(chat, member, true);
 
-	if (chatMember?.status != member?.status) {
+	if (chatMember?.status != member?.status && member?.status !== "left" && member?.status !== "kicked") {
 		await database.updateChatMember(chat, member, { status: member.status });
 	}
 
@@ -86,9 +86,7 @@ export const autoChatMemberDeletion = async (
 
 	if (!ctx.chat || !ctx.chatMember || ctx.chatMember?.from.is_bot) return next();
 
-	console.log(ctx.chatMember);
-
-	const { new_chat_member } = ctx.chatMember!;
+	const { new_chat_member } = ctx.chatMember;
 	if (new_chat_member.status === "kicked" || new_chat_member.status === "left")
 		await database.updateChatMember(ctx.chat, { user: new_chat_member.user }, { status: new_chat_member.status });
 
