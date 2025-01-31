@@ -2,7 +2,7 @@
 import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
-import type { User as TelegramUser } from "typegram";
+import type { Chat, ChatMember, Chat as TelegramChat, User as TelegramUser } from "typegram";
 import * as schema from "../drizzle/index";
 
 export type Schema = typeof schema;
@@ -62,14 +62,14 @@ export class Database {
 		{ id }: U,
 		data?: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.insert(schema.dicks)
 			.values({ ...data, user_id: id })
 			.execute();
 	};
 
 	readonly updateDick = async <U extends TelegramUser, D extends schema.TDick>({ id }: U, data: Partial<D>) => {
-		this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
+		return this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
 	};
 
 	readonly resolveDickHistory = async <
@@ -103,7 +103,7 @@ export class Database {
 		{ id, size, difference }: U,
 		data?: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.insert(schema.dick_history)
 			.values({ ...data, user_id: id, size: size ?? 0, difference: difference ?? 0 })
 			.execute();
@@ -113,7 +113,7 @@ export class Database {
 		{ id, dick_id }: U,
 		data: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.update(schema.dick_history)
 			.set(data)
 			.where(and(eq(schema.dick_history.user_id, id), eq(schema.dick_history.id, dick_id)))
@@ -144,14 +144,14 @@ export class Database {
 		{ id, first_name, last_name, username, is_premium }: U,
 		data?: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.insert(schema.users)
 			.values({ ...data, user_id: id, first_name, last_name, username, is_premium })
 			.execute();
 	};
 
 	readonly updateUser = async <U extends TelegramUser, D extends schema.TUser>({ id }: U, data: Partial<D>) => {
-		this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
+		return this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
 	readonly resolveUserButtons = async <
@@ -175,20 +175,20 @@ export class Database {
 		{ link, text }: B,
 		data?: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.insert(schema.user_buttons)
 			.values({ ...data, user_id: id, text: text ?? null, link: link ?? null })
 			.execute();
 	};
 
-	readonly writeDeleteUserButton = async <
+	readonly deleteUserButton = async <
 		U extends TelegramUser | { id: number },
 		B extends { link: string; text: string },
 	>(
 		{ id }: U,
 		{ link, text }: B
 	) => {
-		this.db
+		return this.db
 			.delete(schema.user_buttons)
 			.where(
 				and(
@@ -225,9 +225,142 @@ export class Database {
 		referrer: U,
 		data?: Partial<D>
 	) => {
-		this.db
+		return this.db
 			.insert(schema.referrals)
 			.values({ ...data, referral: referral.id, referrer: referrer.id })
+			.execute();
+	};
+
+	readonly resolveChat = async <
+		C extends
+			| (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat)
+			| { id: number; type: Chat.AbstractChat["type"] },
+		CINE extends boolean,
+		I extends IncludeRelation<"chats">,
+	>(
+		chat: C,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
+	) => {
+		if (chat.type == "private") return;
+
+		const searchResult = await this.db.query.chats
+			.findFirst({ where: eq(schema.chats.chat_id, chat.id), with: include })
+			.execute();
+
+		if (!searchResult && createIfNotExists) {
+			await this.writeChat(
+				chat as (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
+					is_forum: boolean;
+				}
+			);
+		}
+
+		return this.db.query.chats.findFirst({ where: eq(schema.chats.chat_id, chat.id), with: include }).execute();
+	};
+
+	readonly writeChat = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
+			username?: string;
+			is_forum?: boolean;
+		},
+		D extends schema.TChat,
+	>(
+		{ id, type, title, is_forum, username }: C,
+		data?: Partial<D>
+	) => {
+		return this.db
+			.insert(schema.chats)
+			.values({ ...data, chat_id: id, type, title, username: username ?? null, is_forum: is_forum })
+			.execute();
+	};
+
+	readonly updateChat = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
+			username?: string;
+			is_forum?: boolean;
+		},
+		D extends schema.TChat,
+	>(
+		{ id }: C,
+		data: Partial<D>
+	) => {
+		return this.db.update(schema.chats).set(data).where(eq(schema.chats.chat_id, id)).execute();
+	};
+
+	readonly resolveChatMember = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
+		U extends ChatMember,
+		CINE extends boolean,
+		I extends IncludeRelation<"chat_users">,
+	>(
+		chat: C,
+		user: U,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
+	) => {
+		const searchResult = await this.db.query.chat_users
+			.findFirst({
+				where: and(eq(schema.chat_users.user_id, user.user.id), eq(schema.chat_users.chat_id, chat.id)),
+				with: include,
+			})
+			.execute();
+
+		if (!searchResult && createIfNotExists) {
+			await this.writeChatMember(
+				chat as TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat,
+				user
+			);
+		}
+
+		return this.db.query.chat_users
+			.findFirst({
+				where: and(eq(schema.chat_users.chat_id, chat.id), eq(schema.chat_users.user_id, user.user.id)),
+				with: include,
+			})
+			.execute();
+	};
+
+	readonly resolveChatMembers = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
+		I extends IncludeRelation<"chat_users">,
+	>(
+		chat: C,
+		include: I = {} as I
+	) => {
+		return this.db.query.chat_users
+			.findMany({ where: eq(schema.chat_users.chat_id, chat.id), with: include })
+			.execute();
+	};
+
+	readonly updateChatMember = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
+		U extends ChatMember | { user: { id: number } },
+		D extends schema.TChatUsers,
+	>(
+		chat: C,
+		user: U,
+		data: Partial<D>
+	) => {
+		return this.db
+			.update(schema.chat_users)
+			.set(data)
+			.where(and(eq(schema.chat_users.user_id, user.user.id), eq(schema.chat_users.chat_id, chat.id)))
+			.execute();
+	};
+
+	readonly writeChatMember = async <
+		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
+		U extends ChatMember,
+		D extends schema.TChatUsers,
+	>(
+		chat: C,
+		user: U,
+		data?: Partial<D>
+	) => {
+		return this.db
+			.insert(schema.chat_users)
+			.values({ ...data, chat_id: chat.id, user_id: user.user.id, status: user.status })
 			.execute();
 	};
 }

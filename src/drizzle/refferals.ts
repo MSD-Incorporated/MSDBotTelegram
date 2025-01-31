@@ -21,4 +21,8 @@ export const referralsRelations = relations(referrals, ({ one }) => ({
 		references: [users.user_id],
 		relationName: "referrals",
 	}),
+	referrer: one(users, {
+		fields: [referrals.referrer],
+		references: [users.user_id],
+	}),
 }));

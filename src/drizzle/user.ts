@@ -1,7 +1,10 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
-import { bigint, boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { bigint, boolean, pgEnum, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { chat_users, chats } from "./chat";
 import { dicks } from "./dick";
 import { referrals } from "./refferals";
+
+export const msdbot_user_status = pgEnum("msdbot_user_status", ["user", "trusted", "owner"]);
 
 export const users = pgTable("users", {
 	id: serial("id").unique().notNull(),
@@ -10,9 +13,7 @@ export const users = pgTable("users", {
 	last_name: varchar("last_name", { length: 64 }),
 	username: varchar("username", { length: 32 }),
 	is_premium: boolean("is_premium").default(false).notNull(),
-	status: varchar("status", { enum: ["user", "trusted", "owner"] })
-		.default("user")
-		.notNull(),
+	status: msdbot_user_status("status").default("user").notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
 	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
 		.defaultNow()
@@ -43,6 +44,9 @@ export const userButtonsRelations = relations(user_buttons, ({ one }) => ({
 }));
 
 export const userRelations = relations(users, ({ one, many }) => ({
+	chats: many(chat_users, {
+		relationName: "user_chat_users",
+	}),
 	referrals: many(referrals, {
 		relationName: "referrals",
 	}),

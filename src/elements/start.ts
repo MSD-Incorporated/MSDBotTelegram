@@ -40,3 +40,9 @@ startComposer.command("start", async ctx => {
 
 	return replyStartCommand(ctx, { version, bun_version, msdbot_version });
 });
+
+startComposer.command("test", async ctx => {
+	const user = await ctx.database.resolveChat(ctx.chat, true, { users: { with: { user: true } } });
+
+	console.log(user);
+});

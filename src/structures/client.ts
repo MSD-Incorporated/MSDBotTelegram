@@ -10,7 +10,14 @@ import {
 	shitpostsComposer,
 	startComposer,
 } from "../elements";
-import { autoCaching, createContextConstructor, type Context } from "../utils";
+import {
+	autoChatCaching,
+	autoChatMemberCaching,
+	autoChatMemberDeletion,
+	autoUserCaching,
+	createContextConstructor,
+	type Context,
+} from "../utils";
 import { Database } from "./database";
 
 const database = new Database();
@@ -26,7 +33,10 @@ process.once("SIGINT", () => client.stop());
 process.once("SIGTERM", () => client.stop());
 
 client.use(autoQuote());
-client.use(async (ctx, next) => autoCaching(ctx, database, next));
+client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
+client.use(async (ctx, next) => autoChatCaching(ctx, database, next));
+client.use(async (ctx, next) => autoChatMemberCaching(ctx, database, next));
+client.on("chat_member", async (ctx, next) => autoChatMemberDeletion(ctx, database, next));
 client.api.config.use(parseMode("HTML"));
 
 client.use(dickComposer);
