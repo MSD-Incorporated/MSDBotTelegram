@@ -146,7 +146,15 @@ export class Database {
 	) => {
 		return this.db
 			.insert(schema.users)
-			.values({ ...data, user_id: id, first_name, last_name, username, is_premium })
+			.values({
+				...data,
+				user_id: id,
+				first_name,
+				last_name,
+				username,
+				is_premium,
+				status: data?.status ?? "user",
+			})
 			.execute();
 	};
 
