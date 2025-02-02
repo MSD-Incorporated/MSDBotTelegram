@@ -160,7 +160,7 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 			});
 		});
 
-	const keyboard = keyboardBuilder(ctx, "dick_history", page, "user_id", pagesLength);
+	const keyboard = keyboardBuilder(ctx, "dick_history", page, user_id.toString(), pagesLength);
 
 	return ctx.api.editMessageText(ctx.chatId!, ctx.msgId!, history.join("\n\n"), {
 		reply_markup: { inline_keyboard: keyboard },

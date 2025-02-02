@@ -279,7 +279,7 @@ export class Database {
 	) => {
 		return this.db
 			.insert(schema.chats)
-			.values({ ...data, chat_id: id, type, title, username: username ?? null, is_forum: is_forum })
+			.values({ ...data, chat_id: id, type, title, username: username ?? null, is_forum: is_forum ?? null })
 			.execute();
 	};
 
