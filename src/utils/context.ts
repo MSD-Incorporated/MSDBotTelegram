@@ -1,9 +1,9 @@
 import type { ParseModeFlavor } from "@grammyjs/parse-mode";
 import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
-import L from "i18n/i18n-node";
-import type { Locales, TranslationFunctions } from "i18n/i18n-types";
-import { locales } from "i18n/i18n-util";
+import L from "../i18n/i18n-node";
+import type { Locales, TranslationFunctions } from "../i18n/i18n-types";
+import { locales } from "../i18n/i18n-util";
 import type { Database } from "../structures/database";
 
 interface ExtendedContextFlavor {

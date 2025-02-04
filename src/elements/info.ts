@@ -1,6 +1,6 @@
 import { Composer } from "grammy";
 import type { InlineKeyboardButton } from "grammy/types";
-import { roles } from "i18n/formatters";
+import { roles } from "../i18n/formatters";
 import type { Context } from "../utils/context";
 
 export const infoComposer = new Composer<Context>();
