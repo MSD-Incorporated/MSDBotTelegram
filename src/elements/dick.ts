@@ -167,7 +167,7 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 	});
 });
 
-dickComposer.command("referrals", async ctx => {
+dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async ctx => {
 	const user = ctx.from!;
 	const referrals = await ctx.database.resolveReferrers(user);
 	const isSubscribed = await isSubscriber(ctx, user.id, -1002336315136);
