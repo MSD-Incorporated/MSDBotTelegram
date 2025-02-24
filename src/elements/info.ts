@@ -54,3 +54,11 @@ infoComposer.command(["userinfo", "ui"], async ctx => {
 		}
 	);
 });
+
+infoComposer
+	.filter(ctx => ctx.from?.id === 946070039)
+	.command("total_users", async ctx => {
+		const users = await ctx.database.resolveUsers();
+
+		return ctx.reply(`Всего ${users.length} пользователей!`);
+	});

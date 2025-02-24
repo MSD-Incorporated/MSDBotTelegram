@@ -140,6 +140,10 @@ export class Database {
 		return this.db.query.users.findFirst({ where: eq(schema.users.user_id, user.id), with: include }).execute();
 	};
 
+	readonly resolveUsers = async <I extends IncludeRelation<"users">>(include: I = {} as I) => {
+		return this.db.query.users.findMany({ with: include }).execute();
+	};
+
 	readonly writeUser = async <U extends TelegramUser, D extends schema.TUser>(
 		{ id, first_name, last_name, username, is_premium }: U,
 		data?: Partial<D>
