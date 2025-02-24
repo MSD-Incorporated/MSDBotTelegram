@@ -3,20 +3,20 @@ import { autoQuote } from "@roziscoding/grammy-autoquote";
 import { Bot } from "grammy";
 import type { UserFromGetMe } from "typegram";
 import {
-  dickComposer,
-  extraComposer,
-  infoComposer,
-  msdIncorporatedComposer,
-  shitpostsComposer,
-  startComposer,
+	dickComposer,
+	extraComposer,
+	infoComposer,
+	msdIncorporatedComposer,
+	shitpostsComposer,
+	startComposer,
 } from "../elements";
 import {
-  autoChatCaching,
-  autoChatMemberCaching,
-  autoChatMemberDeletion,
-  autoUserCaching,
-  createContextConstructor,
-  type Context,
+	autoChatCaching,
+	autoChatMemberCaching,
+	autoChatMemberDeletion,
+	autoUserCaching,
+	createContextConstructor,
+	type Context,
 } from "../utils";
 import { Database } from "./database";
 
@@ -24,7 +24,7 @@ const database = new Database();
 await database.connect();
 
 export const client = new Bot<Context>(process.env.TOKEN, {
-  ContextConstructor: createContextConstructor({ database }),
+	ContextConstructor: createContextConstructor({ database }),
 });
 
 export const onStart = ({ username, id }: UserFromGetMe) => console.log(`${username} [${id}] started`);
