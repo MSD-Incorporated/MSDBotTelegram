@@ -1,6 +1,6 @@
 import { parseMode } from "@grammyjs/parse-mode";
 import { autoQuote } from "@roziscoding/grammy-autoquote";
-import { Bot } from "grammy";
+import { Bot, GrammyError, HttpError } from "grammy";
 import type { UserFromGetMe } from "typegram";
 import {
 	dickComposer,
@@ -47,5 +47,17 @@ client.use(msdIncorporatedComposer);
 client.use(shitpostsComposer);
 client.use(startComposer);
 
-client.catch(err => console.error(err.ctx.update));
+client.catch(err => {
+	const ctx = err.ctx;
+	console.error(`Error while handling update ${ctx.update.update_id}:`);
+	const e = err.error;
+	if (e instanceof GrammyError) {
+		console.error("Error in request:", e.description);
+	} else if (e instanceof HttpError) {
+		console.error("Could not contact Telegram:", e);
+	} else {
+		console.error("Unknown error:", e);
+	}
+});
+
 client.init();
