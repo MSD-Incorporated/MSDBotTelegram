@@ -47,5 +47,5 @@ client.use(msdIncorporatedComposer);
 client.use(shitpostsComposer);
 client.use(startComposer);
 
-client.catch(err => console.error(JSON.stringify(err, null, 4)));
+client.catch(err => console.error(err.ctx.update));
 client.init();
