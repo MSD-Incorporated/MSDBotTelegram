@@ -9,7 +9,7 @@ const channelID = -1002118873453;
 const safeWord = (word: string) => word.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 shitpostsComposer.on("message", async (ctx, next) => {
-	if (!ctx.message.forward_origin || (ctx.message?.forward_origin! as Message).chat.id !== channelID) return next();
+	if (!ctx.message.forward_origin || (ctx.message?.forward_origin! as Message)?.chat?.id !== channelID) return next();
 
 	const text = ctx.message.text || ctx.message.caption;
 	if (!text) return next();
