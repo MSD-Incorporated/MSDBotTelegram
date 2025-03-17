@@ -1,6 +1,6 @@
 {
 	"name": "msdbot_telegram",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"author": {
 		"name": "MasedMSD",
 		"url": "https://github.com/MasedMSD"
@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "https://github.com/MSD-Incorporated/MSDBotTelegram"
 	},
-	"packageManager": "bun@1.1.39",
+	"packageManager": "bun@1.2.6",
 	"module": "./src/index.ts",
 	"main": "./dist/index.js",
 	"license": "MIT",
