@@ -52,7 +52,7 @@ dickComposer.command(["dick", "cock"], async ctx => {
 		});
 	}
 
-	const difference = random(-7, 7, true);
+	const difference = random(-12, 12, true);
 
 	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
 	await ctx.database.writeDickHistory({ id: user.id, size, difference });
