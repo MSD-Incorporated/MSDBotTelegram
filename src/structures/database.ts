@@ -1,7 +1,7 @@
 // TODO: Recode
+import { SQL } from "bun";
 import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
-import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Client } from "pg";
+import { drizzle, type BunSQLDatabase } from "drizzle-orm/bun-sql";
 import type { Chat, ChatMember, Chat as TelegramChat, User as TelegramUser } from "typegram";
 import * as schema from "../drizzle/index";
 
@@ -18,7 +18,7 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, DATABASE_URL } = process.env;
 
 export class Database {
-	readonly client = new Client({
+	readonly client = new SQL({
 		host: "localhost",
 		port: 5432,
 		user: POSTGRES_USER,
@@ -27,7 +27,7 @@ export class Database {
 		ssl: DATABASE_URL ? true : false,
 	});
 
-	public db: NodePgDatabase<Schema>;
+	public db: BunSQLDatabase<Schema>;
 
 	constructor() {
 		this.db = drizzle(this.client, { schema });
