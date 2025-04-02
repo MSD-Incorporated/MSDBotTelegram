@@ -10,10 +10,14 @@ export const dicks = pgTable("dicks", {
 		.references(() => users.user_id)
 		.notNull(),
 	size: integer("size").default(0).notNull(),
-	timestamp: timestamp("timestamp", { mode: "date", precision: 3 }).default(new Date(0)).notNull(),
-	referral_timestamp: timestamp("referral_timestamp", { mode: "date", precision: 3 }).default(new Date(0)).notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
+	timestamp: timestamp("timestamp", { mode: "date", precision: 3, withTimezone: true })
+		.default(new Date(0))
+		.notNull(),
+	referral_timestamp: timestamp("referral_timestamp", { mode: "date", precision: 3, withTimezone: true })
+		.default(new Date(0))
+		.notNull(),
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
+	updated_at: timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
 		.defaultNow()
 		.$onUpdate(() => new Date())
 		.notNull(),
@@ -26,7 +30,7 @@ export const dick_history = pgTable("dick_history", {
 		.notNull(),
 	size: integer("size").default(0).notNull(),
 	difference: integer("difference").notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
 });
 
 export type TDick = InferSelectModel<typeof dicks>;

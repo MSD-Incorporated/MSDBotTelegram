@@ -19,8 +19,8 @@ export const chats = pgTable("chats", {
 	type: chat_type("type").notNull(),
 	username: varchar("username", { length: 32 }),
 	is_forum: boolean("is_forum"),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
+	updated_at: timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
 		.defaultNow()
 		.$onUpdate(() => new Date())
 		.notNull(),
@@ -37,7 +37,7 @@ export const chat_users = pgTable("chat_users", {
 		.notNull()
 		.references(() => users.user_id),
 	status: member_status("status").default("member").notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
 });
 
 export type TChatUsers = InferSelectModel<typeof chat_users>;

@@ -1,6 +1,6 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, boolean, pgEnum, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
-import { chat_users, chats } from "./chat";
+import { chat_users } from "./chat";
 import { dicks } from "./dick";
 import { referrals } from "./refferals";
 
@@ -14,8 +14,8 @@ export const users = pgTable("users", {
 	username: varchar("username", { length: 32 }),
 	is_premium: boolean("is_premium").default(false).notNull(),
 	status: msdbot_user_status("status").default("user").notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: "date", precision: 3 })
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
+	updated_at: timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
 		.defaultNow()
 		.$onUpdate(() => new Date())
 		.notNull(),
@@ -30,7 +30,7 @@ export const user_buttons = pgTable("user_buttons", {
 		.notNull(),
 	link: varchar("link", { length: 256 }),
 	text: varchar("text", { length: 256 }),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
 });
 
 export type TUserButton = InferSelectModel<typeof user_buttons>;

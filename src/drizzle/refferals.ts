@@ -10,7 +10,7 @@ export const referrals = pgTable("referrals", {
 	referrer: bigint("referrer", { mode: "number" })
 		.references(() => users.user_id)
 		.notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3 }).defaultNow().notNull(),
+	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
 });
 
 export type TRefferal = InferSelectModel<typeof referrals>;
