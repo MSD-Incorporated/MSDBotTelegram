@@ -62,6 +62,39 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	);
 });
 
+msdIncorporatedComposer.on(":photo").command("search_full", async ctx => {
+	if (ctx.from!.id !== 946070039) return;
+
+	const file = await ctx.getFile();
+	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+
+	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
+	const [res] = await sauceNao(url);
+
+	if (!res?.raw.data.ext_urls.length) return;
+
+	const { author, creator, characters } = res.raw.data;
+	// @ts-ignore
+	const material = res.raw.data.material;
+	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
+
+	if (!url.length) return;
+
+	return ctx.reply(
+		[
+			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
+			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
+			`• <b>Ссылки:</b> ${urlParser(urls)
+				.map(([name, url]) => `<a href="${url}">${name}</a>`)
+				.join(" | ")}`,
+		].join("\n"),
+		{
+			parse_mode: "HTML",
+		}
+	);
+});
+
 msdIncorporatedComposer.on(":new_chat_members", async ctx => {
 	if (ctx.chat.id !== chatChannelID) return;
 	ctx.replyWithAnimation(new InputFile(resolve(cwd(), "src", "media", "welcome.gif")));
