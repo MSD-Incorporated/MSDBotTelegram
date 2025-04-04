@@ -64,7 +64,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 
 msdIncorporatedComposer.command("search_full", async ctx => {
 	if (ctx.from!.id !== 946070039) return;
-	if (!ctx.message?.reply_to_message || ctx.message?.reply_to_message?.photo?.length) return;
+	if (!ctx.message?.reply_to_message || !ctx.message?.reply_to_message?.photo?.length) return;
 
 	const file_id = ctx.message.reply_to_message.photo[0]!.file_id;
 	const file = await ctx.api.getFile(file_id);
