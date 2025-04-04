@@ -45,7 +45,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (!url.length) return;
+	if (url.length) return;
 
 	return ctx.reply(
 		[
@@ -80,7 +80,7 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (!url.length) return ctx.reply("Не удалось найти!");
+	if (url.length) return ctx.reply("Не удалось найти!");
 
 	return ctx.reply(
 		[
@@ -114,7 +114,7 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (!url.length) return ctx.reply("Не удалось найти!");
+	if (url.length) return ctx.reply("Не удалось найти!");
 
 	return ctx.reply(
 		[
