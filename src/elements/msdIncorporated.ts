@@ -62,7 +62,8 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	);
 });
 
-msdIncorporatedComposer.on(":photo").command("search_full", async ctx => {
+msdIncorporatedComposer.on(":caption", async ctx => {
+	if (!ctx.message?.caption.includes("/search_full")) return;
 	if (ctx.from!.id !== 946070039) return;
 
 	const file = await ctx.getFile();
@@ -78,7 +79,7 @@ msdIncorporatedComposer.on(":photo").command("search_full", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (!url.length) return;
+	if (!url.length) return ctx.reply("Не удалось найти!");
 
 	return ctx.reply(
 		[
