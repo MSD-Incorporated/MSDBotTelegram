@@ -237,7 +237,7 @@ dickComposer.callbackQuery(/referrals_(\d+)_(remove|add)_(\d+)/, async ctx => {
 		size: type == "add" ? size + value : size - value,
 		referral_timestamp: new Date(Date.now()),
 	});
-	await ctx.database.writeDickHistory({ id: user.id, size, difference: value });
+	await ctx.database.writeDickHistory({ id: user.id, size, difference: Number(`-${value}`) });
 
 	return ctx.editMessageText(ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value }));
 });
