@@ -21,7 +21,7 @@ shitpostsComposer.on("message", async (ctx, next) => {
 	const formattedRows = words.map(({ word, s, row }) => {
 		const correctedRow = rows[row]?.replace(new RegExp(`${safeWord(word)}\\s`, "gm"), `${safeWord(s[0]!)} `);
 
-		return `Слово <code>${safeWord(word)}</code> должно быть исправлено на <code>${safeWord(s[0]!)}
+		return `Слово <code>${safeWord(word)}</code> должно быть исправлено на <code>${safeWord(s[0]!)}</code>
 			\n<pre class="tg-pre-code"><code class="language-diff">- ${rows[row]}
 			\n+ ${correctedRow}</code></pre>`;
 	});
