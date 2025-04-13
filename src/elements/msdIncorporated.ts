@@ -2,9 +2,12 @@ import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
 import { cwd } from "process";
 import sagiri from "sagiri";
+import Telegraph from "telegra.ph";
+import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
 import type { Message } from "typegram";
 import type { Context } from "../utils";
 
+const telegraph = new Telegraph(process.env.TELEGRAPH_TOKEN);
 const channelID = -1001528929804;
 const chatChannelID = -1001705068191;
 
@@ -129,6 +132,33 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 			parse_mode: "HTML",
 		}
 	);
+});
+
+const getContent = (page: Page) =>
+	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");
+
+const getPage = async (args: string[]) => {
+	const id = args[0]!.replace("https://telegra.ph/", "");
+
+	return telegraph.getPage(id, true);
+};
+
+msdIncorporatedComposer.command("telegraph", async ctx => {
+	if (ctx.from!.id !== 946070039) return;
+
+	const args = ctx.msg.text.split(/\s+/).slice(1);
+	if (!args?.length) return ctx.reply("Не удалось найти ID");
+
+	const page = await getPage(args);
+	const elements = getContent(page);
+	const newPage = await telegraph.createPage(page.title, elements, "MSD Incorporated", "https://t.me/msd_inc");
+
+	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
+		parse_mode: "HTML",
+		reply_markup: {
+			inline_keyboard: [[{ text: "Выложить в канал?", callback_data: "telegraph_post_manga" }]],
+		},
+	});
 });
 
 msdIncorporatedComposer.on(":new_chat_members", async ctx => {
