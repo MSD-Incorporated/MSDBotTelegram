@@ -51,6 +51,6 @@
 		"drizzle-kit": "^0.30.4",
 		"prettier": "^3.4.2",
 		"typegram": "^5.2.0",
-		"typescript": "^5.7.3"
+		"typescript": "^5.8.3"
 	}
 }
