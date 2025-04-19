@@ -1,6 +1,6 @@
 {
 	"name": "msdbot_telegram",
-	"version": "0.5.1",
+	"version": "0.6.0",
 	"author": {
 		"name": "MasedMSD",
 		"url": "https://github.com/MasedMSD"
@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "https://github.com/MSD-Incorporated/MSDBotTelegram"
 	},
-	"packageManager": "bun@1.2.6",
+	"packageManager": "bun@1.2.10",
 	"module": "./src/index.ts",
 	"main": "./dist/index.js",
 	"license": "MIT",
@@ -36,19 +36,19 @@
 		"@artemis69/yandex-speller": "^0.1.1",
 		"@grammyjs/parse-mode": "^1.11.1",
 		"@roziscoding/grammy-autoquote": "^2.0.6",
-		"drizzle-orm": "^0.41.0",
+		"drizzle-orm": "^0.42.0",
 		"grammy": "^1.36.0",
-		"pg": "^8.13.1",
+		"pg": "^8.14.1",
 		"sagiri": "^4.3.0",
 		"telegra.ph": "^1.0.1",
 		"tslib": "^2.8.1",
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.9",
-		"@types/node": "^22.12.0",
-		"@types/pg": "^8.11.11",
-		"drizzle-kit": "^0.30.6",
+		"@types/bun": "^1.2.10",
+		"@types/node": "^22.14.1",
+		"@types/pg": "^8.11.13",
+		"drizzle-kit": "^0.31.0",
 		"prettier": "^3.4.2",
 		"typegram": "^5.2.0",
 		"typescript": "^5.8.3"
