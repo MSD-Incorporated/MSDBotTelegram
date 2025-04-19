@@ -5,8 +5,8 @@ import { dicks } from "../drizzle";
 import type { TranslationFunctions } from "../i18n/i18n-types";
 import { code, isSubscriber, random, type Context } from "../utils";
 
-const timeout = 12 * 60 * 60 * 1000;
-const referral_timeout = 72 * 60 * 60 * 1000;
+const timeout = 30 * 60 * 1000;
+const referral_timeout = 1 * 60 * 60 * 1000;
 const dateFormatter = new Intl.DateTimeFormat("ru", {
 	day: "2-digit",
 	month: "2-digit",
@@ -54,7 +54,7 @@ dickComposer.command(["dick", "cock"], async ctx => {
 		});
 	}
 
-	const difference = random(-12, 12, true);
+	const difference = random(-50, 50, true);
 
 	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
 	await ctx.database.writeDickHistory({ id: user.id, size, difference });
