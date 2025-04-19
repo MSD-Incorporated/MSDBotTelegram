@@ -41,8 +41,6 @@ dickComposer.command(["dick", "cock"], async ctx => {
 	const now = Date.now();
 	const lastUsed = now - timestamp.getTime();
 
-	console.log(new Date(now), new Date(timestamp.getTime()));
-
 	if (lastUsed < timeout) {
 		const timeLeft = dateFormatter.format(timeout - lastUsed).slice(12);
 		const { dick_timeout_text, dick_history_button } = ctx.t;
