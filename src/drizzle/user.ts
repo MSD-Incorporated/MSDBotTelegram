@@ -2,7 +2,7 @@ import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, boolean, pgEnum, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 import { chat_users } from "./chat";
 import { dicks } from "./dick";
-import { referrals } from "./refferals";
+import { referrals } from "./referrals";
 
 export const msdbot_user_status = pgEnum("msdbot_user_status", ["user", "trusted", "owner"]);
 
