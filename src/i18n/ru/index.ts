@@ -1,4 +1,5 @@
 import { bold, boldAndTextLink, code, text_mention } from "../../utils/formatter";
+import { BUN_URL, MSDBOT_URL, NODEJS_URL } from "../constants";
 import type { BaseTranslation } from "../i18n-types.js";
 
 const ru = {
@@ -12,9 +13,9 @@ const ru = {
 	// Start Composer
 	start_command: [
 		`Добро пожаловать!\n`,
-		`• Текущая версия ${boldAndTextLink("MSDBot", "https://github.com/MSD-Incorporated/MSDBotTelegram")} — ${code("{msdbot_version:string}")}`,
-		`• Текущая версия ${boldAndTextLink("NodeJS", "nodejs.org")} — ${code("{version:string}")}`,
-		`• Текущая версия ${boldAndTextLink("Bun", "https://bun.sh")} — ${code("v{bun_version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("{msdbot_version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}`,
 	].join("\n"),
 	start_refferal_command: [
 		`Вы были успешно зарегистрированы по рефферальной ссылке!`,

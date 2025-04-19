@@ -8,6 +8,8 @@ export const referrals = pgTable("referrals", {
 		.references(() => users.user_id)
 		.notNull(),
 	referrer: bigint("referrer", { mode: "number" })
+		.unique()
+		.primaryKey()
 		.references(() => users.user_id)
 		.notNull(),
 	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
