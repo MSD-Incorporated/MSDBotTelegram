@@ -1,4 +1,4 @@
-import type { NextFunction } from "grammy";
+import { type NextFunction } from "grammy";
 import type { Database } from "../structures";
 import type { Context } from "./context";
 
