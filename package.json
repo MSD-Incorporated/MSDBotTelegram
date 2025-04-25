@@ -23,9 +23,6 @@
 		"pm2:bun_start": "pm2 start bun --ignore-watch=\"node_modules\" --name \"msdbot_telegram\" -- bun:start",
 		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
-		"docker:build": "docker build --platform=linux/amd64 -t msdbot_telegram --progress=plain .",
-		"docker:run": "docker run --restart=always --env-file=.env -itd -p 80:80 --name msdbot_telegram msdbot_telegram:latest",
-		"docker:compose": "docker compose up -d",
 		"drizzle:generate": "drizzle-kit generate",
 		"drizzle:migrate": "drizzle-kit migrate",
 		"build": "tsc",
@@ -33,21 +30,12 @@
 		"typesafe-i18n": "typesafe-i18n"
 	},
 	"dependencies": {
-		"@artemis69/yandex-speller": "^0.1.1",
-		"@grammyjs/parse-mode": "^1.11.1",
-		"@roziscoding/grammy-autoquote": "^2.0.6",
 		"drizzle-orm": "^0.42.0",
-		"grammy": "^1.36.1",
-		"pg": "^8.14.1",
-		"sagiri": "^4.3.0",
-		"telegra.ph": "^1.0.1",
-		"tslib": "^2.8.1",
-		"typesafe-i18n": "^5.26.2"
+		"grammy": "^1.36.1"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.10",
 		"@types/node": "^22.14.1",
-		"@types/pg": "^8.11.13",
 		"drizzle-kit": "^0.31.0",
 		"prettier": "^3.4.2",
 		"typegram": "^5.2.0",
