@@ -1,6 +1,7 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./user";
+import { creationTimestamp, timestamps } from "./utils";
 
 export const dicks = pgTable("dicks", {
 	id: serial("id").notNull().unique(),
@@ -16,11 +17,7 @@ export const dicks = pgTable("dicks", {
 	referral_timestamp: timestamp("referral_timestamp", { mode: "date", precision: 3, withTimezone: true })
 		.default(new Date(0))
 		.notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
-		.defaultNow()
-		.$onUpdate(() => new Date())
-		.notNull(),
+	...timestamps,
 });
 
 export const dick_history = pgTable("dick_history", {
@@ -30,22 +27,16 @@ export const dick_history = pgTable("dick_history", {
 		.notNull(),
 	size: integer("size").default(0).notNull(),
 	difference: integer("difference").notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
+	created_at: creationTimestamp,
 });
 
 export type TDick = InferSelectModel<typeof dicks>;
 export type TDickHistory = InferSelectModel<typeof dick_history>;
 
 export const dicksHistoryRelations = relations(dick_history, ({ one }) => ({
-	dick: one(dicks, {
-		fields: [dick_history.user_id],
-		references: [dicks.user_id],
-		relationName: "history",
-	}),
+	dick: one(dicks, { fields: [dick_history.user_id], references: [dicks.user_id], relationName: "history" }),
 }));
 
 export const dicksRelations = relations(dicks, ({ many }) => ({
-	history: many(dick_history, {
-		relationName: "history",
-	}),
+	history: many(dick_history, { relationName: "history" }),
 }));
