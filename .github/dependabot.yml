@@ -1,15 +1,6 @@
 version: 2
 
 updates:
-    - package-ecosystem: "npm"
-      directory: "/"
-      schedule:
-          interval: "weekly"
-      labels:
-          - "dependencies"
-      versioning-strategy: widen
-      open-pull-requests-limit: 5
-
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
