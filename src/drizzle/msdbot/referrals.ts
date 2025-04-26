@@ -4,7 +4,7 @@ import { users } from "../user";
 import { creationTimestamp } from "../utils";
 
 export const referrals = pgTable("referrals", {
-	id: serial("id").notNull().unique(),
+	id: serial("id").unique(),
 	referral: bigint("refferal", { mode: "number" })
 		.references(() => users.user_id)
 		.notNull(),

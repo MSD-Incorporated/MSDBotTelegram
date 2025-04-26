@@ -9,23 +9,23 @@ export const msdbot_user_status: PgEnum<["user", "trusted", "owner"]> = pgEnum("
 	"owner",
 ]);
 
-/**
- * Enum for member status in a chat.
- */
-export const member_status: PgEnum<["creator", "administrator", "member", "restricted", "left", "kicked"]> = pgEnum(
-	"member_status",
-	["creator", "administrator", "member", "restricted", "left", "kicked"]
-);
+// /**
+//  * Enum for member status in a chat.
+//  */
+// export const member_status: PgEnum<["creator", "administrator", "member", "restricted", "left", "kicked"]> = pgEnum(
+// 	"member_status",
+// 	["creator", "administrator", "member", "restricted", "left", "kicked"]
+// );
 
-/**
- * Enum for chat type.
- */
-export const chat_type: PgEnum<["group", "supergroup", "channel", "private"]> = pgEnum("type", [
-	"group",
-	"supergroup",
-	"channel",
-	"private",
-]);
+// /**
+//  * Enum for chat type.
+//  */
+// export const chat_type: PgEnum<["group", "supergroup", "channel", "private"]> = pgEnum("type", [
+// 	"group",
+// 	"supergroup",
+// 	"channel",
+// 	"private",
+// ]);
 
 /**
  * Timestamp for creation, defaults to current time and is non-nullable.

@@ -4,7 +4,7 @@ import { users } from "../user";
 import { creationTimestamp, timestamps } from "../utils";
 
 export const dicks = pgTable("dicks", {
-	id: serial("id").notNull().unique(),
+	id: serial("id").unique(),
 	user_id: bigint("user_id", { mode: "number" })
 		.unique()
 		.primaryKey()

@@ -23,8 +23,8 @@
 		"pm2:bun_start": "pm2 start bun --ignore-watch=\"node_modules\" --name \"msdbot_telegram\" -- bun:start",
 		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
-		"drizzle:generate": "drizzle-kit generate:pg",
-		"drizzle:migrate": "drizzle-kit migrate:pg",
+		"drizzle:generate": "drizzle-kit generate",
+		"drizzle:migrate": "drizzle-kit migrate",
 		"build": "tsc",
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'",
 		"typesafe-i18n": "typesafe-i18n"

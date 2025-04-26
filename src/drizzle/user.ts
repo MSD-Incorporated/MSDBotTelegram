@@ -1,9 +1,9 @@
 import { bigint, boolean, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
-import { creationTimestamp, timestamps } from "./utils";
+import { timestamps } from "./utils";
 
 export const users = pgTable("users", {
-	id: serial("id").unique().notNull(),
+	id: serial("id").unique(),
 	user_id: bigint("user_id", { mode: "number" }).unique().primaryKey().notNull(),
 	first_name: varchar("first_name", { length: 64 }).notNull(),
 	last_name: varchar("last_name", { length: 64 }),
@@ -12,12 +12,12 @@ export const users = pgTable("users", {
 	...timestamps,
 });
 
-export const user_buttons = pgTable("user_buttons", {
-	id: serial("id").unique().notNull(),
-	user_id: bigint("user_id", { mode: "number" })
-		.references(() => users.user_id)
-		.notNull(),
-	link: varchar("link", { length: 256 }),
-	text: varchar("text", { length: 256 }),
-	created_at: creationTimestamp,
-});
+// export const user_buttons = pgTable("user_buttons", {
+// 	id: serial("id").unique(),
+// 	user_id: bigint("user_id", { mode: "number" })
+// 		.references(() => users.user_id)
+// 		.notNull(),
+// 	link: varchar("link", { length: 256 }),
+// 	text: varchar("text", { length: 256 }),
+// 	created_at: creationTimestamp,
+// });
