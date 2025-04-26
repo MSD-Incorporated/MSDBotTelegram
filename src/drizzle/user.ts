@@ -1,11 +1,19 @@
 import { relations, type InferSelectModel } from "drizzle-orm";
-import { bigint, boolean, pgEnum, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { bigint, boolean, pgEnum, pgTable, serial, varchar, type PgEnum } from "drizzle-orm/pg-core";
+
 import { chat_users } from "./chat";
 import { dicks } from "./dick";
 import { referrals } from "./referrals";
 import { creationTimestamp, timestamps } from "./utils";
 
-export const msdbot_user_status = pgEnum("msdbot_user_status", ["user", "trusted", "owner"]);
+/**
+ * User status in the bot.
+ */
+export const msdbot_user_status: PgEnum<["user", "trusted", "owner"]> = pgEnum("msdbot_user_status", [
+	"user",
+	"trusted",
+	"owner",
+]);
 
 export const users = pgTable("users", {
 	id: serial("id").unique().notNull(),
@@ -36,7 +44,7 @@ export const userButtonsRelations = relations(user_buttons, ({ one }) => ({
 	user: one(users, { fields: [user_buttons.user_id], references: [users.user_id], relationName: "user_buttons" }),
 }));
 
-export const userRelations = relations(users, ({ one, many }) => ({
+export const userRelations = relations(users, ({ many, one }) => ({
 	chats: many(chat_users, { relationName: "user_chat_users" }),
 	referrals: many(referrals, { relationName: "referrals" }),
 	buttons: many(user_buttons, { relationName: "user_buttons" }),

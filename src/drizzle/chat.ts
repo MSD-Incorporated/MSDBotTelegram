@@ -20,7 +20,7 @@ export const chats = pgTable("chats", {
 	title: varchar("title", { length: 128 }).notNull(),
 	type: chat_type("type").notNull(),
 	username: varchar("username", { length: 32 }),
-	is_forum: boolean("is_forum").default(false).notNull(),
+	is_forum: boolean("is_forum").default(false),
 	...timestamps,
 });
 
