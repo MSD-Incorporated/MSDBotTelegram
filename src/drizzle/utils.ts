@@ -1,4 +1,31 @@
-import { timestamp } from "drizzle-orm/pg-core";
+import { pgEnum, timestamp, type PgEnum } from "drizzle-orm/pg-core";
+
+/**
+ * User status in the bot.
+ */
+export const msdbot_user_status: PgEnum<["user", "trusted", "owner"]> = pgEnum("msdbot_user_status", [
+	"user",
+	"trusted",
+	"owner",
+]);
+
+/**
+ * Enum for member status in a chat.
+ */
+export const member_status: PgEnum<["creator", "administrator", "member", "restricted", "left", "kicked"]> = pgEnum(
+	"member_status",
+	["creator", "administrator", "member", "restricted", "left", "kicked"]
+);
+
+/**
+ * Enum for chat type.
+ */
+export const chat_type: PgEnum<["group", "supergroup", "channel", "private"]> = pgEnum("type", [
+	"group",
+	"supergroup",
+	"channel",
+	"private",
+]);
 
 /**
  * Timestamp for creation, defaults to current time and is non-nullable.

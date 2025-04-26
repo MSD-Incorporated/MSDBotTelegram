@@ -1,4 +1,5 @@
+export * from "./msdbot/dick";
+export * from "./msdbot/referrals";
+
 export * from "./chat";
-export * from "./dick";
-export * from "./referrals";
 export * from "./user";
