@@ -1,10 +1,10 @@
-import { relations, type InferSelectModel } from "drizzle-orm";
 import { bigint, integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
-import { users } from "./user";
-import { creationTimestamp, timestamps } from "./utils";
+
+import { users } from "../user";
+import { creationTimestamp, timestamps } from "../utils";
 
 export const dicks = pgTable("dicks", {
-	id: serial("id").notNull().unique(),
+	id: serial("id").unique(),
 	user_id: bigint("user_id", { mode: "number" })
 		.unique()
 		.primaryKey()
@@ -29,14 +29,3 @@ export const dick_history = pgTable("dick_history", {
 	difference: integer("difference").notNull(),
 	created_at: creationTimestamp,
 });
-
-export type TDick = InferSelectModel<typeof dicks>;
-export type TDickHistory = InferSelectModel<typeof dick_history>;
-
-export const dicksHistoryRelations = relations(dick_history, ({ one }) => ({
-	dick: one(dicks, { fields: [dick_history.user_id], references: [dicks.user_id], relationName: "history" }),
-}));
-
-export const dicksRelations = relations(dicks, ({ many }) => ({
-	history: many(dick_history, { relationName: "history" }),
-}));
