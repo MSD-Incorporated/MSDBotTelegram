@@ -8,6 +8,20 @@ import type { UserFromGetMe } from "grammy/types";
 export const onStart = ({ id, username }: UserFromGetMe) => console.log(`✅ | ${username} [${id}] started!`);
 
 /**
+ * Generates a random number between the specified minimum and maximum values.
+ *
+ * @param {number} min The minimum value.
+ * @param {number} max The maximum value.
+ * @param {boolean} [includeMax=false] Whether to include the maximum value in the range.
+ * @return {number} The generated random number.
+ */
+export const random = <MIN extends number, MAX extends number, IM extends boolean>(
+	min: MIN,
+	max: MAX,
+	includeMax?: IM
+): number => Math.floor(Math.random() * (max - min + (includeMax ? 1 : 0)) + min);
+
+/**
  * The chat ID where the bot logs messages.
  *
  * @type {number}
