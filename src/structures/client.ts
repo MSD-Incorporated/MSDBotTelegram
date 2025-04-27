@@ -1,6 +1,7 @@
 import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
+import { startComposer } from "../elements";
 import { autoQuote, autoUserCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
@@ -16,6 +17,8 @@ client.use(autoQuote());
 client.api.config.use(parseMode("HTML"));
 
 client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
+
+client.use(startComposer);
 
 process.once("SIGINT", () => client.stop());
 process.once("SIGTERM", () => client.stop());
