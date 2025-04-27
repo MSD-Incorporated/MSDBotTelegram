@@ -16,10 +16,6 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema[TableName]
 >["with"];
 
-export type Nil = null | undefined;
-export type NotNil<T> = Nil extends T ? never : T extends Nil ? never : T;
-
-export type HasValue<T> = { value: NotNil<T> };
 export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu"> | { id: number };
 
 /**
