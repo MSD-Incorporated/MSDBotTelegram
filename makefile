@@ -4,9 +4,7 @@ docker_build_bot:
 docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
-	--network msdbot_default_network \
 	--network msdbot_internal_network \
-	--net bridge \
 	-p 8081:8081 \
 	--env-file .env \
 	-v /etc/timezone:/etc/timezone \
@@ -17,7 +15,6 @@ docker_bot:
 	docker run \
 	--name msdbot_telegram \
 	--network msdbot_internal_network \
-	--net bridge \
 	--env-file .env \
 	-e NODE_ENV=production \
 	-d mased/msdbot_telegram
@@ -28,7 +25,6 @@ docker_database:
 	-itd \
 	-p 5432:5432 \
 	--network msdbot_internal_network \
-	--net bridge \
 	--env-file .env \
 	-v database:/var/lib/postgresql/data \
 	postgres:16-alpine
