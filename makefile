@@ -14,6 +14,7 @@ docker_bot:
 	docker run \
 	--name msdbot_telegram \
 	--network msdbot_telegram_internal_network \
+	--net bridge \
 	--env-file .env \
 	-e NODE_ENV=production \
 	-d mased/msdbot_telegram

@@ -1,10 +1,10 @@
 import { SQL } from "bun";
-import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
-
 import { eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
-import type { TDick, TDickHistory, TReferral, TUser } from "drizzle/types";
+import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 import type { User } from "grammy/types";
+
 import * as schema from "../drizzle/index";
+import type { TDick, TDickHistory, TReferral, TUser } from "../drizzle/types";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;

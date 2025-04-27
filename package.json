@@ -25,14 +25,15 @@
 		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
 		"drizzle:generate": "drizzle-kit generate",
 		"drizzle:migrate": "drizzle-kit migrate",
-		"build": "tsc",
+		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun",
 		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'",
 		"typesafe-i18n": "typesafe-i18n"
 	},
 	"dependencies": {
 		"@grammyjs/parse-mode": "^1.11.1",
 		"drizzle-orm": "^0.42.0",
-		"grammy": "^1.36.1"
+		"grammy": "^1.36.1",
+		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.10",
