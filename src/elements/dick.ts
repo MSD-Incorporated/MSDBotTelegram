@@ -8,6 +8,7 @@ import type { TranslationFunctions } from "../i18n/i18n-types";
 import {
 	code,
 	dateFormatter,
+	daysUntilEvent,
 	formatTime,
 	isSubscriber,
 	keyboardBuilder,
@@ -139,9 +140,13 @@ dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
 
 dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async ctx => {
 	const user = ctx.from!;
-	const referrals = await ctx.database.resolveReferrals(user);
 	const isSubscribed = await isSubscriber(ctx, user.id, -1002336315136);
-	const value = referrals.length + Number(isSubscribed);
+
+	const user_referrals = (await ctx.database.resolveReferrals(user, { referrer: { with: { dick: true } } })).filter(
+		({ referrer }) => referrer && referrer.dick && daysUntilEvent(new Date(), referrer.dick.updated_at!) <= 30
+	);
+
+	const value = user_referrals.length + Number(isSubscribed);
 
 	const { referral_timestamp } = await ctx.database.resolveDick(user, true);
 
@@ -151,7 +156,7 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 	if (lastUsed < referral_timeout) {
 		const timeLeft = formatTime(referral_timeout - lastUsed);
 
-		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: referrals.length }), {
+		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: user_referrals.length }), {
 			reply_markup: {
 				inline_keyboard: [
 					[
@@ -204,7 +209,7 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 					? `Вы не можете получить ни одного дополнительного сантиметра`
 					: `Вы можете получить ${code(`${value}`)} см!`,
 			isSubscribed: isSubscribed ? "Да" : "Нет",
-			referrals_count: referrals.length,
+			referrals_count: user_referrals.length,
 		}),
 		{ reply_markup: { inline_keyboard: keyboard }, link_preview_options: { is_disabled: true } }
 	);

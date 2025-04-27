@@ -60,6 +60,23 @@ export const formatTime = (milliseconds: number): string => {
 	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
+export const daysUntilEvent = (today: Date, event: Date): number => {
+	event.setHours(0, 0, 0, 0);
+	today.setHours(0, 0, 0, 0);
+
+	let diffTime = event.getTime() - today.getTime();
+	let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+	if (diffDays < 0) {
+		const nextYear = new Date(event);
+		nextYear.setFullYear(today.getFullYear() + 1);
+		diffTime = nextYear.getTime() - today.getTime();
+		diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+	}
+
+	return diffDays;
+};
+
 /**
  * The chat ID where the bot logs messages.
  *
