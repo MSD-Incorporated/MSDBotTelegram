@@ -16,6 +16,10 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema[TableName]
 >["with"];
 
+export type Nil = null | undefined;
+export type NotNil<T> = Nil extends T ? never : T extends Nil ? never : T;
+
+export type HasValue<T> = { value: NotNil<T> };
 export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu"> | { id: number };
 
 /**
@@ -87,11 +91,15 @@ export class Database {
 		include: I = {} as I
 	) => {
 		const where = eq(schema.users.user_id, user.id);
-		const searchResult = await this.db.query.users.findFirst({ where, with: include as I }).execute();
+		let searchResult = await this.db.query.users.findFirst({ where, with: include as I }).execute();
 
-		if (!searchResult && createIfNotExists) return this.writeUser(user as User) as unknown as typeof searchResult;
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			return this.writeUser(user as User) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
+		}
 
-		return searchResult;
+		return searchResult as Exclude<typeof searchResult, undefined>;
 	};
 
 	/**
@@ -116,12 +124,14 @@ export class Database {
 		const where = eq(schema.dicks.user_id, user.id);
 		const searchResult = await this.db.query.dicks.findFirst({ where, with: include as I }).execute();
 
-		if (!searchResult && createIfNotExists) {
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
 			await this.resolveUser(user as User, true);
-			return this.writeDick(user as User) as unknown as typeof searchResult;
+			return this.writeDick(user as User) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
 		}
 
-		return searchResult;
+		return searchResult as Exclude<typeof searchResult, undefined>;
 	};
 
 	/**
@@ -141,7 +151,7 @@ export class Database {
 		const where = eq(schema.users.user_id, id);
 
 		await this.db.insert(schema.users).values(values).execute();
-		return this.db.query.users.findFirst({ where, with: include }).execute();
+		return this.db.query.users.findFirst({ where, with: include as I }).execute();
 	};
 
 	/**
@@ -161,7 +171,7 @@ export class Database {
 		const where = eq(schema.dicks.user_id, id);
 
 		await this.db.insert(schema.dicks).values(values).execute();
-		return this.db.query.dicks.findFirst({ where, with: include }).execute();
+		return this.db.query.dicks.findFirst({ where, with: include as I }).execute();
 	};
 
 	/**
@@ -197,7 +207,9 @@ export class Database {
 		{ id }: U,
 		include: I = {} as I
 	) => {
-		return this.db.query.referrals.findMany({ where: eq(schema.referrals.referral, id), with: include }).execute();
+		return this.db.query.referrals
+			.findMany({ where: eq(schema.referrals.referral, id), with: include as I })
+			.execute();
 	};
 
 	/**
@@ -211,7 +223,9 @@ export class Database {
 		{ id }: U,
 		include: I = {} as I
 	) => {
-		return this.db.query.referrals.findFirst({ where: eq(schema.referrals.referrer, id), with: include }).execute();
+		return this.db.query.referrals
+			.findFirst({ where: eq(schema.referrals.referrer, id), with: include as I })
+			.execute();
 	};
 
 	/**
