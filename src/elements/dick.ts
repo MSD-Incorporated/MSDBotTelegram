@@ -150,10 +150,23 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 	if (lastUsed < referral_timeout) {
 		const timeLeft = formatTime(referral_timeout - lastUsed);
 
-		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: referrals.length }));
+		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: referrals.length }), {
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{
+							text: ctx.t.userinfo_refferal_button({ emoji: "👥" }),
+							copy_text: {
+								text: `https://t.me/${ctx.me.username}?start=ref_${user.id}`,
+							},
+						},
+					],
+				],
+			},
+		});
 	}
 
-	const keyboard: InlineKeyboardButton[][] = [[]];
+	const keyboard: InlineKeyboardButton[][] = [[], []];
 
 	if (value !== 0) {
 		keyboard[0]?.push({
@@ -164,6 +177,22 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 		keyboard[0]?.push({
 			text: `➕ Добавить ${value} см`,
 			callback_data: `referrals_${user.id}_add_${value}`,
+		});
+
+		keyboard[1]?.push({
+			text: ctx.t.userinfo_refferal_button({ emoji: "👥" }),
+			copy_text: {
+				text: `https://t.me/${ctx.me.username}?start=ref_${user.id}`,
+			},
+		});
+	}
+
+	if (value == 0) {
+		keyboard[0]?.push({
+			text: ctx.t.userinfo_refferal_button({ emoji: "👥" }),
+			copy_text: {
+				text: `https://t.me/${ctx.me.username}?start=ref_${user.id}`,
+			},
 		});
 	}
 

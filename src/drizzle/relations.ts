@@ -3,7 +3,6 @@ import { relations } from "drizzle-orm";
 // import { chat_users, chats } from "./chat";
 import { dick_history, dicks } from "./msdbot/dick";
 import { referrals } from "./msdbot/referrals";
-import { msdbot_user } from "./msdbot/user";
 import { users } from "./user";
 
 // /**
@@ -37,16 +36,11 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	referrals: many(referrals, { relationName: "referrals" }),
 	// buttons: many(user_buttons, { relationName: "user_buttons" }),
 	dick: one(dicks, { fields: [users.user_id], references: [dicks.user_id] }),
-	msdbot: one(msdbot_user, { fields: [users.user_id], references: [msdbot_user.user_id] }),
 }));
 
 // export const userButtonsRelations = relations(user_buttons, ({ one }) => ({
 // 	user: one(users, { fields: [user_buttons.user_id], references: [users.user_id], relationName: "user_buttons" }),
 // }));
-
-export const msdbotRelations = relations(msdbot_user, ({ one }) => ({
-	user: one(users, { fields: [msdbot_user.user_id], references: [users.user_id], relationName: "msdbot_user" }),
-}));
 
 /**
  * Relations for referrals
