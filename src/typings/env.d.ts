@@ -7,7 +7,8 @@ declare type ConfigKey =
 	| "POSTGRES_USER"
 	| "POSTGRES_PASSWORD"
 	| "POSTGRES_DB"
-	| "DATABASE_URL";
+	| "DATABASE_URL"
+	| "LOCAL_API";
 
 declare type EnvKeys = {
 	[key in ConfigKey]: string;
