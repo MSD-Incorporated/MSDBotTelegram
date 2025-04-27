@@ -2,7 +2,7 @@ import { SQL } from "bun";
 import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 
 import { eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
-import type { TDick, TReferral, TUser } from "drizzle/types";
+import type { TDick, TDickHistory, TReferral, TUser } from "drizzle/types";
 import type { User } from "grammy/types";
 import * as schema from "../drizzle/index";
 
@@ -128,6 +128,48 @@ export class Database {
 		}
 
 		return searchResult as Exclude<typeof searchResult, undefined>;
+	};
+
+	public readonly resolveDickHistory = async <
+		U extends CINE extends false
+			? TelegramUser
+			: Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">,
+		CINE extends boolean,
+		I extends IncludeRelation<"dick_history">,
+	>(
+		user: U,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
+	) => {
+		const where = eq(schema.dick_history.user_id, user.id);
+		const searchResult = await this.db.query.dick_history.findMany({ where, with: include as I }).execute();
+
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			await this.resolveUser(user as User, true);
+			await this.resolveDick(user as User, true);
+
+			return this.writeDickHistory(user) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
+		}
+
+		return searchResult as Exclude<typeof searchResult, undefined>;
+	};
+
+	public readonly writeDickHistory = async <
+		U extends { id: number; size?: number; difference?: number },
+		D extends TDickHistory,
+		I extends IncludeRelation<"users">,
+	>(
+		{ id, size, difference }: U,
+		data?: Partial<D>,
+		include: I = {} as I
+	) => {
+		const values = { ...data, user_id: id, size: size ?? 0, difference: difference ?? 0 };
+		const where = eq(schema.dick_history.user_id, id);
+
+		await this.db.insert(schema.dick_history).values(values).execute();
+		return this.db.query.dick_history.findMany({ where, with: include as I }).execute();
 	};
 
 	/**

@@ -1,4 +1,5 @@
-import type { UserFromGetMe } from "grammy/types";
+import type { InlineKeyboardButton, UserFromGetMe } from "grammy/types";
+import type { Context } from "./context";
 
 /**
  * Logs a message when the bot starts.
@@ -20,6 +21,44 @@ export const random = <MIN extends number, MAX extends number, IM extends boolea
 	max: MAX,
 	includeMax?: IM
 ): number => Math.floor(Math.random() * (max - min + (includeMax ? 1 : 0)) + min);
+
+/**
+ * The timeout for a dick command in milliseconds.
+ *
+ * @type {number}
+ */
+export const timeout: number = 12 * 60 * 60 * 1000;
+
+/**
+ * The timeout for a referral in milliseconds.
+ *
+ * @type {number}
+ */
+export const referral_timeout: number = 72 * 60 * 60 * 1000;
+
+/**
+ * Formats dates in the format "DD.MM.YYYY HH:mm:ss" and with the time zone "+00:00".
+ *
+ * @type {Intl.DateTimeFormat}
+ */
+export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", {
+	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
+	hour: "numeric",
+	minute: "numeric",
+	second: "numeric",
+	timeZone: "+00:00",
+});
+
+export const formatTime = (milliseconds: number): string => {
+	const totalSeconds = Math.floor(milliseconds / 1000);
+	const hours = Math.floor(totalSeconds / 3600);
+	const minutes = Math.floor((totalSeconds % 3600) / 60);
+	const seconds = totalSeconds % 60;
+	const pad = (num: number) => num.toString().padStart(2, "0");
+	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};
 
 /**
  * The chat ID where the bot logs messages.
@@ -48,6 +87,35 @@ export const developerID: number = 946070039 as const;
  * @type {boolean}
  */
 export const isProd: boolean = process.env.NODE_ENV === "production";
+
+export const isSubscriber = async (ctx: Context, user_id: number, chat_id: number) =>
+	await ctx.api
+		.getChatMember(chat_id, user_id)
+		.then(member => ["member", "creator", "administrator"].includes(member.status))
+		.catch(() => false);
+
+export const keyboardBuilder = (ctx: Context, name: string, page: number, sub_name: string, totalPages: number) => {
+	const keyboard: InlineKeyboardButton[][] = [[]];
+
+	if (page > 1)
+		keyboard[0]?.push({
+			callback_data: `${name}_${sub_name}_${page - 1}`,
+			text: ctx.t.keyboard_back_page(),
+		});
+
+	keyboard[0]?.push({
+		callback_data: `${name}_${sub_name}_${page}`,
+		text: ctx.t.keyboard_current_page({ page, totalPages }),
+	});
+
+	if (page < totalPages)
+		keyboard[0]?.push({
+			callback_data: `${name}_${sub_name}_${page + 1}`,
+			text: ctx.t.keyboard_next_page(),
+		});
+
+	return keyboard;
+};
 
 export * from "./auto-quote";
 export * from "./caching";

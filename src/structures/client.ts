@@ -1,7 +1,7 @@
 import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
-import { extraComposer, startComposer } from "../elements";
+import { dickComposer, extraComposer, startComposer } from "../elements";
 import { autoQuote, autoUserCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
@@ -18,6 +18,7 @@ client.api.config.use(parseMode("HTML"));
 
 client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
 
+client.use(dickComposer);
 client.use(extraComposer);
 client.use(startComposer);
 
