@@ -1,5 +1,6 @@
 import { Composer } from "grammy";
-import { resolve } from "path";
+
+import { version as msdbot_version } from "../../package.json" with { type: "json" };
 import type { Context } from "../utils/context";
 
 export const startComposer = new Composer<Context>();
@@ -17,18 +18,17 @@ const replyStartCommand = (
 
 startComposer.command("start", async ctx => {
 	const version = process.version;
-	const msdbot_version = (await import(resolve(process.cwd(), "package.json"))).version;
 	const bun_version = Bun.version;
 
-	if (ctx.match) {
+	if (ctx.match && ctx.from !== undefined) {
 		const refferal_id = Number(ctx.match.slice("ref_".length));
 		const refferal = await ctx.database.resolveUser({ id: refferal_id });
-		const refferer = await ctx.database.resolveDick({ id: ctx.from!.id });
+		const refferer = await ctx.database.resolveDick({ id: ctx.from.id });
 
 		if (!refferal || refferer) return replyStartCommand(ctx, { version, bun_version, msdbot_version });
 
-		await ctx.database.writeReferral({ id: refferal_id }, { id: ctx.from!.id });
-		await ctx.database.writeDick({ id: ctx.from!.id });
+		await ctx.database.writeReferral({ id: refferal_id }, { id: ctx.from.id });
+		await ctx.database.writeDick({ id: ctx.from.id });
 
 		return ctx.reply(
 			ctx.t.start_refferal_command({

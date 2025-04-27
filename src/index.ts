@@ -1,4 +1,5 @@
-import { client, onStart } from "./structures/client";
+import { client } from "./structures/client";
+import { onStart } from "./utils";
 
 client.start({
 	onStart,

@@ -1,4 +1,5 @@
 import { bold, boldAndTextLink, code, text_mention } from "../../utils/formatter";
+import { BUN_URL, MSDBOT_URL, NODEJS_URL } from "../constants";
 import type { BaseTranslation } from "../i18n-types.js";
 
 const ru = {
@@ -12,9 +13,9 @@ const ru = {
 	// Start Composer
 	start_command: [
 		`Добро пожаловать!\n`,
-		`• Текущая версия ${boldAndTextLink("MSDBot", "https://github.com/MSD-Incorporated/MSDBotTelegram")} — ${code("{msdbot_version:string}")}`,
-		`• Текущая версия ${boldAndTextLink("NodeJS", "nodejs.org")} — ${code("{version:string}")}`,
-		`• Текущая версия ${boldAndTextLink("Bun", "https://bun.sh")} — ${code("v{bun_version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("{msdbot_version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
+		`• Текущая версия ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}`,
 	].join("\n"),
 	start_refferal_command: [
 		`Вы были успешно зарегистрированы по рефферальной ссылке!`,
@@ -58,7 +59,9 @@ const ru = {
 		`За каждого приглашённого участника, который запустит бота по вашей реферальной ссылке и использует /dick вы получаете ${code(`1`)} см`,
 		`Также, если вы подписались на наш ${boldAndTextLink("информационный канал", "https://t.me/msdbot_information")}, то вы тоже получаете ${code(`1`)} см`,
 		`Все эти сантиметры суммируются и затем, раз в ${code(`72`)} часа, вы можете прибавить или отнять их у себя!\n`,
+
 		`• Количество рефералов: ${code(`{referrals_count:number}`)}`,
+		`• Количество ${bold("активных")} рефералов: ${code(`{active_referrals_count:number}`)}`,
 		`• Подписаны на канал: ${code("{isSubscribed:string}")}`,
 		`• {canGet:string}`,
 	].join("\n"),

@@ -1,15 +1,17 @@
 import { defineConfig } from "drizzle-kit";
 
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, DATABASE_URL } = process.env;
+
 export default defineConfig({
 	schema: "./src/drizzle/*",
 	dialect: "postgresql",
 	out: "./drizzle",
 	dbCredentials: {
-		host: "localhost",
-		port: 5432,
-		user: process.env.POSTGRES_USER,
-		password: process.env.POSTGRES_PASSWORD,
-		database: process.env.POSTGRES_DATABASE!,
-		ssl: process.env.DATABASE_URL ? true : false,
+		host: process.env.POSTGRES_HOST!,
+		port: Number(process.env.POSTGRES_PORT!),
+		user: POSTGRES_USER,
+		password: POSTGRES_PASSWORD,
+		database: POSTGRES_DATABASE!,
+		ssl: false,
 	},
 });

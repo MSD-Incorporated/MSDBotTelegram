@@ -2,6 +2,4 @@
 	"editor.formatOnSave": true,
 	"editor.insertSpaces": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"prettier.prettierPath": "node_modules/prettier/index.cjs",
 }

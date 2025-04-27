@@ -1,62 +1,46 @@
-import { relations, type InferSelectModel } from "drizzle-orm";
-import { bigint, boolean, pgEnum, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
-import { users } from "./user";
+// import { bigint, boolean, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
-export const member_status = pgEnum("member_status", [
-	"creator",
-	"administrator",
-	"member",
-	"restricted",
-	"left",
-	"kicked",
-]);
-export const chat_type = pgEnum("type", ["group", "supergroup", "channel"]);
+// import { users } from "./user";
+// import { chat_type, creationTimestamp, member_status, timestamps } from "./utils";
 
-export const chats = pgTable("chats", {
-	id: serial("id").unique().notNull(),
-	chat_id: bigint("chat_id", { mode: "number" }).unique().primaryKey().notNull(),
-	title: varchar("title", { length: 128 }).notNull(),
-	type: chat_type("type").notNull(),
-	username: varchar("username", { length: 32 }),
-	is_forum: boolean("is_forum"),
-	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
-	updated_at: timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
-		.defaultNow()
-		.$onUpdate(() => new Date())
-		.notNull(),
-});
+// export const chats = pgTable("chats", {
+// 	id: serial("id").unique(),
+// 	chat_id: bigint("chat_id", { mode: "number" }).unique().primaryKey().notNull(),
+// 	title: varchar("title", { length: 128 }).notNull(),
+// 	type: chat_type("type").notNull(),
+// 	username: varchar("username", { length: 32 }),
+// 	is_forum: boolean("is_forum").default(false),
+// 	...timestamps,
+// });
 
-export type TChat = InferSelectModel<typeof chats>;
+// export const chat_users = pgTable("chat_users", {
+// 	id: serial("id").unique(),
+// 	chat_id: bigint("chat_id", { mode: "number" })
+// 		.notNull()
+// 		.references(() => chats.chat_id),
+// 	user_id: bigint("user_id", { mode: "number" })
+// 		.notNull()
+// 		.references(() => users.user_id),
 
-export const chat_users = pgTable("chat_users", {
-	id: serial("id").unique().notNull(),
-	chat_id: bigint("chat_id", { mode: "number" })
-		.notNull()
-		.references(() => chats.chat_id),
-	user_id: bigint("user_id", { mode: "number" })
-		.notNull()
-		.references(() => users.user_id),
-	status: member_status("status").default("member").notNull(),
-	created_at: timestamp("created_at", { mode: "date", precision: 3, withTimezone: true }).defaultNow().notNull(),
-});
+// 	status: member_status("status").default("member").notNull(),
+// 	custom_title: varchar("custom_title", { length: 255 }),
+// 	is_anonymous: boolean("is_anonymous").default(false),
+// 	can_be_edited: boolean("can_be_edited"),
+// 	can_change_info: boolean("can_change_info"),
+// 	can_delete_messages: boolean("can_delete_messages"),
+// 	can_delete_stories: boolean("can_delete_stories"),
+// 	can_edit_messages: boolean("can_edit_messages"),
+// 	can_edit_stories: boolean("can_edit_stories"),
+// 	can_invite_users: boolean("can_invite_users"),
+// 	can_manage_chat: boolean("can_manage_chat"),
+// 	can_manage_topics: boolean("can_manage_topics"),
+// 	can_manage_video_chats: boolean("can_manage_video_chats"),
+// 	can_pin_messages: boolean("can_pin_messages"),
+// 	can_post_messages: boolean("can_post_messages"),
+// 	can_post_stories: boolean("can_post_stories"),
+// 	can_promote_members: boolean("can_promote_members"),
+// 	can_restrict_members: boolean("can_restrict_members"),
+// 	until_date: integer("until_date"),
 
-export type TChatUsers = InferSelectModel<typeof chat_users>;
-
-export const chatRelations = relations(chats, ({ many }) => ({
-	users: many(chat_users, {
-		relationName: "chat_chat_users",
-	}),
-}));
-
-export const chatUserRelations = relations(chat_users, ({ one }) => ({
-	chat: one(chats, {
-		fields: [chat_users.chat_id],
-		references: [chats.chat_id],
-		relationName: "chat_chat_users",
-	}),
-	user: one(users, {
-		fields: [chat_users.user_id],
-		references: [users.user_id],
-		relationName: "user_chat_users",
-	}),
-}));
+// 	created_at: creationTimestamp,
+// });

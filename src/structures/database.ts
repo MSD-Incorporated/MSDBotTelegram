@@ -1,9 +1,10 @@
-// TODO: Recode
 import { SQL } from "bun";
-import { and, eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
-import { drizzle, type BunSQLDatabase } from "drizzle-orm/bun-sql";
-import type { Chat, ChatMember, Chat as TelegramChat, User as TelegramUser } from "typegram";
+import { eq, type DBQueryConfig, type ExtractTablesWithRelations } from "drizzle-orm";
+import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
+import type { User } from "grammy/types";
+
 import * as schema from "../drizzle/index";
+import type { TDick, TDickHistory, TReferral, TUser } from "../drizzle/types";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;
@@ -15,113 +16,69 @@ export type IncludeRelation<TableName extends keyof TSchema> = DBQueryConfig<
 	TSchema[TableName]
 >["with"];
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, DATABASE_URL } = process.env;
+export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu"> | { id: number };
 
+/**
+ * Database class that provides methods for working with the database.
+ */
 export class Database {
-	readonly client = new SQL({
-		host: "localhost",
-		port: 5432,
-		user: POSTGRES_USER,
-		password: POSTGRES_PASSWORD,
-		database: POSTGRES_DATABASE,
-		ssl: DATABASE_URL ? true : false,
-	});
+	/**
+	 * The underlying SQL client.
+	 */
+	public readonly client: SQL;
 
-	public db: BunSQLDatabase<Schema>;
+	/**
+	 * The database instance.
+	 */
+	public readonly db: BunSQLDatabase<Schema>;
 
+	/**
+	 * Creates a new instance of the Database class.
+	 */
 	constructor() {
-		this.db = drizzle(this.client, { schema });
+		this.client = new SQL({
+			host: process.env.POSTGRES_HOST!,
+			port: Number(process.env.POSTGRES_PORT!),
+			user: process.env.POSTGRES_USER,
+			password: process.env.POSTGRES_PASSWORD,
+			database: process.env.POSTGRES_DATABASE!,
+			url: process.env.DATABASE_URL ?? undefined,
+			ssl: false,
+		});
+
+		this.db = drizzle({ client: Bun.sql, schema });
 	}
 
+	/**
+	 * Establishes a connection to the database.
+	 */
 	public readonly connect = async () => {
 		await this.client.connect();
+
+		return this;
 	};
 
-	readonly resolveDick = async <
-		U extends TelegramUser | { id: number },
-		CINE extends boolean,
-		I extends IncludeRelation<"dicks">,
-	>(
-		user: U,
-		createIfNotExists: CINE = false as CINE,
-		include: I = {} as I
-	) => {
-		const searchResult = await this.db.query.dicks
-			.findFirst({ where: eq(schema.dicks.user_id, user.id) })
-			.execute();
+	/**
+	 * Closes the connection to the database.
+	 */
+	public readonly close = async () => {
+		await this.client.close();
 
-		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
-			await this.resolveUser(user as TelegramUser, true);
-			await this.writeDick(user as TelegramUser);
-		}
-
-		return this.db.query.dicks.findFirst({ where: eq(schema.dicks.user_id, user.id), with: include }).execute();
+		return this;
 	};
 
-	readonly writeDick = async <U extends TelegramUser | { id: number }, D extends schema.TDick>(
-		{ id }: U,
-		data?: Partial<D>
-	) => {
-		return this.db
-			.insert(schema.dicks)
-			.values({ ...data, user_id: id })
-			.execute();
-	};
-
-	readonly updateDick = async <U extends TelegramUser, D extends schema.TDick>({ id }: U, data: Partial<D>) => {
-		return this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
-	};
-
-	readonly resolveDickHistory = async <
-		U extends TelegramUser & { id: number },
-		CINE extends boolean,
-		I extends IncludeRelation<"dick_history">,
-	>(
-		user: U,
-		createIfNotExists: CINE = false as CINE,
-		include: I = {} as I
-	) => {
-		const searchResult = await this.db.query.dick_history
-			.findFirst({ where: eq(schema.dick_history.user_id, user.id) })
-			.execute();
-
-		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
-			await this.resolveUser(user as TelegramUser, true);
-			await this.resolveDick(user as TelegramUser, true);
-			await this.writeDickHistory(user);
-		}
-
-		return this.db.query.dick_history
-			.findMany({ where: eq(schema.dick_history.user_id, user.id), with: include })
-			.execute();
-	};
-
-	readonly writeDickHistory = async <
-		U extends { id: number; size?: number; difference?: number },
-		D extends schema.TDickHistory,
-	>(
-		{ id, size, difference }: U,
-		data?: Partial<D>
-	) => {
-		return this.db
-			.insert(schema.dick_history)
-			.values({ ...data, user_id: id, size: size ?? 0, difference: difference ?? 0 })
-			.execute();
-	};
-
-	readonly updateDickHistory = async <U extends TelegramUser & { dick_id: number }, D extends schema.TDickHistory>(
-		{ id, dick_id }: U,
-		data: Partial<D>
-	) => {
-		return this.db
-			.update(schema.dick_history)
-			.set(data)
-			.where(and(eq(schema.dick_history.user_id, id), eq(schema.dick_history.id, dick_id)))
-			.execute();
-	};
-
-	readonly resolveUser = async <
-		U extends TelegramUser | { id: number },
+	/**
+	 * Finds a user by their Telegram ID, or creates a new user if the user does not exist.
+	 *
+	 * @param user The Telegram user.
+	 * @param createIfNotExists Whether to create a new user if the user does not exist.
+	 * @param include The relations to include in the result.
+	 * @returns The user.
+	 */
+	public readonly resolveUser = async <
+		U extends CINE extends false
+			? TelegramUser
+			: Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">,
 		CINE extends boolean,
 		I extends IncludeRelation<"users">,
 	>(
@@ -129,250 +86,202 @@ export class Database {
 		createIfNotExists: CINE = false as CINE,
 		include: I = {} as I
 	) => {
-		const searchResult = await this.db.query.users
-			.findFirst({ where: eq(schema.users.user_id, user.id), with: include })
-			.execute();
+		const where = eq(schema.users.user_id, user.id);
+		let searchResult = await this.db.query.users.findFirst({ where, with: include as I }).execute();
 
-		if (!searchResult && createIfNotExists && (user as TelegramUser)?.first_name) {
-			await this.writeUser(user as TelegramUser);
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			return this.writeUser(user as User) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
 		}
 
-		return this.db.query.users.findFirst({ where: eq(schema.users.user_id, user.id), with: include }).execute();
+		return searchResult as Exclude<typeof searchResult, undefined>;
 	};
 
-	readonly resolveUsers = async <I extends IncludeRelation<"users">>(include: I = {} as I) => {
-		return this.db.query.users.findMany({ with: include }).execute();
-	};
-
-	readonly writeUser = async <U extends TelegramUser, D extends schema.TUser>(
-		{ id, first_name, last_name, username, is_premium }: U,
-		data?: Partial<D>
+	/**
+	 * Finds a dick by their user ID, or creates a new dick if the dick does not exist.
+	 *
+	 * @param user The user.
+	 * @param createIfNotExists Whether to create a new dick if the dick does not exist.
+	 * @param include The relations to include in the result.
+	 * @returns The dick.
+	 */
+	public readonly resolveDick = async <
+		U extends CINE extends false
+			? TelegramUser
+			: Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">,
+		CINE extends boolean,
+		I extends IncludeRelation<"dicks">,
+	>(
+		user: U,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
 	) => {
-		return this.db
-			.insert(schema.users)
-			.values({
-				...data,
-				user_id: id,
-				first_name,
-				last_name,
-				username,
-				is_premium,
-				status: data?.status ?? "user",
-			})
-			.execute();
+		const where = eq(schema.dicks.user_id, user.id);
+		const searchResult = await this.db.query.dicks.findFirst({ where, with: include as I }).execute();
+
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			await this.resolveUser(user as User, true);
+			return this.writeDick(user as TDick) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
+		}
+
+		return searchResult as Exclude<typeof searchResult, undefined>;
 	};
 
-	readonly updateUser = async <U extends TelegramUser, D extends schema.TUser>({ id }: U, data: Partial<D>) => {
+	public readonly resolveDickHistory = async <
+		U extends CINE extends false
+			? TelegramUser
+			: Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">,
+		CINE extends boolean,
+		I extends IncludeRelation<"dick_history">,
+	>(
+		user: U,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
+	) => {
+		const where = eq(schema.dick_history.user_id, user.id);
+		const searchResult = await this.db.query.dick_history.findMany({ where, with: include as I }).execute();
+
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			await this.resolveUser(user as User, true);
+			await this.resolveDick(user as User, true);
+
+			return this.writeDickHistory(user) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
+		}
+
+		return searchResult as Exclude<typeof searchResult, undefined>;
+	};
+
+	public readonly writeDickHistory = async <
+		U extends { id: number; size?: number; difference?: number },
+		D extends TDickHistory,
+		I extends IncludeRelation<"users">,
+	>(
+		{ id, size, difference }: U,
+		data?: Partial<D>,
+		include: I = {} as I
+	) => {
+		const values = { ...data, user_id: id, size: size ?? 0, difference: difference ?? 0 };
+		const where = eq(schema.dick_history.user_id, id);
+
+		await this.db.insert(schema.dick_history).values(values).execute();
+		return this.db.query.dick_history.findMany({ where, with: include as I }).execute();
+	};
+
+	/**
+	 * Writes a new user to the database.
+	 *
+	 * @param user The user to write.
+	 * @param data The data to write.
+	 * @param include The relations to include in the result.
+	 * @returns The written user.
+	 */
+	public readonly writeUser = async <U extends User, D extends TUser, I extends IncludeRelation<"users">>(
+		{ id, first_name, last_name, username, is_premium }: U,
+		data?: Partial<D>,
+		include: I = {} as I
+	) => {
+		const values = { ...data, user_id: id, first_name, last_name, username, is_premium };
+		const where = eq(schema.users.user_id, id);
+
+		await this.db.insert(schema.users).values(values).execute();
+		return this.db.query.users.findFirst({ where, with: include as I }).execute();
+	};
+
+	/**
+	 * Writes a new dick to the database.
+	 *
+	 * @param user The user to write.
+	 * @param data The data to write.
+	 * @param include The relations to include in the result.
+	 * @returns The written dick.
+	 */
+	public readonly writeDick = async <U extends TelegramUser, D extends TDick, I extends IncludeRelation<"dicks">>(
+		{ id }: U,
+		data?: Partial<D>,
+		include: I = {} as I
+	) => {
+		const values = { ...data, user_id: id };
+		const where = eq(schema.dicks.user_id, id);
+
+		await this.db.insert(schema.dicks).values(values).execute();
+		return this.db.query.dicks.findFirst({ where, with: include as I }).execute();
+	};
+
+	/**
+	 * Updates a user in the database.
+	 *
+	 * @param user The user to update.
+	 * @param data The data to update.
+	 * @returns The updated user.
+	 */
+	public readonly updateUser = async <U extends TelegramUser, D extends TUser>({ id }: U, data: Partial<D>) => {
 		return this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
-	readonly resolveUserButtons = async <
-		U extends TelegramUser | { id: number },
-		I extends IncludeRelation<"user_buttons">,
-	>(
-		user: U,
+	/**
+	 * Updates a dick in the database.
+	 *
+	 * @param user The user to update.
+	 * @param data The data to update.
+	 * @returns The updated dick.
+	 */
+	public readonly updateDick = async <U extends TelegramUser, D extends TDick>({ id }: U, data: Partial<D>) => {
+		return this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
+	};
+
+	/**
+	 * Finds all referrers of a user.
+	 *
+	 * @param user The user to find referrers for.
+	 * @param include The relations to include in the result.
+	 * @returns The referrers.
+	 */
+	public readonly resolveReferrals = async <U extends TelegramUser, I extends IncludeRelation<"referrals">>(
+		{ id }: U,
 		include: I = {} as I
 	) => {
-		return this.db.query.user_buttons
-			.findMany({ where: eq(schema.user_buttons.user_id, user.id), with: include })
-			.execute();
-	};
-
-	readonly writeUserButton = async <
-		U extends TelegramUser | { id: number },
-		B extends { link: string; text: string },
-		D extends schema.TUserButton,
-	>(
-		{ id }: U,
-		{ link, text }: B,
-		data?: Partial<D>
-	) => {
-		return this.db
-			.insert(schema.user_buttons)
-			.values({ ...data, user_id: id, text: text ?? null, link: link ?? null })
-			.execute();
-	};
-
-	readonly deleteUserButton = async <
-		U extends TelegramUser | { id: number },
-		B extends { link: string; text: string },
-	>(
-		{ id }: U,
-		{ link, text }: B
-	) => {
-		return this.db
-			.delete(schema.user_buttons)
-			.where(
-				and(
-					eq(schema.user_buttons.user_id, id),
-					eq(schema.user_buttons.link, link),
-					eq(schema.user_buttons.text, text)
-				)
-			)
+		return this.db.query.referrals
+			.findMany({ where: eq(schema.referrals.referral, id), with: include as I })
 			.execute();
 	};
 
 	/**
-	 * Resolves referrers of user
+	 * Finds a referrer by their ID.
+	 *
+	 * @param user The user to find referrer for.
+	 * @param include The relations to include in the result.
+	 * @returns The referrer.
 	 */
-	readonly resolveReferrers = async <U extends TelegramUser & { id: number }, I extends IncludeRelation<"referrals">>(
+	public readonly resolveReferrer = async <U extends TelegramUser, I extends IncludeRelation<"referrals">>(
 		{ id }: U,
 		include: I = {} as I
 	) => {
-		return this.db.query.referrals.findMany({ where: eq(schema.referrals.referral, id), with: include }).execute();
+		return this.db.query.referrals
+			.findFirst({ where: eq(schema.referrals.referrer, id), with: include as I })
+			.execute();
 	};
 
 	/**
-	 * Resolves referrer by id
+	 * Writes a new referral to the database.
+	 *
+	 * @param referral The referral.
+	 * @param referrer The referrer.
+	 * @param data The data to write.
+	 * @returns The written referral.
 	 */
-	readonly resolveReferrer = async <U extends TelegramUser & { id: number }, I extends IncludeRelation<"referrals">>(
-		{ id }: U,
-		include: I = {} as I
-	) => {
-		return this.db.query.referrals.findFirst({ where: eq(schema.referrals.referrer, id), with: include }).execute();
-	};
-
-	readonly writeReferral = async <U extends TelegramUser | { id: number }, D extends schema.TRefferal>(
+	public readonly writeReferral = async <U extends TelegramUser, D extends TReferral>(
 		referral: U,
 		referrer: U,
-		data?: Partial<D>
+		data?: Omit<Partial<D>, "referral" | "referrer">
 	) => {
 		return this.db
 			.insert(schema.referrals)
 			.values({ ...data, referral: referral.id, referrer: referrer.id })
-			.execute();
-	};
-
-	readonly resolveChat = async <
-		C extends
-			| (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat)
-			| { id: number; type: Chat.AbstractChat["type"] },
-		CINE extends boolean,
-		I extends IncludeRelation<"chats">,
-	>(
-		chat: C,
-		createIfNotExists: CINE = false as CINE,
-		include: I = {} as I
-	) => {
-		if (chat.type == "private") return;
-
-		const searchResult = await this.db.query.chats
-			.findFirst({ where: eq(schema.chats.chat_id, chat.id), with: include })
-			.execute();
-
-		if (!searchResult && createIfNotExists) {
-			await this.writeChat(
-				chat as (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
-					is_forum: boolean;
-				}
-			);
-		}
-
-		return this.db.query.chats.findFirst({ where: eq(schema.chats.chat_id, chat.id), with: include }).execute();
-	};
-
-	readonly writeChat = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
-			username?: string;
-			is_forum?: boolean;
-		},
-		D extends schema.TChat,
-	>(
-		{ id, type, title, is_forum, username }: C,
-		data?: Partial<D>
-	) => {
-		return this.db
-			.insert(schema.chats)
-			.values({ ...data, chat_id: id, type, title, username: username ?? null, is_forum: is_forum ?? null })
-			.execute();
-	};
-
-	readonly updateChat = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) & {
-			username?: string;
-			is_forum?: boolean;
-		},
-		D extends schema.TChat,
-	>(
-		{ id }: C,
-		data: Partial<D>
-	) => {
-		return this.db.update(schema.chats).set(data).where(eq(schema.chats.chat_id, id)).execute();
-	};
-
-	readonly resolveChatMember = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
-		U extends ChatMember,
-		CINE extends boolean,
-		I extends IncludeRelation<"chat_users">,
-	>(
-		chat: C,
-		user: U,
-		createIfNotExists: CINE = false as CINE,
-		include: I = {} as I
-	) => {
-		const searchResult = await this.db.query.chat_users
-			.findFirst({
-				where: and(eq(schema.chat_users.user_id, user.user.id), eq(schema.chat_users.chat_id, chat.id)),
-				with: include,
-			})
-			.execute();
-
-		if (!searchResult && createIfNotExists) {
-			await this.writeChatMember(
-				chat as TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat,
-				user
-			);
-		}
-
-		return this.db.query.chat_users
-			.findFirst({
-				where: and(eq(schema.chat_users.chat_id, chat.id), eq(schema.chat_users.user_id, user.user.id)),
-				with: include,
-			})
-			.execute();
-	};
-
-	readonly resolveChatMembers = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
-		I extends IncludeRelation<"chat_users">,
-	>(
-		chat: C,
-		include: I = {} as I
-	) => {
-		return this.db.query.chat_users
-			.findMany({ where: eq(schema.chat_users.chat_id, chat.id), with: include })
-			.execute();
-	};
-
-	readonly updateChatMember = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
-		U extends ChatMember | { user: { id: number } },
-		D extends schema.TChatUsers,
-	>(
-		chat: C,
-		user: U,
-		data: Partial<D>
-	) => {
-		return this.db
-			.update(schema.chat_users)
-			.set(data)
-			.where(and(eq(schema.chat_users.user_id, user.user.id), eq(schema.chat_users.chat_id, chat.id)))
-			.execute();
-	};
-
-	readonly writeChatMember = async <
-		C extends (TelegramChat.GroupChat | TelegramChat.SupergroupChat | TelegramChat.ChannelChat) | { id: number },
-		U extends ChatMember,
-		D extends schema.TChatUsers,
-	>(
-		chat: C,
-		user: U,
-		data?: Partial<D>
-	) => {
-		return this.db
-			.insert(schema.chat_users)
-			.values({ ...data, chat_id: chat.id, user_id: user.user.id, status: user.status })
 			.execute();
 	};
 }
