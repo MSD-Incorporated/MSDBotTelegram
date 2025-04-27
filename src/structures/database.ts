@@ -122,7 +122,7 @@ export class Database {
 
 		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
 			await this.resolveUser(user as User, true);
-			return this.writeDick(user as User) as unknown as CINE extends true
+			return this.writeDick(user as TDick) as unknown as CINE extends true
 				? Exclude<typeof searchResult, undefined>
 				: typeof searchResult;
 		}
@@ -158,7 +158,7 @@ export class Database {
 	 * @param include The relations to include in the result.
 	 * @returns The written dick.
 	 */
-	public readonly writeDick = async <U extends User, D extends TDick, I extends IncludeRelation<"dicks">>(
+	public readonly writeDick = async <U extends TelegramUser, D extends TDick, I extends IncludeRelation<"dicks">>(
 		{ id }: U,
 		data?: Partial<D>,
 		include: I = {} as I
