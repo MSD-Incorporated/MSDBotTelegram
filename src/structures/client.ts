@@ -10,7 +10,7 @@ await database.connect();
 
 export const client = new Bot<Context>(process.env.TOKEN, {
 	ContextConstructor: createContextConstructor({ database }),
-	client: { apiRoot: process.env.LOCAL_API ? process.env.LOCAL_API : "https://api.telegram.org" },
+	client: { apiRoot: process.env.LOCAL_API ?? "https://api.telegram.org" },
 });
 
 client.use(autoQuote());

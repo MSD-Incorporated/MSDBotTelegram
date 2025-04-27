@@ -1,8 +1,9 @@
-import { dicks } from "drizzle";
 import { asc, desc } from "drizzle-orm";
 import { Composer } from "grammy";
 import type { InlineKeyboardButton } from "grammy/types";
-import type { TranslationFunctions } from "i18n/i18n-types";
+
+import { dicks } from "../drizzle";
+import type { TranslationFunctions } from "../i18n/i18n-types";
 
 import {
 	code,
