@@ -1,8 +1,7 @@
+import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
-import { parseMode } from "@grammyjs/parse-mode";
-import { autoQuote } from "../utils/auto-quote";
-import { createContextConstructor, type Context } from "../utils/context";
+import { autoQuote, autoUserCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
 const database = new Database();
@@ -10,10 +9,13 @@ await database.connect();
 
 export const client = new Bot<Context>(process.env.TOKEN, {
 	ContextConstructor: createContextConstructor({ database }),
+	client: { apiRoot: process.env.LOCAL_API ? process.env.LOCAL_API : "https://api.telegram.org" },
 });
 
 client.use(autoQuote());
 client.api.config.use(parseMode("HTML"));
+
+client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
 
 process.once("SIGINT", () => client.stop());
 process.once("SIGTERM", () => client.stop());
