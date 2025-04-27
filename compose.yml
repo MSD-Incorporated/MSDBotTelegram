@@ -1,0 +1,61 @@
+name: msdbot_telegram
+services:
+    telegram-bot-api:
+        image: aiogram/telegram-bot-api:latest
+        restart: unless-stopped
+        container_name: telegram-bot-api
+        env_file:
+            - .env
+        volumes:
+            - /etc/timezone:/etc/timezone
+            - telegram_api_data:/var/lib/telegram-bot-api
+        networks:
+            - default_network
+            - internal_network
+
+    postgres:
+        image: postgres:16-alpine
+        restart: always
+        command: postgres -c listen_addresses='*'
+        container_name: database
+        volumes:
+            - database:/var/lib/postgresql/data
+        env_file:
+            - .env
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 5s
+        networks:
+            - internal_network
+
+    bot:
+        image: mased/msdbot_telegram:latest
+        restart: unless-stopped
+        container_name: bot
+        build: .
+        depends_on:
+            telegram-bot-api:
+                condition: service_started
+            postgres:
+                condition: service_started
+        env_file:
+            - .env
+        environment:
+            - NODE_ENV=production
+        networks:
+            - internal_network
+
+networks:
+    default_network:
+    internal_network:
+        driver: bridge
+        internal: true
+
+volumes:
+    telegram_api_data:
+        name: "telegram_api_data"
+    database:
+        name: "database"

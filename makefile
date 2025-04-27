@@ -4,8 +4,8 @@ docker_build_bot:
 docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
-	--network msdbot_telegram_default_network \
-	--network msdbot_telegram_internal_network \
+	--network msdbot_default_network \
+	--network msdbot_internal_network \
 	--net bridge \
 	-p 8081:8081 \
 	--env-file .env \
@@ -16,7 +16,7 @@ docker_bot_api:
 docker_bot:
 	docker run \
 	--name msdbot_telegram \
-	--network msdbot_telegram_internal_network \
+	--network msdbot_internal_network \
 	--net bridge \
 	--env-file .env \
 	-e NODE_ENV=production \
@@ -27,7 +27,7 @@ docker_database:
 	--name database \
 	-itd \
 	-p 5432:5432 \
-	--network msdbot_telegram_internal_network \
+	--network msdbot_internal_network \
 	--net bridge \
 	--env-file .env \
 	-v database:/var/lib/postgresql/data \
