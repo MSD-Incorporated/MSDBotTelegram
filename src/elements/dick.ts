@@ -142,11 +142,12 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 	const user = ctx.from!;
 	const isSubscribed = await isSubscriber(ctx, user.id, -1002336315136);
 
-	const user_referrals = (await ctx.database.resolveReferrals(user, { referrer: { with: { dick: true } } })).filter(
+	const referrals = await ctx.database.resolveReferrals(user, { referrer: { with: { dick: true } } });
+	const active_referrals = referrals.filter(
 		({ referrer }) => referrer && referrer.dick && daysUntilEvent(new Date(), referrer.dick.updated_at!) <= 30
 	);
 
-	const value = user_referrals.length + Number(isSubscribed);
+	const value = active_referrals.length + Number(isSubscribed);
 
 	const { referral_timestamp } = await ctx.database.resolveDick(user, true);
 
@@ -156,7 +157,7 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 	if (lastUsed < referral_timeout) {
 		const timeLeft = formatTime(referral_timeout - lastUsed);
 
-		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: user_referrals.length }), {
+		return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: active_referrals.length }), {
 			reply_markup: {
 				inline_keyboard: [
 					[
@@ -209,7 +210,8 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 					? `Вы не можете получить ни одного дополнительного сантиметра`
 					: `Вы можете получить ${code(`${value}`)} см!`,
 			isSubscribed: isSubscribed ? "Да" : "Нет",
-			referrals_count: user_referrals.length,
+			active_referrals_count: active_referrals.length,
+			referrals_count: active_referrals.length,
 		}),
 		{ reply_markup: { inline_keyboard: keyboard }, link_preview_options: { is_disabled: true } }
 	);
