@@ -1,3 +1,6 @@
+docker_build_bot:
+	docker build -t mased/msdbot_telegram .
+
 docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
