@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"@grammyjs/parse-mode": "^1.11.1",
-		"drizzle-orm": "^0.42.0",
+		"drizzle-orm": "^0.43.1",
 		"grammy": "^1.36.1",
 		"typesafe-i18n": "^5.26.2"
 	},
