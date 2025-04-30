@@ -31,13 +31,13 @@
 	},
 	"dependencies": {
 		"@grammyjs/parse-mode": "^1.11.1",
-		"drizzle-orm": "^0.42.0",
+		"drizzle-orm": "^0.43.1",
 		"grammy": "^1.36.1",
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.10",
-		"@types/node": "^22.14.1",
+		"@types/node": "^22.15.3",
 		"drizzle-kit": "^0.31.0",
 		"prettier": "^3.4.2",
 		"typegram": "^5.2.0",
