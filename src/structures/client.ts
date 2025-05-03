@@ -1,7 +1,7 @@
 import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
-import { dickComposer, extraComposer, startComposer } from "../elements";
+import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer } from "../elements";
 import { autoQuote, autoUserCaching, createContextConstructor, type Context } from "../utils";
 import { Database } from "./database";
 
@@ -20,6 +20,7 @@ client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
 
 client.use(dickComposer);
 client.use(extraComposer);
+client.use(msdIncorporatedComposer);
 client.use(startComposer);
 
 process.once("SIGINT", () => client.stop());

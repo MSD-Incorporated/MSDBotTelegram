@@ -33,6 +33,8 @@
 		"@grammyjs/parse-mode": "^1.11.1",
 		"drizzle-orm": "^0.43.1",
 		"grammy": "^1.36.1",
+		"sagiri": "^4.3.0",
+		"telegra.ph": "^1.0.1",
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
