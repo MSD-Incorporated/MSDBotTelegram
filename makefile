@@ -7,15 +7,18 @@ docker_bot_api:
 	--network msdbot_internal_network \
 	-p 8081:8081 \
 	--env-file .env \
+	-e TELEGRAM_LOCAL=1 \
 	-v /etc/timezone:/etc/timezone \
-	-v telegram_api_data:/var/lib/telegram-bot-api \
+	-v /etc/localtime:/etc/localtime \
+	-v telegram-bot-api:/var/lib/telegram-bot-api \
 	-d aiogram/telegram-bot-api:latest
 
 docker_bot:
 	docker run \
 	--name msdbot_telegram \
 	--network msdbot_internal_network \
-	--env-file .env \
+	--env-file .env.dev \
+	--volumes-from telegram-bot-api \
 	-e NODE_ENV=production \
 	-d mased/msdbot_telegram
 

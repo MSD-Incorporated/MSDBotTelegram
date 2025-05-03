@@ -37,10 +37,11 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	if (ctx.message?.media_group_id) return;
 
 	const file = await ctx.getFile();
-	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+	const bun_file = Bun.file(file.file_path!);
+	const image = Buffer.from(await bun_file.arrayBuffer());
 
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
-	const [res] = await sauceNao(url);
+	const [res] = await sauceNao(image);
 
 	if (!res?.raw.data.ext_urls.length) return;
 
@@ -49,33 +50,37 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (urlParser(urls).length <= 0) return;
+	if (urlParser(urls).length <= 0) return bun_file.delete();
 
-	return ctx.reply(
-		[
-			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-			`• <b>Ссылки:</b> ${urlParser(urls)
-				.map(([name, url]) => `<a href="${url}">${name}</a>`)
-				.join(" | ")}`,
-		].join("\n"),
-		{
-			parse_mode: "HTML",
-		}
-	);
+	return ctx
+		.reply(
+			[
+				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
+				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
+				`• <b>Ссылки:</b> ${urlParser(urls)
+					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.join(" | ")}`,
+			].join("\n"),
+			{
+				parse_mode: "HTML",
+			}
+		)
+		.then(async () => bun_file.delete());
 });
 
 msdIncorporatedComposer.command("search_full", async ctx => {
 	if (ctx.from!.id !== 946070039) return;
 	if (!ctx.message?.reply_to_message || !ctx.message?.reply_to_message?.photo?.length) return;
 
-	const file_id = ctx.message.reply_to_message.photo[0]!.file_id;
+	const photos = ctx.message.reply_to_message.photo;
+	const file_id = photos[photos.length - 1]!.file_id;
 	const file = await ctx.api.getFile(file_id);
-	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+	const bun_file = Bun.file(file.file_path!);
+	const image = Buffer.from(await bun_file.arrayBuffer());
 
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
-	const [res] = await sauceNao(url);
+	const [res] = await sauceNao(image);
 
 	if (!res?.raw.data.ext_urls.length) return;
 
@@ -84,21 +89,23 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (urlParser(urls).length <= 0) return ctx.reply("Не удалось найти!");
+	if (urlParser(urls).length <= 0) return ctx.reply("Не удалось найти!").then(async () => bun_file.delete());
 
-	return ctx.reply(
-		[
-			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-			`• <b>Ссылки:</b> ${urlParser(urls)
-				.map(([name, url]) => `<a href="${url}">${name}</a>`)
-				.join(" | ")}`,
-		].join("\n"),
-		{
-			parse_mode: "HTML",
-		}
-	);
+	return ctx
+		.reply(
+			[
+				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
+				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
+				`• <b>Ссылки:</b> ${urlParser(urls)
+					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.join(" | ")}`,
+			].join("\n"),
+			{
+				parse_mode: "HTML",
+			}
+		)
+		.then(async () => bun_file.delete());
 });
 
 msdIncorporatedComposer.on(":caption", async ctx => {
@@ -106,10 +113,11 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 	if (ctx.from!.id !== 946070039) return;
 
 	const file = await ctx.getFile();
-	const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+	const bun_file = Bun.file(file.file_path!);
+	const image = Buffer.from(await bun_file.arrayBuffer());
 
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
-	const [res] = await sauceNao(url);
+	const [res] = await sauceNao(image);
 
 	if (!res?.raw.data.ext_urls.length) return;
 
@@ -118,21 +126,23 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (urlParser(urls).length <= 0) return ctx.reply("Не удалось найти!");
+	if (urlParser(urls).length <= 0) return ctx.reply("Не удалось найти!").then(async () => bun_file.delete());
 
-	return ctx.reply(
-		[
-			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-			`• <b>Ссылки:</b> ${urlParser(urls)
-				.map(([name, url]) => `<a href="${url}">${name}</a>`)
-				.join(" | ")}`,
-		].join("\n"),
-		{
-			parse_mode: "HTML",
-		}
-	);
+	return ctx
+		.reply(
+			[
+				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
+				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
+				`• <b>Ссылки:</b> ${urlParser(urls)
+					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.join(" | ")}`,
+			].join("\n"),
+			{
+				parse_mode: "HTML",
+			}
+		)
+		.then(async () => bun_file.delete());
 });
 
 const getContent = (page: Page) =>
