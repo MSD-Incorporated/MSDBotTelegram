@@ -1,6 +1,4 @@
-import { Composer, InputFile } from "grammy";
-import { resolve } from "path";
-import { cwd } from "process";
+import { Composer } from "grammy";
 import sagiri from "sagiri";
 import Telegraph from "telegra.ph";
 import type { NodeElement, Page } from "telegra.ph/typings/telegraph";
@@ -167,9 +165,4 @@ msdIncorporatedComposer.command("telegraph", async ctx => {
 	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
 		parse_mode: "HTML",
 	});
-});
-
-msdIncorporatedComposer.on(":new_chat_members", async ctx => {
-	if (ctx.chat.id !== chatChannelID) return;
-	ctx.replyWithAnimation(new InputFile(resolve(cwd(), "src", "media", "welcome.gif")));
 });
