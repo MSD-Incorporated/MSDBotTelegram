@@ -99,9 +99,11 @@ dickComposer.callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
 
 	const keyboard = keyboardBuilder(ctx, "leaderboard", page, type, pagesLength);
 
-	return ctx.api.editMessageText(ctx.chatId!, ctx.msgId!, (await Promise.all(text)).join("\n"), {
-		reply_markup: { inline_keyboard: keyboard },
-	});
+	return ctx.api
+		.editMessageText(ctx.chatId!, ctx.msgId!, (await Promise.all(text)).join("\n"), {
+			reply_markup: { inline_keyboard: keyboard },
+		})
+		.catch(err => console.error(err));
 });
 
 dickComposer.callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {

@@ -8,7 +8,6 @@ import type { Context } from "../utils";
 
 const telegraph = new Telegraph(process.env.TELEGRAPH_TOKEN);
 const channelID = -1001528929804;
-const chatChannelID = -1001705068191;
 
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
