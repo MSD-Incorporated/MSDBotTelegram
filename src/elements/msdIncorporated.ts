@@ -79,7 +79,7 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(image);
 
-	if (!res?.raw.data.ext_urls.length) return;
+	if (!res || res.raw.data?.ext_urls?.length) return;
 
 	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
@@ -116,7 +116,7 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(image);
 
-	if (!res?.raw.data.ext_urls.length) return;
+	if (!res?.raw.data?.ext_urls?.length) return;
 
 	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
