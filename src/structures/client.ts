@@ -23,5 +23,12 @@ client.use(extraComposer);
 client.use(msdIncorporatedComposer);
 client.use(startComposer);
 
-process.once("SIGINT", () => client.stop());
-process.once("SIGTERM", () => client.stop());
+process.once("SIGINT", res => {
+	console.log(res);
+	client.stop();
+});
+process.once("SIGTERM", res => {
+	console.log(res);
+
+	client.stop();
+});
