@@ -5,6 +5,8 @@ import type { User } from "grammy/types";
 
 import * as schema from "../drizzle/index";
 import type { TDick, TDickHistory, TReferral, TUser } from "../drizzle/types";
+import { normalizeName } from "../utils";
+import type { Logger } from "./logger";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;
@@ -23,6 +25,11 @@ export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_att
  */
 export class Database {
 	/**
+	 * The logger instance.
+	 */
+	public readonly logger: Logger;
+
+	/**
 	 * The underlying SQL client.
 	 */
 	public readonly client: SQL;
@@ -35,7 +42,7 @@ export class Database {
 	/**
 	 * Creates a new instance of the Database class.
 	 */
-	constructor() {
+	constructor(logger: Logger) {
 		this.client = new SQL({
 			host: process.env.POSTGRES_HOST!,
 			port: Number(process.env.POSTGRES_PORT!),
@@ -46,6 +53,7 @@ export class Database {
 			ssl: false,
 		});
 
+		this.logger = logger;
 		this.db = drizzle({ client: Bun.sql, schema });
 	}
 
@@ -55,6 +63,14 @@ export class Database {
 	public readonly connect = async () => {
 		await this.client.connect();
 
+		this.logger.custom(
+			this.logger.ck.magentaBright(
+				this.logger.icons["menu"],
+				"Connected to database:",
+				`"${process.env.DATABASE_URL.split("/")[3]}"`
+			)
+		);
+
 		return this;
 	};
 
@@ -63,6 +79,14 @@ export class Database {
 	 */
 	public readonly close = async () => {
 		await this.client.close();
+
+		this.logger.custom(
+			this.logger.ck.magentaBright(
+				this.logger.icons["menu"],
+				"Disconnected from database:",
+				`"${process.env.DATABASE_URL.split("/")[3]}"`
+			)
+		);
 
 		return this;
 	};
@@ -90,6 +114,14 @@ export class Database {
 		let searchResult = await this.db.query.users.findFirst({ where, with: include as I }).execute();
 
 		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			this.logger.custom(
+				this.logger.ck.grey(this.logger.icons["menu"], `User`),
+				this.logger.ck.greenBright(normalizeName(user as User)),
+				this.logger.ck.grey("[") + this.logger.ck.greenBright(user.id) + this.logger.ck.grey("]"),
+				this.logger.ck.redBright("not found!"),
+				this.logger.ck.yellowBright("Creating new...")
+			);
+
 			return this.writeUser(user as User) as unknown as CINE extends true
 				? Exclude<typeof searchResult, undefined>
 				: typeof searchResult;
