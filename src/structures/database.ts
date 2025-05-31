@@ -5,6 +5,8 @@ import type { User } from "grammy/types";
 
 import * as schema from "../drizzle/index";
 import type { TDick, TDickHistory, TReferral, TUser } from "../drizzle/types";
+import { dateFormatter, normalizeName } from "../utils";
+import type { Logger } from "./logger";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;
@@ -23,6 +25,11 @@ export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_att
  */
 export class Database {
 	/**
+	 * The logger instance.
+	 */
+	public readonly logger: Logger;
+
+	/**
 	 * The underlying SQL client.
 	 */
 	public readonly client: SQL;
@@ -35,7 +42,7 @@ export class Database {
 	/**
 	 * Creates a new instance of the Database class.
 	 */
-	constructor() {
+	constructor(logger: Logger) {
 		this.client = new SQL({
 			host: process.env.POSTGRES_HOST!,
 			port: Number(process.env.POSTGRES_PORT!),
@@ -46,6 +53,7 @@ export class Database {
 			ssl: false,
 		});
 
+		this.logger = logger;
 		this.db = drizzle({ client: Bun.sql, schema });
 	}
 
@@ -55,6 +63,14 @@ export class Database {
 	public readonly connect = async () => {
 		await this.client.connect();
 
+		this.logger.custom(
+			this.logger.ck.magentaBright(
+				this.logger.icons["menu"],
+				"Connected to database:",
+				`"${process.env.DATABASE_URL.split("/")[3]}"`
+			)
+		);
+
 		return this;
 	};
 
@@ -63,6 +79,14 @@ export class Database {
 	 */
 	public readonly close = async () => {
 		await this.client.close();
+
+		this.logger.custom(
+			this.logger.ck.magentaBright(
+				this.logger.icons["menu"],
+				"Disconnected from database:",
+				`"${process.env.DATABASE_URL.split("/")[3]}"`
+			)
+		);
 
 		return this;
 	};
@@ -168,6 +192,15 @@ export class Database {
 		const values = { ...data, user_id: id, size: size ?? 0, difference: difference ?? 0 };
 		const where = eq(schema.dick_history.user_id, id);
 
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `📃 Creating new dick history entry for id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
+			this.logger.ck.grey("with size"),
+			this.logger.ck.greenBright(size ?? 0),
+			this.logger.ck.grey("and difference"),
+			this.logger.ck.greenBright(difference ?? 0)
+		);
+
 		await this.db.insert(schema.dick_history).values(values).execute();
 		return this.db.query.dick_history.findMany({ where, with: include as I }).execute();
 	};
@@ -187,6 +220,12 @@ export class Database {
 	) => {
 		const values = { ...data, user_id: id, first_name, last_name, username, is_premium };
 		const where = eq(schema.users.user_id, id);
+
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `➕ Creating new user`),
+			this.logger.ck.greenBright(normalizeName({ first_name, last_name })),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]")
+		);
 
 		await this.db.insert(schema.users).values(values).execute();
 		return this.db.query.users.findFirst({ where, with: include as I }).execute();
@@ -208,6 +247,11 @@ export class Database {
 		const values = { ...data, user_id: id };
 		const where = eq(schema.dicks.user_id, id);
 
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `🍆 Creating new dick for id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]")
+		);
+
 		await this.db.insert(schema.dicks).values(values).execute();
 		return this.db.query.dicks.findFirst({ where, with: include as I }).execute();
 	};
@@ -220,6 +264,17 @@ export class Database {
 	 * @returns The updated user.
 	 */
 	public readonly updateUser = async <U extends TelegramUser, D extends TUser>({ id }: U, data: Partial<D>) => {
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `✏️  Updating user with id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
+			this.logger.ck.grey("with data"),
+			this.logger.ck.greenBright(
+				JSON.stringify(
+					`first_name: ${data.first_name}, last_name: ${data.last_name ?? "null"}, username: ${data.username ?? "null"}`
+				)
+			)
+		);
+
 		return this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
 	};
 
@@ -231,6 +286,17 @@ export class Database {
 	 * @returns The updated dick.
 	 */
 	public readonly updateDick = async <U extends TelegramUser, D extends TDick>({ id }: U, data: Partial<D>) => {
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `✏️  Updating dick for id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
+			this.logger.ck.grey("with data"),
+			this.logger.ck.greenBright(
+				JSON.stringify(
+					`size: ${data.size}, referral_timestamp: ${data.referral_timestamp ? dateFormatter.format(data.referral_timestamp) : null}, timestamp: ${data.timestamp ? dateFormatter.format(data.timestamp) : null}`
+				)
+			)
+		);
+
 		return this.db.update(schema.dicks).set(data).where(eq(schema.dicks.user_id, id)).execute();
 	};
 
@@ -279,6 +345,13 @@ export class Database {
 		referrer: U,
 		data?: Omit<Partial<D>, "referral" | "referrer">
 	) => {
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `👥 Creating new referral for id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(referrer.id) + this.logger.ck.grey("]"),
+			this.logger.ck.grey("with referral"),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(referral.id) + this.logger.ck.grey("]")
+		);
+
 		return this.db
 			.insert(schema.referrals)
 			.values({ ...data, referral: referral.id, referrer: referrer.id })

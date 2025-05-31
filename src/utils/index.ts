@@ -1,4 +1,5 @@
 import type { InlineKeyboardButton, UserFromGetMe } from "grammy/types";
+import type { Logger } from "../structures/logger";
 import type { Context } from "./context";
 
 /**
@@ -6,7 +7,13 @@ import type { Context } from "./context";
  *
  * @param {UserFromGetMe} user - The user info from the 'getMe' method.
  */
-export const onStart = ({ id, username }: UserFromGetMe) => console.log(`✅ | ${username} [${id}] started!`);
+export const onStart = (logger: Logger, { id, username, first_name }: UserFromGetMe) =>
+	logger.custom(
+		logger.ck.greenBright(logger.icons["success"], first_name, "|", `@${username}`, `[${id}]`, "started!\n")
+	);
+
+export const normalizeName = ({ first_name, last_name }: { first_name: string; last_name?: string }) =>
+	`${first_name}` + (last_name ? ` ${last_name}` : "");
 
 /**
  * Generates a random number between the specified minimum and maximum values.
@@ -138,3 +145,4 @@ export * from "./auto-quote";
 export * from "./caching";
 export * from "./context";
 export * from "./formatter";
+export * from "./logging";

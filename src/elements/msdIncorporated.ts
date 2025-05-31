@@ -9,6 +9,15 @@ import type { Context } from "../utils";
 const telegraph = new Telegraph(process.env.TELEGRAPH_TOKEN);
 const channelID = -1001528929804;
 
+const getContent = (page: Page) =>
+	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");
+
+const getPage = async (args: string[]) => {
+	const id = args[0]!.replace("https://telegra.ph/", "");
+
+	return telegraph.getPage(id, true);
+};
+
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
 
@@ -141,15 +150,6 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 		)
 		.then(async () => bun_file.delete());
 });
-
-const getContent = (page: Page) =>
-	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");
-
-const getPage = async (args: string[]) => {
-	const id = args[0]!.replace("https://telegra.ph/", "");
-
-	return telegraph.getPage(id, true);
-};
 
 msdIncorporatedComposer.command("telegraph", async ctx => {
 	if (ctx.from!.id !== 946070039) return;

@@ -32,6 +32,7 @@
 	"dependencies": {
 		"@grammyjs/files": "^1.1.1",
 		"@grammyjs/parse-mode": "^1.11.1",
+		"chalk": "^5.4.1",
 		"drizzle-orm": "^0.43.1",
 		"grammy": "^1.36.1",
 		"sagiri": "^4.3.0",
