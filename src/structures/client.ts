@@ -2,7 +2,14 @@ import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
 import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer } from "../elements";
-import { autoQuote, autoUserCaching, commandLogging, createContextConstructor, type Context } from "../utils";
+import {
+	autoQuote,
+	autoUserCaching,
+	buttonLogging,
+	commandLogging,
+	createContextConstructor,
+	type Context,
+} from "../utils";
 import { Database } from "./database";
 import { Logger } from "./logger";
 
@@ -21,6 +28,7 @@ client.api.config.use(parseMode("HTML"));
 
 client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
 client.use(async (ctx, next) => commandLogging(ctx, next));
+client.use(async (ctx, next) => buttonLogging(ctx, next));
 
 client.use(dickComposer);
 client.use(extraComposer);
