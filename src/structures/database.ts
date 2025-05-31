@@ -265,7 +265,7 @@ export class Database {
 	 */
 	public readonly updateUser = async <U extends TelegramUser, D extends TUser>({ id }: U, data: Partial<D>) => {
 		this.logger.custom(
-			this.logger.ck.grey(this.logger.icons["menu"], `✏️  Updating user with id`),
+			this.logger.ck.grey(this.logger.icons["menu"], `📝 Updating user with id`),
 			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
 			this.logger.ck.grey("with data"),
 			this.logger.ck.greenBright(
@@ -287,7 +287,7 @@ export class Database {
 	 */
 	public readonly updateDick = async <U extends TelegramUser, D extends TDick>({ id }: U, data: Partial<D>) => {
 		this.logger.custom(
-			this.logger.ck.grey(this.logger.icons["menu"], `✏️  Updating dick for id`),
+			this.logger.ck.grey(this.logger.icons["menu"], `📝 Updating dick for id`),
 			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
 			this.logger.ck.grey("with data"),
 			this.logger.ck.greenBright(
