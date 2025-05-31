@@ -1,4 +1,3 @@
-import type { ParseModeFlavor } from "@grammyjs/parse-mode";
 import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
 import L from "../i18n/i18n-node";
@@ -18,7 +17,7 @@ interface Dependencies {
 	logger: Logger;
 }
 
-export type Context = ParseModeFlavor<DefaultContext & ExtendedContextFlavor>;
+export type Context = DefaultContext & ExtendedContextFlavor;
 
 export function createContextConstructor({ database, logger }: Dependencies) {
 	return class extends DefaultContext implements ExtendedContextFlavor {

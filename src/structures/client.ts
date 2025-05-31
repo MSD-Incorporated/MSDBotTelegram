@@ -1,4 +1,3 @@
-import { parseMode } from "@grammyjs/parse-mode";
 import { Bot } from "grammy";
 
 import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer } from "../elements";
@@ -10,6 +9,7 @@ import {
 	createContextConstructor,
 	type Context,
 } from "../utils";
+import { parseMode } from "../utils/parse-mode";
 import { Database } from "./database";
 import { Logger } from "./logger";
 
