@@ -7,7 +7,7 @@ export const commandLogging = async (ctx: Context, next: NextFunction) => {
 
 	if (!ctx.message || !ctx.from) return;
 	if (!(ctx.message.text || ctx.message.caption)) return;
-	if (!(ctx.message.text! || ctx.message.caption!).startsWith("/")) console.log(1);
+	if (!(ctx.message.text! || ctx.message.caption!).startsWith("/")) return;
 
 	const log_string = [
 		ctx.logger.ck.grey(`{/}`),
