@@ -33,7 +33,7 @@
 		"@grammyjs/files": "^1.1.1",
 		"@grammyjs/parse-mode": "^2.1.2",
 		"chalk": "^5.4.1",
-		"drizzle-orm": "^0.43.1",
+		"drizzle-orm": "^0.44.1",
 		"grammy": "^1.36.3",
 		"sagiri": "^4.3.0",
 		"telegra.ph": "^1.0.1",
