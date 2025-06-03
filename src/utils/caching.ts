@@ -19,7 +19,7 @@ export const autoUserCaching = async (
 		user.first_name != dbuser.first_name ||
 		user.last_name != dbuser.last_name ||
 		user.username != dbuser.username ||
-		user.is_premium != dbuser.is_premium
+		(user.is_premium ?? false) != dbuser.is_premium
 	) {
 		await database.updateUser(user!, {
 			first_name: user.first_name,

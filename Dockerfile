@@ -1,5 +1,4 @@
 ARG BUN_VERSION="latest"
-ARG ALPINE_VERSION="3.18"
 
 # Bun Image
 FROM oven/bun:${BUN_VERSION} AS bun_image
