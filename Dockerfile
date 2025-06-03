@@ -1,7 +1,5 @@
-ARG BUN_VERSION="latest"
-
-# Bun Image
-FROM oven/bun:${BUN_VERSION} AS bun_image
+# Images
+FROM oven/bun:latest AS bun_image
 FROM frolvlad/alpine-glibc AS base_image
 
 # Build app
