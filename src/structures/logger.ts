@@ -1,5 +1,5 @@
 import ck from "chalk";
-import { dateFormatter } from "utils";
+import { dateFormatter } from "../utils";
 
 export class Logger {
 	public readonly icons = {
