@@ -37,7 +37,7 @@ const urlParser = (urls: string[]) => {
 export const msdIncorporatedComposer = new Composer<Context>();
 
 msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (channelID !== (ctx.message?.forward_origin! as Message).chat.id) return;
+	if (channelID !== (ctx.message?.forward_origin! as Message).chat?.id) return;
 	if (!ctx.message?.caption?.includes("#Hentai")) return;
 	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
 	if (ctx.message?.media_group_id) return;
