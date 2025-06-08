@@ -82,20 +82,32 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 	const photos = ctx.message.reply_to_message.photo;
 	const file_id = photos[photos.length - 1]!.file_id;
 	const file = await ctx.api.getFile(file_id);
-	const bun_file = Bun.file(file.file_path!);
+
+	let bun_file;
+
+	if (process.env.LOCAL_API) {
+		bun_file = Bun.file(file.file_path!);
+	} else {
+		const url = `https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`;
+		bun_file = await fetch(url);
+	}
+
 	const image = Buffer.from(await bun_file.arrayBuffer());
 
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(image);
 
-	if (!res || !res.raw.data?.ext_urls?.length) return ctx.reply("Не удалось найти!");
+	if (!res || res.raw.data?.ext_urls?.length == 0 || !res.raw.data.creator) return ctx.reply("Не удалось найти!");
 
 	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (urlParser(urls).length <= 0) return ctx.reply("Не удалось найти!").then(async () => bun_file.delete());
+	if (urlParser(urls).length <= 0)
+		return ctx.reply("Не удалось найти!").then(async () => {
+			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
+		});
 
 	return ctx
 		.reply(
@@ -104,14 +116,16 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
 				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
 				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
 					.join(" | ")}`,
 			].join("\n"),
 			{
 				parse_mode: "HTML",
 			}
 		)
-		.then(async () => bun_file.delete());
+		.then(async () => {
+			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
+		});
 });
 
 msdIncorporatedComposer.on(":caption", async ctx => {
