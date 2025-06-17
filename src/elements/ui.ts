@@ -11,6 +11,9 @@ export const userinfoComposer = new Composer<Context>();
 const background = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "background.png")
 )) as unknown as CanvasImageSource;
+const background_purple = (await loadImage(
+	resolve(process.cwd(), "src", "resources", "background.png")
+)) as unknown as CanvasImageSource;
 const plus_icon = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "plus-icon.svg")
 )) as unknown as CanvasImageSource;
@@ -146,7 +149,7 @@ userinfoComposer.command("userinfo", async ctx => {
 	const canvas = createCanvas(imageWidth, imageHeight);
 	const canvas_context = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
 
-	canvas_context.drawImage(background, 0, 0);
+	canvas_context.drawImage(Math.random() < 0.1 ? background : background_purple, 0, 0);
 
 	const user_photo = (await ctx.api.getUserProfilePhotos(ctx.from?.id!)).photos;
 	if (user_photo?.length) {
