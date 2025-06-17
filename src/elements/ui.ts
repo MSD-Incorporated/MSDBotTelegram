@@ -181,5 +181,10 @@ userinfoComposer.command("userinfo", async ctx => {
 	});
 
 	const attachment = new InputFile(canvas.toBuffer(), "avatar.png");
-	return ctx.replyWithPhoto(attachment);
+	return ctx.replyWithPhoto(attachment, {
+		caption: [
+			`👤 <b>Информация о:</b> ${name} [<code>${ctx.from?.id}</code>]\n`,
+			`• <b>Текущий размер dick:</b> <code>${dickSize}</code> см`,
+		].join("\n"),
+	});
 });
