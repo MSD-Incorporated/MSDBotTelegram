@@ -12,7 +12,7 @@ const background = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "background.png")
 )) as unknown as CanvasImageSource;
 const background_purple = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "background.png")
+	resolve(process.cwd(), "src", "resources", "background-purple.png")
 )) as unknown as CanvasImageSource;
 const plus_icon = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "plus-icon.svg")
