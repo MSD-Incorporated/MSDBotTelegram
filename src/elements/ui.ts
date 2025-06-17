@@ -149,7 +149,7 @@ userinfoComposer.command("userinfo", async ctx => {
 	const canvas = createCanvas(imageWidth, imageHeight);
 	const canvas_context = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
 
-	canvas_context.drawImage(Math.random() < 0.1 ? background : background_purple, 0, 0);
+	canvas_context.drawImage(Math.random() > 0.01 ? background : background_purple, 0, 0);
 
 	const user_photo = (await ctx.api.getUserProfilePhotos(ctx.from?.id!)).photos;
 	if (user_photo?.length) {
