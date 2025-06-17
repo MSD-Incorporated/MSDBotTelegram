@@ -1,5 +1,5 @@
 docker_build_bot:
-	docker buildx build -t "mased/msdbot_telegram" .
+	docker buildx build -t "mased/msdbot_telegram" --progress=plain .
 
 docker_bot_api:
 	docker run \

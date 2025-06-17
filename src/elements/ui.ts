@@ -1,9 +1,9 @@
-import { createCanvas, loadImage, registerFont } from "canvas";
+import { createCanvas, loadImage } from "canvas";
+import { desc } from "drizzle-orm";
 import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
 
-import { dick_history } from "drizzle";
-import { desc } from "drizzle-orm";
+import { dick_history } from "../drizzle";
 import type { Context } from "../utils";
 
 export const userinfoComposer = new Composer<Context>();
@@ -23,11 +23,6 @@ const zero_icon = (await loadImage(
 
 const imageWidth: number = 1410 as const;
 const imageHeight: number = 770 as const;
-
-registerFont(resolve(process.cwd(), "src", "resources", "SF-Pro-Display-Bold.otf"), {
-	family: "SF Pro Display",
-	weight: "regular",
-});
 
 export const centerText = (
 	ctx: CanvasRenderingContext2D,
@@ -49,7 +44,7 @@ export const drawUsername = (ctx: CanvasRenderingContext2D, text: string, boxX: 
 
 	const { textX, textY } = centerText(ctx, text, 346, boxX, boxY);
 
-	ctx.fillText(text, textX, textY);
+	return ctx.fillText(text, textX, textY);
 };
 
 export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
@@ -58,7 +53,7 @@ export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: nu
 
 	const { textX, textY } = centerText(ctx, text, 298, boxX, boxY);
 
-	ctx.fillText(text, textX, textY);
+	return ctx.fillText(text, textX, textY);
 };
 
 export const drawDickSize = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
@@ -67,7 +62,7 @@ export const drawDickSize = (ctx: CanvasRenderingContext2D, text: string, boxX: 
 
 	const { textX, textY } = centerText(ctx, text, 98, boxX, boxY);
 
-	ctx.fillText(text, textX, textY);
+	return ctx.fillText(text, textX, textY);
 };
 
 export const drawLevelTitle = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
@@ -76,7 +71,7 @@ export const drawLevelTitle = (ctx: CanvasRenderingContext2D, text: string, boxX
 
 	const { textY } = centerText(ctx, text, 181, boxX, boxY);
 
-	ctx.fillText(text, boxX, textY);
+	return ctx.fillText(text, boxX, textY);
 };
 
 export const drawDickHistory = async (
@@ -113,7 +108,7 @@ export const drawDickHistory = async (
 
 	ctx.fillText("см", boxX + 75 + textWidth, sizeBoxY);
 
-	ctx.drawImage(icon, boxX, boxY);
+	return ctx.drawImage(icon, boxX, boxY);
 };
 
 export const drawAvatar = (
@@ -135,20 +130,13 @@ export const drawAvatar = (
 
 	ctx.drawImage(avatar, boxX, boxY, boxSize, boxSize);
 
-	ctx.restore();
+	return ctx.restore();
 };
 
 userinfoComposer.command("userinfo", async ctx => {
-	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
-	const user_photo = (await ctx.api.getUserProfilePhotos(ctx.from?.id!)).photos[0]![0]!;
-	const file = await ctx.api.getFile(user_photo.file_id);
+	if (![946070039, 654382771, 629401289, 825720828, 1302930611, 759259922].includes(ctx.from!.id)) return;
 
-	const bun_file =
-		process.env.LOCAL_API === undefined
-			? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`)
-			: Bun.file(file.file_path!);
-	const buffer = Buffer.from(await bun_file.arrayBuffer());
-	const avatar = (await loadImage(buffer)) as unknown as CanvasImageSource;
+	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
 
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
 		history: { orderBy: desc(dick_history.created_at), limit: 3 },
@@ -160,7 +148,19 @@ userinfoComposer.command("userinfo", async ctx => {
 
 	canvas_context.drawImage(background, 0, 0);
 
-	drawAvatar(canvas_context, avatar, 924, 234);
+	const user_photo = (await ctx.api.getUserProfilePhotos(ctx.from?.id!)).photos;
+	if (user_photo?.length) {
+		const file = await ctx.api.getFile(user_photo[0]![0]!.file_id);
+
+		const bun_file =
+			process.env.LOCAL_API === undefined
+				? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`)
+				: Bun.file(file.file_path!);
+		const buffer = Buffer.from(await bun_file.arrayBuffer());
+		const avatar = (await loadImage(buffer)) as unknown as CanvasImageSource;
+		drawAvatar(canvas_context, avatar, 924, 234);
+	}
+
 	drawUsername(canvas_context, name.length > 18 ? `${name.slice(0, 18)}...` : name, 840, 464);
 	drawStatus(canvas_context, "Статус отсутствует", 861, 518);
 
