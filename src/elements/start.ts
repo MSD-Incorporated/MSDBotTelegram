@@ -20,6 +20,8 @@ startComposer.command("start", async ctx => {
 	const version = process.version;
 	const bun_version = Bun.version;
 
+	console.log(await ctx.getChatMember(ctx.from!.id));
+
 	if (ctx.match && ctx.from !== undefined) {
 		const refferal_id = Number(ctx.match.slice("ref_".length));
 		const refferal = await ctx.database.resolveUser({ id: refferal_id });

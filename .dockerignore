@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+drizzle
+.dockerignore
+.editorconfig
+.env*
+.gitattributes
+.gitignore
+.prettierrc.json
+compose.yml
+Dockerfile
+makefile
+README.md

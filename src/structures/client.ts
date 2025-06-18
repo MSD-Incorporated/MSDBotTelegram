@@ -1,6 +1,6 @@
 import { Bot } from "grammy";
 
-import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer } from "../elements";
+import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer, userinfoComposer } from "../elements";
 import {
 	autoQuote,
 	autoUserCaching,
@@ -34,6 +34,7 @@ client.use(dickComposer);
 client.use(extraComposer);
 client.use(msdIncorporatedComposer);
 client.use(startComposer);
+client.use(userinfoComposer);
 
 process.once("SIGINT", async () => {
 	logger.custom(logger.ck.red("SIGINT received, shutting down..."));
