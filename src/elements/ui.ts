@@ -137,8 +137,6 @@ export const drawAvatar = (
 };
 
 userinfoComposer.command("userinfo", async ctx => {
-	if (![946070039, 654382771, 629401289, 825720828, 1302930611, 759259922].includes(ctx.from!.id)) return;
-
 	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
 
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
