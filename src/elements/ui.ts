@@ -3,6 +3,7 @@ import { desc } from "drizzle-orm";
 import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
 
+import type { ChatMember } from "typegram";
 import { dick_history } from "../drizzle";
 import type { Context } from "../utils";
 
@@ -162,8 +163,16 @@ userinfoComposer.command("userinfo", async ctx => {
 		drawAvatar(canvas_context, avatar, 924, 234);
 	}
 
+	const customTitle = ((await ctx.getChatMember(ctx.from!.id)) as ChatMember & { custom_title?: string })
+		?.custom_title;
+	const status = customTitle
+		? customTitle.length > 29
+			? customTitle.slice(0, 26) + "..."
+			: customTitle
+		: "Статус отсутствует";
+
 	drawUsername(canvas_context, name.length > 18 ? `${name.slice(0, 18)}...` : name, 840, 464);
-	drawStatus(canvas_context, "Статус отсутствует", 861, 518);
+	drawStatus(canvas_context, status, 861, 518);
 
 	drawDickSize(canvas_context, dickSize.toString() + " см", 351, 195);
 	drawLevelTitle(canvas_context, "Fucking Slave", 258, 274);
