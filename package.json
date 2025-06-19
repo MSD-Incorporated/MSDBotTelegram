@@ -32,7 +32,7 @@
 	"dependencies": {
 		"@grammyjs/files": "^1.1.1",
 		"@grammyjs/parse-mode": "^2.1.2",
-		"canvas": "^3.1.0",
+		"@napi-rs/canvas": "^0.1.71",
 		"chalk": "^5.4.1",
 		"drizzle-orm": "^0.44.2",
 		"grammy": "^1.36.3",
