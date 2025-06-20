@@ -35,6 +35,4 @@ RUN wget https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts/raw/refs/heads
 	&& fc-cache -f -v \
 	&& rm -rf /app/SF-Pro-Display-Bold.otf
 
-RUN apk del fontconfig
-
 CMD [ "bun", "run", "index.js" ]
