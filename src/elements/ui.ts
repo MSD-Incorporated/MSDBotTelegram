@@ -15,6 +15,10 @@ const background = (await loadImage(
 const background_white = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "background-white.png")
 )) as unknown as CanvasImageSource;
+const background_blue = (await loadImage(
+	resolve(process.cwd(), "src", "resources", "background-blue.png")
+)) as unknown as CanvasImageSource;
+
 const avatarCleared = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "avatar-cleared-white.svg")
 )) as unknown as CanvasImageSource;
@@ -177,6 +181,12 @@ export const drawFadedRoundedAvatar = (
 	ctx.drawImage(avatarCleared, 910, 220);
 };
 
+export const getBackground = (ctx: Context) => {
+	if ([946070039, 5454721629].includes(ctx.from!.id)) return background_white;
+	if ([1089300340].includes(ctx.from!.id)) return background_blue;
+	return background;
+};
+
 userinfoComposer.command("userinfo", async ctx => {
 	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
 
@@ -188,7 +198,7 @@ userinfoComposer.command("userinfo", async ctx => {
 	const canvas = createCanvas(imageWidth, imageHeight);
 	const canvas_context = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
 
-	canvas_context.drawImage(ctx.from!.id !== 946070039 ? background : background_white, 0, 0);
+	canvas_context.drawImage(getBackground(ctx), 0, 0);
 
 	const customTitle = ((await ctx.getChatMember(ctx.from!.id)) as ChatMember & { custom_title?: string })
 		?.custom_title;
@@ -228,6 +238,21 @@ userinfoComposer.command("userinfo", async ctx => {
 		if (difference < 0) return drawDickHistory(canvas_context, diff, x, y, minus_icon, "minus");
 		return drawDickHistory(canvas_context, diff, x, y, zero_icon, "zero");
 	});
+
+	// ctx.replyWithMediaGroup(
+	// 	await Promise.all(
+	// 		user_photo.slice(0, 9).map(async (_value, index) => {
+	// 			const { file_path } = await ctx.api.getFile(user_photo[index]![0]!.file_id);
+
+	// 			const bun_file =
+	// 				process.env.LOCAL_API === undefined
+	// 					? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file_path!}`)
+	// 					: Bun.file(file_path!);
+	// 			const buffer = Buffer.from(await bun_file.arrayBuffer());
+	// 			return { type: "photo", media: new InputFile(buffer, "avatar.png") };
+	// 		})
+	// 	)
+	// );
 
 	const attachment = new InputFile(canvas.toBuffer("image/png"), "avatar.png");
 	return ctx.replyWithPhoto(attachment, {
