@@ -229,15 +229,17 @@ userinfoComposer.command("userinfo", async ctx => {
 		drawAvatar(canvas_context, avatar, 924, 234);
 	}
 
-	dick.history.forEach(({ difference }, index) => {
-		const diff = difference.toString().replace("-", "");
-		const x: number = 149 as const;
-		const y: number = 419 + index * 70;
+	if (dick?.history?.length > 0) {
+		dick.history.forEach(({ difference }, index) => {
+			const diff = difference.toString().replace("-", "");
+			const x: number = 149 as const;
+			const y: number = 419 + index * 70;
 
-		if (difference > 0) return drawDickHistory(canvas_context, diff, x, y, plus_icon, "plus");
-		if (difference < 0) return drawDickHistory(canvas_context, diff, x, y, minus_icon, "minus");
-		return drawDickHistory(canvas_context, diff, x, y, zero_icon, "zero");
-	});
+			if (difference > 0) return drawDickHistory(canvas_context, diff, x, y, plus_icon, "plus");
+			if (difference < 0) return drawDickHistory(canvas_context, diff, x, y, minus_icon, "minus");
+			return drawDickHistory(canvas_context, diff, x, y, zero_icon, "zero");
+		});
+	}
 
 	// ctx.replyWithMediaGroup(
 	// 	await Promise.all(
