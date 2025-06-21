@@ -29,10 +29,8 @@ ENV NODE_ENV=production
 RUN --mount=type=cache,target=/etc/apk/cache apk add --update-cache pango-dev fontconfig
 RUN --mount=type=cache,target=/root/.npm bun --frozen-lockfile --production -f install
 
-RUN wget https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts/raw/refs/heads/master/SF-Pro-Display-Bold.otf \
-	&& mkdir -p /usr/share/fonts/custom \
-	&& cp /app/SF-Pro-Display-Bold.otf /usr/share/fonts/custom/ \ 
-	&& fc-cache -f -v \
-	&& rm -rf /app/SF-Pro-Display-Bold.otf
+RUN mkdir -p /usr/share/fonts/custom \
+	&& mv /app/src/resources/SF-Pro-Display-Bold.otf /usr/share/fonts/custom/ \ 
+	&& fc-cache -f -v
 
 CMD [ "bun", "run", "index.js" ]
