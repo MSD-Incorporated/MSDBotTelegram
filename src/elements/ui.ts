@@ -18,6 +18,9 @@ const background_white = (await loadImage(
 const background_blue = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "background-blue.png")
 )) as unknown as CanvasImageSource;
+const background_green = (await loadImage(
+	resolve(process.cwd(), "src", "resources", "background-green.png")
+)) as unknown as CanvasImageSource;
 
 const avatarCleared = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "avatar-cleared-white.svg")
@@ -182,8 +185,9 @@ export const drawFadedRoundedAvatar = (
 };
 
 export const getBackground = (ctx: Context) => {
-	if ([946070039, 5454721629].includes(ctx.from!.id)) return background_white;
-	if ([1089300340, 825720828].includes(ctx.from!.id)) return background_blue;
+	if ([946070039, 5454721629, 1468687523].includes(ctx.from!.id)) return background_white;
+	if ([1089300340].includes(ctx.from!.id)) return background_blue;
+	if ([825720828].includes(ctx.from!.id)) return background_green;
 	return background;
 };
 
