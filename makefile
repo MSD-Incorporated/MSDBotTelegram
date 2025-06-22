@@ -17,7 +17,7 @@ docker_bot:
 	docker run \
 	--name msdbot_telegram \
 	--network msdbot_internal_network \
-	--env-file .env.dev \
+	--env-file .env \
 	--volumes-from telegram-bot-api \
 	--restart always \
 	-e NODE_ENV=production \
