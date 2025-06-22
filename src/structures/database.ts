@@ -4,7 +4,7 @@ import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 import type { User } from "grammy/types";
 
 import * as schema from "../drizzle/index";
-import type { TDick, TDickHistory, TReferral, TUser } from "../drizzle/types";
+import type { TDick, TDickHistory, TMSDBotUser, TReferral, TUser } from "../drizzle/types";
 import { dateFormatter, normalizeName } from "../utils";
 import type { Logger } from "./logger";
 
@@ -122,6 +122,29 @@ export class Database {
 		return searchResult as Exclude<typeof searchResult, undefined>;
 	};
 
+	public readonly resolveMSDBotUser = async <
+		U extends CINE extends false
+			? TelegramUser
+			: Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">,
+		CINE extends boolean,
+		I extends IncludeRelation<"msdbot_users">,
+	>(
+		user: U,
+		createIfNotExists: CINE = false as CINE,
+		include: I = {} as I
+	) => {
+		const where = eq(schema.msdbot_users.user_id, user.id);
+		let searchResult = await this.db.query.msdbot_users.findFirst({ where, with: include as I }).execute();
+
+		if (!searchResult && (createIfNotExists as unknown as CINE extends true ? true : false)) {
+			return this.writeMSDBotUser(user as User) as unknown as CINE extends true
+				? Exclude<typeof searchResult, undefined>
+				: typeof searchResult;
+		}
+
+		return searchResult as Exclude<typeof searchResult, undefined>;
+	};
+
 	/**
 	 * Finds a dick by their user ID, or creates a new dick if the dick does not exist.
 	 *
@@ -231,6 +254,28 @@ export class Database {
 		return this.db.query.users.findFirst({ where, with: include as I }).execute();
 	};
 
+	public readonly writeMSDBotUser = async <
+		U extends User,
+		D extends TUser,
+		I extends IncludeRelation<"msdbot_users">,
+	>(
+		{ id, first_name, last_name, username, is_premium }: U,
+		data?: Partial<D>,
+		include: I = {} as I
+	) => {
+		const values = { ...data, user_id: id, first_name, last_name, username, is_premium };
+		const where = eq(schema.msdbot_users.user_id, id);
+
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `➕ Creating new MSDBot user`),
+			this.logger.ck.greenBright(normalizeName({ first_name, last_name })),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]")
+		);
+
+		await this.db.insert(schema.msdbot_users).values(values).execute();
+		return this.db.query.msdbot_users.findFirst({ where, with: include as I }).execute();
+	};
+
 	/**
 	 * Writes a new dick to the database.
 	 *
@@ -276,6 +321,20 @@ export class Database {
 		);
 
 		return this.db.update(schema.users).set(data).where(eq(schema.users.user_id, id)).execute();
+	};
+
+	public readonly updateMSDBotUser = async <U extends TelegramUser, D extends TMSDBotUser>(
+		{ id }: U,
+		data: Partial<D>
+	) => {
+		this.logger.custom(
+			this.logger.ck.grey(this.logger.icons["menu"], `📝 Updating MSDBot user with id`),
+			this.logger.ck.grey("[") + this.logger.ck.greenBright(id) + this.logger.ck.grey("]"),
+			this.logger.ck.grey("with data"),
+			this.logger.ck.greenBright(JSON.stringify(`status ${data.status}, background: ${data.background}`))
+		);
+
+		return this.db.update(schema.msdbot_users).set(data).where(eq(schema.msdbot_users.user_id, id)).execute();
 	};
 
 	/**

@@ -12,6 +12,7 @@ export default defineConfig({
 		user: POSTGRES_USER,
 		password: POSTGRES_PASSWORD,
 		database: POSTGRES_DATABASE!,
+		url: DATABASE_URL ?? undefined,
 		ssl: false,
 	},
 });

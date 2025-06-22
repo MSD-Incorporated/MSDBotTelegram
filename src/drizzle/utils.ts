@@ -9,6 +9,53 @@ export const msdbot_user_status: PgEnum<["user", "trusted", "owner"]> = pgEnum("
 	"owner",
 ]);
 
+export type UserinfoBackground =
+	| "blue"
+	| "green"
+	| "orange"
+	| "purple"
+	| "teal"
+	| "gray"
+	| "red"
+	| "pink"
+	| "premium"
+	| "moon-temple"
+	| "judgment"
+	| "night-city"
+	| "celestia";
+
+type UserinfoBackgroundArray = [
+	"blue",
+	"green",
+	"orange",
+	"purple",
+	"teal",
+	"gray",
+	"red",
+	"pink",
+	"premium",
+	"moon-temple",
+	"judgment",
+	"night-city",
+	"celestia",
+];
+
+export const msdbot_user_backgrounds: PgEnum<UserinfoBackgroundArray> = pgEnum("msdbot_user_backgrounds", [
+	"blue",
+	"green",
+	"orange",
+	"purple",
+	"teal",
+	"gray",
+	"red",
+	"pink",
+	"premium",
+	"moon-temple",
+	"judgment",
+	"night-city",
+	"celestia",
+] as UserinfoBackgroundArray);
+
 // /**
 //  * Enum for member status in a chat.
 //  */

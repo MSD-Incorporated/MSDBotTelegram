@@ -1,10 +1,9 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
+import type { chat_users, chats } from "./chat";
 import type { dick_history, dicks } from "./msdbot/dick";
 import type { referrals } from "./msdbot/referrals";
-import type { msdbot_user } from "./msdbot/user";
-
-import type { chat_users, chats } from "./chat";
+import type { msdbot_users } from "./msdbot/user";
 import type { user_buttons, users } from "./user";
 
 /**
@@ -25,8 +24,8 @@ export type TReferralInsert = InferInsertModel<typeof referrals>;
 /**
  * MSDBot types
  */
-export type TMSDBotUser = InferSelectModel<typeof msdbot_user>;
-export type TMSDBotUserInsert = InferInsertModel<typeof msdbot_user>;
+export type TMSDBotUser = InferSelectModel<typeof msdbot_users>;
+export type TMSDBotUserInsert = InferInsertModel<typeof msdbot_users>;
 
 /**
  * Chat types
@@ -45,3 +44,6 @@ export type TUserInsert = InferInsertModel<typeof users>;
 
 export type TUserButton = InferSelectModel<typeof user_buttons>;
 export type TUserButtonInsert = InferInsertModel<typeof user_buttons>;
+
+export type TMSDBotUser = InferSelectModel<typeof msdbot_user>;
+export type TMSDBotUserInsert = InferInsertModel<typeof msdbot_user>;

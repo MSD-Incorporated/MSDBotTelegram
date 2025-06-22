@@ -1,30 +1,15 @@
-import { createCanvas, loadImage } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts, loadImage } from "@napi-rs/canvas";
 import { desc } from "drizzle-orm";
 import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
 
+import type { UserinfoBackground } from "drizzle/utils";
 import type { ChatMember } from "typegram";
 import { dick_history } from "../drizzle";
 import type { Context } from "../utils";
 
 export const userinfoComposer = new Composer<Context>();
 
-const background = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "background.png")
-)) as unknown as CanvasImageSource;
-const background_white = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "background-white.png")
-)) as unknown as CanvasImageSource;
-const background_blue = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "background-blue.png")
-)) as unknown as CanvasImageSource;
-const background_green = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "background-green.png")
-)) as unknown as CanvasImageSource;
-
-const avatarCleared = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "avatar-cleared-white.svg")
-)) as unknown as CanvasImageSource;
 const plus_icon = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "plus-icon.svg")
 )) as unknown as CanvasImageSource;
@@ -37,6 +22,12 @@ const zero_icon = (await loadImage(
 
 const imageWidth: number = 1410 as const;
 const imageHeight: number = 770 as const;
+const font: string = "SF Pro Rounded" as const;
+
+GlobalFonts.register(
+	Buffer.from(await Bun.file(resolve(process.cwd(), "src", "resources", "SF-Pro-Rounded-Bold.otf")).arrayBuffer()),
+	"SF Pro Rounded"
+);
 
 export const centerText = (
 	ctx: CanvasRenderingContext2D,
@@ -53,7 +44,7 @@ export const centerText = (
 };
 
 export const drawUsername = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
-	ctx.font = `48px "SF Pro Display"`;
+	ctx.font = `48px "${font}"`;
 	ctx.fillStyle = "#FFFFFF";
 
 	const { textX, textY } = centerText(ctx, text, 346, boxX, boxY);
@@ -62,7 +53,7 @@ export const drawUsername = (ctx: CanvasRenderingContext2D, text: string, boxX: 
 };
 
 export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
-	ctx.font = `32px "SF Pro Display"`;
+	ctx.font = `32px "${font}"`;
 	ctx.fillStyle = "#707579";
 
 	const { textX, textY } = centerText(ctx, text, 298, boxX, boxY);
@@ -71,7 +62,7 @@ export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: nu
 };
 
 export const drawDickSize = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
-	ctx.font = `32px "SF Pro Display"`;
+	ctx.font = `32px "${font}"`;
 	ctx.fillStyle = "#FFFFFF";
 
 	const { textX, textY } = centerText(ctx, text, 98, boxX, boxY);
@@ -80,7 +71,7 @@ export const drawDickSize = (ctx: CanvasRenderingContext2D, text: string, boxX: 
 };
 
 export const drawLevelTitle = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
-	ctx.font = `24px "SF Pro Display"`;
+	ctx.font = `24px "${font}"`;
 	ctx.fillStyle = "#707579";
 
 	const { textY } = centerText(ctx, text, 181, boxX, boxY);
@@ -96,7 +87,7 @@ export const drawDickHistory = async (
 	icon: CanvasImageSource,
 	type: "plus" | "minus" | "zero"
 ) => {
-	ctx.font = `20px "SF Pro Display"`;
+	ctx.font = `20px "${font}"`;
 	ctx.fillStyle = "#FFFFFF";
 
 	const { textY: statusBoxY } = centerText(
@@ -130,7 +121,7 @@ export const drawAvatar = (
 	avatar: CanvasImageSource,
 	boxX: number,
 	boxY: number,
-	boxSize: number = 172
+	boxSize: number = 174
 ) => {
 	const radius = boxSize / 2;
 	const centerX = boxX + radius;
@@ -147,62 +138,67 @@ export const drawAvatar = (
 	return ctx.restore();
 };
 
-export const drawFadedRoundedAvatar = (
-	ctx: CanvasRenderingContext2D,
-	avatar: CanvasImageSource,
-	boxX: number,
-	boxY: number
-) => {
-	const w = 540;
-	const h = 510;
-	const r = Math.min(w, h) / 24;
+// export const drawFadedRoundedAvatar = (
+// 	ctx: CanvasRenderingContext2D,
+// 	avatar: CanvasImageSource,
+// 	boxX: number,
+// 	boxY: number
+// ) => {
+// 	const w = 540;
+// 	const h = 510;
+// 	const r = Math.min(w, h) / 24;
 
-	const tempCanvas = createCanvas(w, h);
-	const tempCtx = tempCanvas.getContext("2d") as unknown as CanvasRenderingContext2D;
+// 	const tempCanvas = createCanvas(w, h);
+// 	const tempCtx = tempCanvas.getContext("2d") as unknown as CanvasRenderingContext2D;
 
-	tempCtx.beginPath();
-	tempCtx.moveTo(r, 0);
-	tempCtx.arcTo(w, 0, w, r, r);
-	tempCtx.arcTo(w, h, w - r, h, r);
-	tempCtx.arcTo(0, h, 0, h - r, r);
-	tempCtx.arcTo(0, 0, r, 0, r);
-	tempCtx.closePath();
-	tempCtx.clip();
+// 	tempCtx.beginPath();
+// 	tempCtx.moveTo(r, 0);
+// 	tempCtx.arcTo(w, 0, w, r, r);
+// 	tempCtx.arcTo(w, h, w - r, h, r);
+// 	tempCtx.arcTo(0, h, 0, h - r, r);
+// 	tempCtx.arcTo(0, 0, r, 0, r);
+// 	tempCtx.closePath();
+// 	tempCtx.clip();
 
-	tempCtx.drawImage(avatar, 0, 0, w, h);
+// 	tempCtx.drawImage(avatar, 0, 0, w, h);
 
-	const gradient = tempCtx.createLinearGradient(0, 0, 0, h);
-	gradient.addColorStop(0, "rgba(0, 0, 0, 0.08)");
-	gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+// 	const gradient = tempCtx.createLinearGradient(0, 0, 0, h);
+// 	gradient.addColorStop(0, "rgba(0, 0, 0, 0.08)");
+// 	gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
 
-	tempCtx.globalCompositeOperation = "destination-in";
-	tempCtx.fillStyle = gradient;
+// 	tempCtx.globalCompositeOperation = "destination-in";
+// 	tempCtx.fillStyle = gradient;
 
-	tempCtx.fillRect(0, 0, w, h + 1);
+// 	tempCtx.fillRect(0, 0, w, h + 1);
 
-	ctx.drawImage(tempCanvas as unknown as CanvasImageSource, boxX, boxY);
-	ctx.drawImage(avatarCleared, 910, 220);
-};
+// 	ctx.drawImage(tempCanvas as unknown as CanvasImageSource, boxX, boxY);
+// };
 
-export const getBackground = (ctx: Context) => {
-	if ([946070039, 5454721629, 1468687523].includes(ctx.from!.id)) return background_white;
-	if ([1089300340].includes(ctx.from!.id)) return background_blue;
-	if ([825720828].includes(ctx.from!.id)) return background_green;
-	return background;
+export const getBackground = async (background: UserinfoBackground = "blue") => {
+	if (!background.endsWith(".png")) background += ".png";
+
+	const backgroundPath = resolve(process.cwd(), "src", "resources", `background-${background}`);
+	const isExists = await Bun.file(backgroundPath).exists();
+
+	return loadImage(
+		isExists ? backgroundPath : resolve(process.cwd(), "src", "resources", `background-blue.png`)
+	) as unknown as CanvasImageSource;
 };
 
 userinfoComposer.command("userinfo", async ctx => {
 	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
 
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
-		history: { orderBy: desc(dick_history.created_at), limit: 3 },
+		history: { orderBy: desc(dick_history.created_at), limit: 3, columns: { difference: true } },
 	});
+	const { background } = await ctx.database.resolveMSDBotUser(ctx.from!, true);
+
 	const dickSize = dick.size;
 
 	const canvas = createCanvas(imageWidth, imageHeight);
 	const canvas_context = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
 
-	canvas_context.drawImage(getBackground(ctx), 0, 0);
+	canvas_context.drawImage(await getBackground(background), 0, 0);
 
 	const customTitle = ((await ctx.getChatMember(ctx.from!.id)) as ChatMember & { custom_title?: string })
 		?.custom_title;
@@ -212,8 +208,8 @@ userinfoComposer.command("userinfo", async ctx => {
 			: customTitle
 		: "Статус отсутствует";
 
-	drawUsername(canvas_context, name.length > 18 ? `${name.slice(0, 18)}...` : name, 840, 464);
-	drawStatus(canvas_context, status, 861, 518);
+	drawUsername(canvas_context, name.length > 18 ? `${name.slice(0, 18)}...` : name, 837, 454);
+	drawStatus(canvas_context, status, 837, 508);
 
 	drawDickSize(canvas_context, dickSize.toString() + " см", 351, 195);
 	drawLevelTitle(canvas_context, "Fucking Slave", 258, 274);
@@ -229,14 +225,13 @@ userinfoComposer.command("userinfo", async ctx => {
 		const buffer = Buffer.from(await bun_file.arrayBuffer());
 		const avatar = (await loadImage(buffer)) as unknown as CanvasImageSource;
 
-		if (ctx.from!.id === 946070039) drawFadedRoundedAvatar(canvas_context, avatar, 740, 130);
-		drawAvatar(canvas_context, avatar, 924, 234);
+		drawAvatar(canvas_context, avatar, 924 - 1, 238 - 1);
 	}
 
 	if (dick?.history?.length > 0) {
 		dick.history.forEach(({ difference }, index) => {
 			const diff = difference.toString().replace("-", "");
-			const x: number = 149 as const;
+			const x: number = 150 as const;
 			const y: number = 419 + index * 70;
 
 			if (difference > 0) return drawDickHistory(canvas_context, diff, x, y, plus_icon, "plus");
@@ -244,21 +239,6 @@ userinfoComposer.command("userinfo", async ctx => {
 			return drawDickHistory(canvas_context, diff, x, y, zero_icon, "zero");
 		});
 	}
-
-	// ctx.replyWithMediaGroup(
-	// 	await Promise.all(
-	// 		user_photo.slice(0, 9).map(async (_value, index) => {
-	// 			const { file_path } = await ctx.api.getFile(user_photo[index]![0]!.file_id);
-
-	// 			const bun_file =
-	// 				process.env.LOCAL_API === undefined
-	// 					? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file_path!}`)
-	// 					: Bun.file(file_path!);
-	// 			const buffer = Buffer.from(await bun_file.arrayBuffer());
-	// 			return { type: "photo", media: new InputFile(buffer, "avatar.png") };
-	// 		})
-	// 	)
-	// );
 
 	const attachment = new InputFile(canvas.toBuffer("image/png"), "avatar.png");
 	return ctx.replyWithPhoto(attachment, {
