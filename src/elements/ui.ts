@@ -183,7 +183,7 @@ export const drawFadedRoundedAvatar = (
 
 export const getBackground = (ctx: Context) => {
 	if ([946070039, 5454721629].includes(ctx.from!.id)) return background_white;
-	if ([1089300340].includes(ctx.from!.id)) return background_blue;
+	if ([1089300340, 825720828].includes(ctx.from!.id)) return background_blue;
 	return background;
 };
 
