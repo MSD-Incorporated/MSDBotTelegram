@@ -11,13 +11,13 @@ import type { Context } from "../utils";
 export const userinfoComposer = new Composer<Context>();
 
 const plus_icon = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "plus-icon.svg")
+	resolve(process.cwd(), "src", "resources", "icons", "plus-icon.svg")
 )) as unknown as CanvasImageSource;
 const minus_icon = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "minus-icon.svg")
+	resolve(process.cwd(), "src", "resources", "icons", "minus-icon.svg")
 )) as unknown as CanvasImageSource;
 const zero_icon = (await loadImage(
-	resolve(process.cwd(), "src", "resources", "zero-icon.svg")
+	resolve(process.cwd(), "src", "resources", "icons", "zero-icon.svg")
 )) as unknown as CanvasImageSource;
 
 const imageWidth: number = 1410 as const;
@@ -43,13 +43,46 @@ export const centerText = (
 	return { textX: boxX + (boxWidth - textWidth) / 2, textY: boxY + textHeight };
 };
 
-export const drawUsername = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
+export const drawUsername = async (
+	ctx: CanvasRenderingContext2D,
+	text: string,
+	boxX: number,
+	boxY: number,
+	{ premium, verified, background }: { premium?: boolean; verified?: boolean; background: UserinfoBackground }
+) => {
 	ctx.font = `48px "${font}"`;
 	ctx.fillStyle = "#FFFFFF";
 
 	const { textX, textY } = centerText(ctx, text, 346, boxX, boxY);
 
-	return ctx.fillText(text, textX, textY);
+	const metrics = ctx.measureText(text);
+	const textWidth = metrics.width;
+
+	const removableWidth = premium && verified ? 60 : premium || verified ? 30 : 0;
+
+	ctx.fillText(text, textX - removableWidth / 2, textY);
+
+	if (verified) {
+		let iconPath = resolve(process.cwd(), "src", "resources", "icons", "verified", `${background ?? "blue"}.svg`);
+		const isExists = await Bun.file(iconPath).exists();
+
+		if (!isExists) iconPath = resolve(process.cwd(), "src", "resources", "icons", "verified", "blue.svg");
+
+		const icon = (await loadImage(iconPath)) as unknown as CanvasImageSource;
+		ctx.drawImage(icon, textX - removableWidth / 2 + textWidth + 7, textY - 28, 24, 24);
+	}
+
+	if (premium) {
+		let iconPath = resolve(process.cwd(), "src", "resources", "icons", "premium", `${background ?? "blue"}.svg`);
+		const isExists = await Bun.file(iconPath).exists();
+
+		if (!isExists) iconPath = resolve(process.cwd(), "src", "resources", "icons", "premium", "blue.svg");
+
+		const icon = (await loadImage(iconPath)) as unknown as CanvasImageSource;
+		ctx.drawImage(icon, textX - removableWidth / 2 + textWidth + (verified ? 35 + 1 : 5), textY - 29, 24, 24);
+	}
+
+	return;
 };
 
 export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
@@ -177,11 +210,11 @@ export const drawAvatar = (
 export const getBackground = async (background: UserinfoBackground = "blue") => {
 	if (!background.endsWith(".png")) background += ".png";
 
-	const backgroundPath = resolve(process.cwd(), "src", "resources", `background-${background}`);
+	const backgroundPath = resolve(process.cwd(), "src", "resources", "backgrounds", background);
 	const isExists = await Bun.file(backgroundPath).exists();
 
 	return loadImage(
-		isExists ? backgroundPath : resolve(process.cwd(), "src", "resources", `background-blue.png`)
+		isExists ? backgroundPath : resolve(process.cwd(), "src", "resources", "backgrounds", `blue.png`)
 	) as unknown as CanvasImageSource;
 };
 
@@ -191,7 +224,7 @@ userinfoComposer.command("userinfo", async ctx => {
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
 		history: { orderBy: desc(dick_history.created_at), limit: 3, columns: { difference: true } },
 	});
-	const { background } = await ctx.database.resolveMSDBotUser(ctx.from!, true);
+	const { background, status: msdbot_status } = await ctx.database.resolveMSDBotUser(ctx.from!, true);
 
 	const dickSize = dick.size;
 
@@ -208,8 +241,12 @@ userinfoComposer.command("userinfo", async ctx => {
 			: customTitle
 		: "Статус отсутствует";
 
-	drawUsername(canvas_context, name.length > 18 ? `${name.slice(0, 18)}...` : name, 837, 454);
-	drawStatus(canvas_context, status, 837, 508);
+	drawUsername(canvas_context, name.length > 16 ? `${name.slice(0, 16)}...` : name, 837, 453, {
+		premium: ctx.from?.is_premium ?? false,
+		verified: msdbot_status == "trusted" || msdbot_status == "owner",
+		background,
+	});
+	drawStatus(canvas_context, status, 861, 508);
 
 	drawDickSize(canvas_context, dickSize.toString() + " см", 351, 195);
 	drawLevelTitle(canvas_context, "Fucking Slave", 258, 274);
