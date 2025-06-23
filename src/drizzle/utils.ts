@@ -21,6 +21,7 @@ export type UserinfoBackground =
 	| "premium"
 	| "moon-temple"
 	| "judgment"
+	| "minecraft"
 	| "night-city"
 	| "celestia";
 
@@ -36,6 +37,7 @@ type UserinfoBackgroundArray = [
 	"premium",
 	"moon-temple",
 	"judgment",
+	"minecraft",
 	"night-city",
 	"celestia",
 ];
@@ -52,6 +54,7 @@ export const msdbot_user_backgrounds: PgEnum<UserinfoBackgroundArray> = pgEnum("
 	"premium",
 	"moon-temple",
 	"judgment",
+	"minecraft",
 	"night-city",
 	"celestia",
 ] as UserinfoBackgroundArray);
