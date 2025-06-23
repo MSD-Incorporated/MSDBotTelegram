@@ -49,7 +49,11 @@ export const drawUsername = async (
 	text: string,
 	boxX: number,
 	boxY: number,
-	{ premium, verified, background }: { premium?: boolean; verified?: boolean; background: UserinfoBackground }
+	{ premium, verified, background }: { premium?: boolean; verified?: boolean; background: UserinfoBackground } = {
+		premium: false,
+		verified: false,
+		background: "blue",
+	}
 ) => {
 	ctx.font = `48px "${font}"`;
 	ctx.fillStyle = fontColor;
@@ -254,7 +258,7 @@ userinfoComposer.command("userinfo", async ctx => {
 			: customTitle
 		: "Статус отсутствует";
 
-	drawUsername(canvas_context, name.length > 16 ? `${name.slice(0, 16)}...` : name, 837, 453, {
+	await drawUsername(canvas_context, name.length > 16 ? `${name.slice(0, 16)}...` : name, 837, 453, {
 		premium: ctx.from?.is_premium ?? false,
 		verified: msdbot_status == "trusted" || msdbot_status == "owner",
 		background,
