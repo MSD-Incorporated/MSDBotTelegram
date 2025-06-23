@@ -2,11 +2,11 @@ import { createCanvas, GlobalFonts, loadImage } from "@napi-rs/canvas";
 import { desc } from "drizzle-orm";
 import { Composer, InputFile } from "grammy";
 import { resolve } from "path";
-
-import type { UserinfoBackground } from "drizzle/utils";
 import type { ChatMember } from "typegram";
+
 import { dick_history } from "../drizzle";
-import type { Context } from "../utils";
+import type { UserinfoBackground } from "../drizzle/utils";
+import { userinfo_background_colors, type Context } from "../utils";
 
 export const userinfoComposer = new Composer<Context>();
 
@@ -23,6 +23,7 @@ const zero_icon = (await loadImage(
 const imageWidth: number = 1410 as const;
 const imageHeight: number = 770 as const;
 const font: string = "SF Pro Rounded" as const;
+const fontColor: string = "#D9D9D9" as const;
 
 GlobalFonts.register(
 	Buffer.from(await Bun.file(resolve(process.cwd(), "src", "resources", "SF-Pro-Rounded-Bold.otf")).arrayBuffer()),
@@ -51,7 +52,7 @@ export const drawUsername = async (
 	{ premium, verified, background }: { premium?: boolean; verified?: boolean; background: UserinfoBackground }
 ) => {
 	ctx.font = `48px "${font}"`;
-	ctx.fillStyle = "#FFFFFF";
+	ctx.fillStyle = fontColor;
 
 	const { textX, textY } = centerText(ctx, text, 346, boxX, boxY);
 
@@ -85,9 +86,15 @@ export const drawUsername = async (
 	return;
 };
 
-export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
+export const drawStatus = (
+	ctx: CanvasRenderingContext2D,
+	text: string,
+	boxX: number,
+	boxY: number,
+	background: UserinfoBackground
+) => {
 	ctx.font = `32px "${font}"`;
-	ctx.fillStyle = "#707579";
+	ctx.fillStyle = userinfo_background_colors[background];
 
 	const { textX, textY } = centerText(ctx, text, 298, boxX, boxY);
 
@@ -96,16 +103,22 @@ export const drawStatus = (ctx: CanvasRenderingContext2D, text: string, boxX: nu
 
 export const drawDickSize = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
 	ctx.font = `32px "${font}"`;
-	ctx.fillStyle = "#FFFFFF";
+	ctx.fillStyle = fontColor;
 
 	const { textX, textY } = centerText(ctx, text, 98, boxX, boxY);
 
 	return ctx.fillText(text, textX, textY);
 };
 
-export const drawLevelTitle = (ctx: CanvasRenderingContext2D, text: string, boxX: number, boxY: number) => {
+export const drawLevelTitle = (
+	ctx: CanvasRenderingContext2D,
+	text: string,
+	boxX: number,
+	boxY: number,
+	background: UserinfoBackground
+) => {
 	ctx.font = `24px "${font}"`;
-	ctx.fillStyle = "#707579";
+	ctx.fillStyle = userinfo_background_colors[background];
 
 	const { textY } = centerText(ctx, text, 181, boxX, boxY);
 
@@ -121,7 +134,7 @@ export const drawDickHistory = async (
 	type: "plus" | "minus" | "zero"
 ) => {
 	ctx.font = `20px "${font}"`;
-	ctx.fillStyle = "#FFFFFF";
+	ctx.fillStyle = fontColor;
 
 	const { textY: statusBoxY } = centerText(
 		ctx,
@@ -246,10 +259,10 @@ userinfoComposer.command("userinfo", async ctx => {
 		verified: msdbot_status == "trusted" || msdbot_status == "owner",
 		background,
 	});
-	drawStatus(canvas_context, status, 861, 508);
+	drawStatus(canvas_context, status, 861, 508, background);
 
 	drawDickSize(canvas_context, dickSize.toString() + " см", 351, 195);
-	drawLevelTitle(canvas_context, "Fucking Slave", 258, 274);
+	drawLevelTitle(canvas_context, "Fucking Slave", 258, 274, background);
 
 	const user_photo = (await ctx.api.getUserProfilePhotos(ctx.from?.id!)).photos;
 	if (user_photo?.length) {

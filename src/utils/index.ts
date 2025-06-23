@@ -142,6 +142,7 @@ export const keyboardBuilder = (ctx: Context, name: string, page: number, sub_na
 };
 
 export * from "./auto-quote";
+export * from "./background_colors";
 export * from "./caching";
 export * from "./context";
 export * from "./formatter";
