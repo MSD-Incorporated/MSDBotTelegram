@@ -146,7 +146,7 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 
 	const referrals = await ctx.database.resolveReferrals(user, { referrer: { with: { dick: true } } });
 	const active_referrals = referrals.filter(
-		({ referrer }) => referrer && referrer.dick && daysUntilEvent(new Date(), referrer.dick.updated_at!) <= 30
+		({ referrer }) => referrer && referrer.dick && daysUntilEvent(referrer.dick.updated_at!, new Date()) <= 30
 	);
 
 	const value = active_referrals.length + Number(isSubscribed);
