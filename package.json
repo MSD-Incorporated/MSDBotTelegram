@@ -30,9 +30,7 @@
 		"typesafe-i18n": "typesafe-i18n"
 	},
 	"dependencies": {
-		"@grammyjs/files": "^1.1.1",
-		"@grammyjs/parse-mode": "^2.1.2",
-		"@napi-rs/canvas": "^0.1.71",
+		"@napi-rs/canvas": "^0.1.72",
 		"chalk": "^5.4.1",
 		"drizzle-orm": "^0.44.2",
 		"grammy": "^1.36.3",
@@ -41,11 +39,11 @@
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.16",
-		"@types/node": "^24.0.3",
-		"drizzle-kit": "^0.31.1",
-		"pg": "^8.16.2",
-		"prettier": "^3.4.2",
+		"@types/bun": "^1.2.17",
+		"@types/node": "^24.0.7",
+		"drizzle-kit": "^0.31.4s",
+		"pg": "^8.16.3",
+		"prettier": "^3.6.2",
 		"typegram": "^5.2.0",
 		"typescript": "^5.8.3"
 	}
