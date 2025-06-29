@@ -12,8 +12,8 @@ const channelID = -1001528929804;
 const getContent = (page: Page) =>
 	(page.content as NodeElement[]).filter(element => element.tag === "img" || element.tag === "figure");
 
-const getPage = async (args: string[]) => {
-	const id = args[0]!.replace("https://telegra.ph/", "");
+const getPage = async (args: string[] | string) => {
+	const id = (Array.isArray(args) ? args[0] : args)!.replace("https://telegra.ph/", "");
 
 	return telegraph.getPage(id, true);
 };

@@ -27,9 +27,8 @@ const getPhrase = (difference: number, t: TranslationFunctions) => {
 };
 
 dickComposer.command(["dick", "cock"], async ctx => {
-	if (!ctx.from) return;
-
-	const { size, timestamp } = await ctx.database.resolveDick(ctx.from, true);
+	const user = ctx.from!;
+	const { size, timestamp } = await ctx.database.resolveDick(user, true);
 
 	const now = Date.now();
 	const lastUsed = now - timestamp.getTime();
@@ -40,15 +39,15 @@ dickComposer.command(["dick", "cock"], async ctx => {
 
 		return ctx.reply(dick_timeout_text({ timeLeft, size }), {
 			reply_markup: {
-				inline_keyboard: [[{ text: dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1` }]],
+				inline_keyboard: [[{ text: dick_history_button(), callback_data: `dick_history_${user.id}_1` }]],
 			},
 		});
 	}
 
 	const difference = random(-12, 12, true);
 
-	await ctx.database.updateDick(ctx.from, { size: size + difference, timestamp: new Date(now) });
-	await ctx.database.writeDickHistory({ id: ctx.from.id, size, difference });
+	await ctx.database.updateDick(user, { size: size + difference, timestamp: new Date(now) });
+	await ctx.database.writeDickHistory({ id: user.id, size, difference });
 
 	return ctx.reply(
 		ctx.t.dick_success_text({ phrase: getPhrase(difference, ctx.t), current_size: size + difference })
@@ -72,12 +71,10 @@ dickComposer.command(["lb", "leaderboard"], async ctx => {
 });
 
 dickComposer.callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
-	if (!ctx.msg || !ctx.msg.reply_markup || !ctx.msg.reply_markup.inline_keyboard) return;
+	const inline_keyboard = ctx.msg!.reply_markup?.inline_keyboard!;
+	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
 
-	const inline_keyboard = ctx.msg.reply_markup.inline_keyboard as InlineKeyboardButton[][];
-	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"))!;
-
-	const currentPage = Number(totalPagesButton.text.split("/")[0]);
+	const currentPage = Number(totalPagesButton?.text.split("/")[0]);
 	const page = Number(ctx.callbackQuery.data.split("_")[2]);
 
 	if (currentPage == page) return ctx.answerCallbackQuery(ctx.t.keyboard_same_page());
