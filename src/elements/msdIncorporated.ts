@@ -68,7 +68,7 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
 				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
 				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
 					.join(" | ")}`,
 			].join("\n"),
 			{
@@ -162,7 +162,7 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
 				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
 				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<a href="${url}">${name}</a>`)
+					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
 					.join(" | ")}`,
 			].join("\n"),
 			{
