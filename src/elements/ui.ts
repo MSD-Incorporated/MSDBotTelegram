@@ -20,7 +20,7 @@ const zero_icon = (await loadImage(
 	resolve(process.cwd(), "src", "resources", "icons", "zero-icon.svg")
 )) as unknown as CanvasImageSource;
 
-const imageWidth: number = 1410 as const;
+const imageWidth: number = 1846 as const;
 const imageHeight: number = 770 as const;
 const font: string = "SF Pro Rounded" as const;
 const fontColor: string = "#D9D9D9" as const;
@@ -235,7 +235,7 @@ export const getBackground = async (background: UserinfoBackground = "blue") => 
 	) as unknown as CanvasImageSource;
 };
 
-userinfoComposer.command("userinfo", async ctx => {
+userinfoComposer.command(["userinfo", "ui"], async ctx => {
 	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
 
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
