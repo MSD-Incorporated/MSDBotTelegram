@@ -34,15 +34,8 @@ const urlParser = (urls: string[]) => {
 	return sortedURLs;
 };
 
-export const msdIncorporatedComposer = new Composer<Context>();
-
-msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
-	if (channelID !== (ctx.message?.forward_origin! as Message).chat?.id) return;
-	if (!ctx.message?.caption?.includes("#Hentai")) return;
-	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
-	if (ctx.message?.media_group_id) return;
-
-	const file = await ctx.getFile();
+const search_full = async (ctx: Context, file_id?: string) => {
+	const file = file_id === undefined ? await ctx.getFile() : await ctx.api.getFile(file_id);
 	const bun_file =
 		process.env.LOCAL_API === undefined
 			? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`)
@@ -59,25 +52,41 @@ msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
-	if (urlParser(urls).length <= 0 && process.env.LOCAL_API) return (bun_file as unknown as Bun.BunFile).delete();
+	if (urlParser(urls).length == 0) {
+		if (process.env.LOCAL_API) (bun_file as unknown as Bun.BunFile).delete();
 
-	return ctx
-		.reply(
-			[
-				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
-					.join(" | ")}`,
-			].join("\n"),
-			{
-				parse_mode: "HTML",
-			}
-		)
-		.then(async () => {
-			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
-		});
+		return { text: ["Не удалось найти!"] };
+	}
+
+	return {
+		text: [
+			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
+			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
+			`• <b>Ссылки:</b> ${urlParser(urls)
+				.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
+				.join(" | ")}`,
+		],
+
+		file: bun_file,
+	};
+};
+
+export const msdIncorporatedComposer = new Composer<Context>();
+
+msdIncorporatedComposer.on(":photo").on(":is_automatic_forward", async ctx => {
+	if (channelID !== (ctx.message?.forward_origin! as Message).chat?.id) return;
+	if (!ctx.message?.caption?.includes("#Hentai")) return;
+	if (ctx.message?.caption?.includes("#RealLife") || ctx.message?.caption?.includes("#Video")) return;
+	if (ctx.message?.media_group_id) return;
+
+	const data = (await search_full(ctx)) as { text: string[]; file: Bun.BunFile };
+	if (!data.text) return;
+	if (data.text[0] == "Не удалось найти!") return;
+
+	return ctx.reply(data.text.join("\n")).then(async () => {
+		if (process.env.LOCAL_API && data.file) await (data.file as unknown as Bun.BunFile).delete();
+	});
 });
 
 msdIncorporatedComposer.command("search_full", async ctx => {
@@ -86,92 +95,25 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 
 	const photos = ctx.message.reply_to_message.photo;
 	const file_id = photos[photos.length - 1]!.file_id;
-	const file = await ctx.api.getFile(file_id);
 
-	const bun_file =
-		process.env.LOCAL_API === undefined
-			? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`)
-			: Bun.file(file.file_path!);
+	const data = (await search_full(ctx, file_id)) as { text: string[]; file: Bun.BunFile };
+	if (!data.text) return;
 
-	const image = Buffer.from(await bun_file.arrayBuffer());
-
-	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
-	const [res] = await sauceNao(image);
-
-	if (!res || res.raw.data?.ext_urls?.length == 0 || !res.raw.data.creator) return ctx.reply("Не удалось найти!");
-
-	const { author, creator, characters } = res.raw.data;
-	// @ts-ignore
-	const material = res.raw.data.material;
-	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
-
-	if (urlParser(urls).length <= 0)
-		return ctx.reply("Не удалось найти!").then(async () => {
-			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
-		});
-
-	return ctx
-		.reply(
-			[
-				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
-					.join(" | ")}`,
-			].join("\n"),
-			{
-				parse_mode: "HTML",
-			}
-		)
-		.then(async () => {
-			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
-		});
+	return ctx.reply(data.text.join("\n")).then(async () => {
+		if (process.env.LOCAL_API && data.file) await (data.file as unknown as Bun.BunFile).delete();
+	});
 });
 
 msdIncorporatedComposer.on(":caption", async ctx => {
 	if (!ctx.message?.caption.includes("/search_full")) return;
 	if (ctx.from!.id !== 946070039) return;
 
-	const file = await ctx.getFile();
-	const bun_file =
-		process.env.LOCAL_API === undefined
-			? await fetch(`https://api.telegram.org/file/bot${process.env.TOKEN}/${file.file_path!}`)
-			: Bun.file(file.file_path!);
-	const image = Buffer.from(await bun_file.arrayBuffer());
+	const data = (await search_full(ctx)) as { text: string[]; file: Bun.BunFile };
+	if (!data.text) return;
 
-	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
-	const [res] = await sauceNao(image);
-
-	if (!res || !res.raw.data?.ext_urls?.length) return ctx.reply("Не удалось найти!");
-
-	const { author, creator, characters } = res.raw.data;
-	// @ts-ignore
-	const material = res.raw.data.material;
-	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
-
-	if (urlParser(urls).length <= 0)
-		return ctx.reply("Не удалось найти!").then(async () => {
-			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
-		});
-
-	return ctx
-		.reply(
-			[
-				`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-				`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
-				`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-				`• <b>Ссылки:</b> ${urlParser(urls)
-					.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
-					.join(" | ")}`,
-			].join("\n"),
-			{
-				parse_mode: "HTML",
-			}
-		)
-		.then(async () => {
-			if (process.env.LOCAL_API) await (bun_file as unknown as Bun.BunFile).delete();
-		});
+	return ctx.reply(data.text.join("\n")).then(async () => {
+		if (process.env.LOCAL_API && data.file) await (data.file as unknown as Bun.BunFile).delete();
+	});
 });
 
 msdIncorporatedComposer.command("telegraph", async ctx => {

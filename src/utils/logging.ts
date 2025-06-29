@@ -13,7 +13,7 @@ export const commandLogging = async (ctx: Context, next: NextFunction) => {
 		ctx.logger.ck.grey(`{/}`),
 		ctx.logger.ck.greenBright(normalizeName(ctx.from)),
 		ctx.logger.ck.grey(`[`) + ctx.logger.ck.greenBright(ctx.from?.id) + ctx.logger.ck.grey(`] used command`),
-		ctx.logger.ck.greenBright(ctx.message?.text?.split(" ")[0] ?? ""),
+		ctx.logger.ck.greenBright((ctx.message?.text || ctx.message?.caption)?.split(" ")[0] ?? ""),
 	];
 
 	if (ctx.match && ctx.match.length >= 1) {

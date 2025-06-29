@@ -23,12 +23,13 @@ export const client = new Bot<Context>(process.env.TOKEN, {
 	client: { apiRoot: process.env.LOCAL_API ?? "https://api.telegram.org" },
 });
 
+client.use(async (ctx, next) => commandLogging(ctx, next));
+client.use(async (ctx, next) => buttonLogging(ctx, next));
+
 client.use(autoQuote());
 client.api.config.use(parseMode("HTML"));
 
 client.use(async (ctx, next) => autoUserCaching(ctx, database, next));
-client.use(async (ctx, next) => commandLogging(ctx, next));
-client.use(async (ctx, next) => buttonLogging(ctx, next));
 
 client.use(dickComposer);
 client.use(extraComposer);
