@@ -2,6 +2,7 @@ import { Bot } from "grammy";
 
 import { dickComposer, extraComposer, msdIncorporatedComposer, startComposer, userinfoComposer } from "../elements";
 import {
+	apiRoot,
 	autoQuote,
 	autoUserCaching,
 	buttonLogging,
@@ -20,7 +21,7 @@ await database.connect();
 
 export const client = new Bot<Context>(process.env.TOKEN, {
 	ContextConstructor: createContextConstructor({ database, logger }),
-	client: { apiRoot: process.env.LOCAL_API ?? "https://api.telegram.org" },
+	client: { apiRoot },
 });
 
 client.use(async (ctx, next) => commandLogging(ctx, next));

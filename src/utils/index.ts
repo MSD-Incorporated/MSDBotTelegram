@@ -112,6 +112,8 @@ export const developerID: number = 946070039 as const;
  */
 export const isProd: boolean = process.env.NODE_ENV === "production";
 
+export const apiRoot = process.env.LOCAL_API ?? "https://api.telegram.org";
+
 export const isSubscriber = async (ctx: Context, user_id: number, chat_id: number) =>
 	await ctx.api
 		.getChatMember(chat_id, user_id)
