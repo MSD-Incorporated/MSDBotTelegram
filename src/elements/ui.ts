@@ -6,7 +6,7 @@ import type { ChatMember } from "typegram";
 
 import { dick_history } from "../drizzle";
 import type { UserinfoBackground } from "../drizzle/utils";
-import { userinfo_background_colors, type Context } from "../utils";
+import { dateFormatter, normalizeName, statuses, userinfo_background_colors, type Context } from "../utils";
 
 export const userinfoComposer = new Composer<Context>();
 
@@ -236,12 +236,12 @@ export const getBackground = async (background: UserinfoBackground = "blue") => 
 };
 
 userinfoComposer.command(["userinfo", "ui"], async ctx => {
-	const name = ctx.from?.first_name + (ctx.from?.last_name ? ` ${ctx.from?.last_name}` : "");
+	const name = normalizeName(ctx.from!);
 
 	const dick = await ctx.database.resolveDick(ctx.from!, true, {
-		history: { orderBy: desc(dick_history.created_at), limit: 3, columns: { difference: true } },
+		history: { orderBy: desc(dick_history.created_at), limit: 3, columns: { difference: true, created_at: true } },
 	});
-	const { background, status: msdbot_status } = await ctx.database.resolveMSDBotUser(ctx.from!, true);
+	const { background, status: msdbot_status, id: msdbot_id } = await ctx.database.resolveMSDBotUser(ctx.from!, true);
 
 	const dickSize = dick.size;
 
@@ -297,8 +297,18 @@ userinfoComposer.command(["userinfo", "ui"], async ctx => {
 	const attachment = new InputFile(canvas.toBuffer("image/png"), "avatar.png");
 	return ctx.replyWithPhoto(attachment, {
 		caption: [
-			`👤 <b>Информация о:</b> ${name} [<code>${ctx.from?.id}</code>]\n`,
+			`👤 <b>Информация</b>`,
+			`• <b>Telegram ID:</b> <code>${ctx.from?.id}</code>`,
+			`• <b>Имя:</b> <code>${ctx.from?.first_name}</code>`,
+			`• <b>Фамилия:</b> <code>${ctx.from?.last_name ?? "Отсутствует"}</code>`,
+			`• <b>Юзернейм:</b> <code>${ctx.from?.username ?? "Отсутствует"}</code>\n`,
+			`🤖 <b>MSDBot Информация</b>`,
+			`• <b>MSDBot ID:</b> <code>${msdbot_id}</code>`,
+			`• <b>Статус:</b> <code>${statuses[msdbot_status]}</code>\n`,
+			`🍆 <b>MSDBot Dick Информация</b>`,
 			`• <b>Текущий размер dick:</b> <code>${dickSize}</code> см`,
+			`• <b>Последнее использование:</b> <code>${dick.timestamp.getMilliseconds() == new Date(0).getMilliseconds() ? "Не использовано" : dateFormatter.format(dick.timestamp) + " UTC"}</code>`,
+			`• <b>Последняя рефка:</b> <code>${dick.referral_timestamp.getMilliseconds() == new Date(0).getMilliseconds() ? "Не использовано" : dateFormatter.format(dick.referral_timestamp) + " UTC"}</code>\n`,
 		].join("\n"),
 	});
 });

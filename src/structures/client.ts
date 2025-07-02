@@ -44,6 +44,7 @@ process.once("SIGINT", async () => {
 	await client.stop();
 	await database.close();
 });
+
 process.once("SIGTERM", async () => {
 	logger.custom(logger.ck.red("SIGTERM received, shutting down..."));
 
