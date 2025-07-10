@@ -213,7 +213,7 @@ dickComposer.command(["referrals", "referals", "ref", "refs", "referral"], async
 					: `Вы можете получить ${code(`${value}`)} см!`,
 			isSubscribed: isSubscribed ? "Да" : "Нет",
 			active_referrals_count: active_referrals.length,
-			referrals_count: active_referrals.length,
+			referrals_count: referrals.length,
 		}),
 		{ reply_markup: { inline_keyboard: keyboard }, link_preview_options: { is_disabled: true } }
 	);
