@@ -6,9 +6,9 @@ const ru = {
 	// Global
 	keyboard_same_page: "Вы уже на этой странице",
 	keyboard_wrong_user: "Эта кнопка предназначена не вам",
-	keyboard_back_page: "Назад",
+	keyboard_back_page: "‹ Назад",
 	keyboard_current_page: "{page:number}/{totalPages:number}",
-	keyboard_next_page: "Вперёд",
+	keyboard_next_page: "Вперёд ›",
 
 	// Start Composer
 	start_command: [
