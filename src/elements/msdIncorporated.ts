@@ -45,7 +45,7 @@ const search_full = async (ctx: Context, file_id?: string) => {
 	const sauceNao = sagiri(process.env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(image);
 
-	if (!res || !res.raw.data?.ext_urls?.length) return;
+	if (!res || !res.raw.data?.ext_urls?.length) return { text: ["Не удалось найти!"] };
 
 	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
@@ -109,6 +109,9 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 	if (ctx.from!.id !== 946070039) return;
 
 	const data = (await search_full(ctx)) as { text: string[]; file: Bun.BunFile };
+
+	console.log(data);
+
 	if (!data.text) return;
 
 	return ctx.reply(data.text.join("\n")).then(async () => {
