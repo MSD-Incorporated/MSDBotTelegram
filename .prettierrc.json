@@ -1,12 +1,17 @@
 {
 	"$schema": "https://json.schemastore.org/prettierrc.json",
-	"arrowParens": "avoid",
+
+	"tabWidth": 4,
+	"useTabs": true,
 	"printWidth": 120,
 	"semi": true,
-	"trailingComma": "es5",
-	"quoteProps": "as-needed",
 	"singleQuote": false,
+	"trailingComma": "es5",
+	"arrowParens": "avoid",
 	"bracketSpacing": true,
+	"quoteProps": "as-needed",
+	"endOfLine": "lf",
+
 	"overrides": [
 		{
 			"files": [".vscode/*.json"],
@@ -20,8 +25,8 @@
 			"files": [".github/*.yml", ".github/*.yaml"],
 			"options": {
 				"parser": "yaml",
-				"useTabs": false,
-				"tabWidth": 4
+				"tabWidth": 4,
+				"useTabs": false
 			}
 		}
 	]
