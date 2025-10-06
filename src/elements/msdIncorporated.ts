@@ -110,8 +110,6 @@ msdIncorporatedComposer.on(":caption", async ctx => {
 
 	const data = (await search_full(ctx)) as { text: string[]; file: Bun.BunFile };
 
-	console.log(data);
-
 	if (!data.text) return;
 
 	return ctx.reply(data.text.join("\n")).then(async () => {
