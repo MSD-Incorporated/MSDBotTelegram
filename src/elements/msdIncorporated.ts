@@ -101,6 +101,8 @@ msdIncorporatedComposer.command("search_full", async ctx => {
 	const data = (await search_full(ctx, file_id)) as { text: string[]; file: Bun.BunFile };
 	if (!data.text) return;
 
+	console.log(123);
+
 	return ctx.reply(data.text.join("\n")).then(async () => {
 		if (process.env.LOCAL_API && data.file) await (data.file as unknown as Bun.BunFile).delete();
 	});
