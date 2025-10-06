@@ -31,7 +31,7 @@
 	},
 	"dependencies": {
 		"@napi-rs/canvas": "^0.1.72",
-		"chalk": "^5.4.1",
+		"chalk": "^5.6.2",
 		"drizzle-orm": "^0.44.2",
 		"grammy": "^1.36.3",
 		"sagiri": "^4.3.0",
