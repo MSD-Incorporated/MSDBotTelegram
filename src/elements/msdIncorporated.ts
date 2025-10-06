@@ -52,6 +52,8 @@ const search_full = async (ctx: Context, file_id?: string) => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
+	console.log(123);
+
 	if (urlParser(urls).length == 0) {
 		if (process.env.LOCAL_API) (bun_file as unknown as Bun.BunFile).delete();
 
