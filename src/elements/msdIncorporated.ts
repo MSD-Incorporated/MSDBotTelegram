@@ -123,11 +123,11 @@ msdIncorporatedComposer.command("telegraph", async ctx => {
 	const args = ctx.msg.text.split(/\s+/).slice(1);
 	if (!args?.length) return ctx.reply("Не удалось найти ID");
 
+	console.log(123);
+
 	const page = await getPage(args);
 	const elements = getContent(page);
 	const newPage = await telegraph.createPage(page.title, elements, "MSD Incorporated", "https://t.me/msd_inc");
 
-	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, {
-		parse_mode: "HTML",
-	});
+	return ctx.reply(`<a href="${newPage.url}">${newPage.title}</a>`, { parse_mode: "HTML" });
 });
