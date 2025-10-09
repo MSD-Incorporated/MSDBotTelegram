@@ -31,15 +31,15 @@
 	},
 	"dependencies": {
 		"@napi-rs/canvas": "^0.1.72",
-		"chalk": "^5.4.1",
+		"chalk": "^5.6.2",
 		"drizzle-orm": "^0.44.2",
-		"grammy": "^1.36.3",
+		"grammy": "^1.38.3",
 		"sagiri": "^4.3.0",
 		"telegra.ph": "^1.0.1",
 		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.17",
+		"@types/bun": "^1.2.23",
 		"@types/node": "^24.0.7",
 		"drizzle-kit": "^0.31.4s",
 		"pg": "^8.16.3",
