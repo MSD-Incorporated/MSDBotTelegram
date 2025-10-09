@@ -120,10 +120,11 @@ export const statuses: Record<"user" | "trusted" | "owner", string> = {
 	owner: "Владелец",
 };
 
-export const isSubscriber = async (ctx: Context, user_id: number, chat_id: number) =>
-	await ctx.api
-		.getChatMember(chat_id, user_id)
-		.then(member => ["member", "creator", "administrator"].includes(member.status))
+export const isSubscriber = async (ctx: Context, chat_id: number) =>
+	ctx.from &&
+	ctx.api
+		.getChatMember(chat_id, ctx.from.id)
+		.then(member => new Set(["creator", "administrator", "member"]).has(member.status))
 		.catch(() => false);
 
 export const keyboardBuilder = (ctx: Context, name: string, page: number, sub_name: string, totalPages: number) => {
