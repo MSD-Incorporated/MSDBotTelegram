@@ -1,4 +1,4 @@
-name: Format
+name: 🧹 Format
 
 on:
     push:
@@ -15,20 +15,18 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout
+            - name: 📥 Checkout
               uses: actions/checkout@v5
               with:
                   ref: ${{ github.head_ref }}
 
-            - name: Setup Bun
+            - name: 🛠️ Setup Bun
               uses: oven-sh/setup-bun@v2
-              with:
-                  bun-version: latest
 
-            - name: Format
+            - name: 🧹 Format
               run: bunx prettier --write --cache './{.vscode,src,test}/**/*.{mjs,ts,tsx,js,jsx}'
 
-            - name: Commit changes
+            - name: 💾 Commit changes
               uses: stefanzweifel/git-auto-commit-action@v6
               with:
                   commit_message: Apply formatting changes

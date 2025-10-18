@@ -1,29 +1,37 @@
 {
 	"compilerOptions": {
-		"allowJs": true,
-		"allowSyntheticDefaultImports": true,
-		"allowUnreachableCode": true,
-		"allowUnusedLabels": true,
-		"baseUrl": "./src",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"importHelpers": true,
-		"lib": ["ESNext", "DOM"],
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"newLine": "lf",
-		"noImplicitThis": true,
-		"noUncheckedIndexedAccess": true,
-		"noUnusedParameters": true,
-		"outDir": "./dist",
-		"paths": {},
-		"removeComments": false,
-		"verbatimModuleSyntax": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"target": "ESNext"
+		// JavaScript Support
+		"allowJs": true, // Allow JavaScript files to be compiled.
+		"resolveJsonModule": true, // Allow importing .json files.
+
+		// Code Quality & Linting
+		"allowUnreachableCode": true, // Do not report errors on unreachable code.
+		"allowUnusedLabels": true, // Do not report errors on unused labels.
+		"noUnusedParameters": true, // Report errors on unused parameters.
+
+		// Module Resolution
+		"allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export. This does not affect code emit.
+		"baseUrl": "./src", // Base directory to resolve non-relative module names.
+		"esModuleInterop": true, // Enables 'allowSyntheticDefaultImports' and 'forceConsistentCasingInFileNames' for better CommonJS/AMD interop.
+		"forceConsistentCasingInFileNames": true, // Disallow inconsistent casing in file names.
+		"importHelpers": true, // Import helper functions from tslib.
+		"module": "ESNext", // Specify module code generation: 'None', 'CommonJS', 'AMD', 'System', 'ES6', 'ES2015', 'ES2020', 'ES2022', 'ESNext'.
+		"moduleResolution": "Node", // Specify how modules are resolved: 'Node' (for Node.js style resolution), 'Classic' (for traditional TypeScript resolution).
+		"verbatimModuleSyntax": true, // Enforce that 'import type' and 'export type' are used for type-only imports and exports.
+
+		// Output & Environment
+		"lib": ["ESNext", "DOM"], // List of libraries to be included in the compilation.
+		"newLine": "lf", // Specify the end of line sequence: "crlf" (Windows) or "lf" (Unix).
+		"outDir": "./dist", // Redirect output structure to the directory.
+		"removeComments": false, // Do not emit comments in output.
+		"target": "ESNext", // Specify ECMAScript target version: 'ES3', 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', 'ES2022', 'ESNext'.
+
+		// Strictness & Type Checking
+		"noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type.
+		"noUncheckedIndexedAccess": true, // Add 'undefined' to the types of index signatures in objects with 'noImplicitAny' enabled.
+		"skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts).
+		"strict": true // Enable all strict type-checking options.
 	},
-	"exclude": ["dist", "node_modules"],
-	"include": ["src"]
+	"include": ["src"], // Specify an array of filenames or patterns to include in the program.
+	"exclude": ["dist", "node_modules"] // Specify an array of filenames or patterns that should be skipped when resolving 'include'.
 }
