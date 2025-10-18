@@ -1,0 +1,49 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "msdbot_telegram",
+      "devDependencies": {
+        "prettier": "^3.6.2",
+      },
+    },
+    "apps/bot": {
+      "name": "msdbot",
+      "version": "1.0.0",
+      "dependencies": {
+        "@msdbot/env": "workspace:^",
+      },
+      "devDependencies": {
+        "@msdbot/tsconfig": "workspace:^",
+      },
+    },
+    "packages/env": {
+      "name": "@msdbot/env",
+      "version": "1.0.0",
+      "dependencies": {
+        "@t3-oss/env-core": "^0.13.8",
+        "zod": "^4.1.12",
+      },
+      "devDependencies": {
+        "@msdbot/tsconfig": "workspace:^",
+      },
+    },
+    "packages/tsconfig": {
+      "name": "@msdbot/tsconfig",
+      "version": "0.0.0",
+    },
+  },
+  "packages": {
+    "@msdbot/env": ["@msdbot/env@workspace:packages/env"],
+
+    "@msdbot/tsconfig": ["@msdbot/tsconfig@workspace:packages/tsconfig"],
+
+    "@t3-oss/env-core": ["@t3-oss/env-core@0.13.8", "", { "peerDependencies": { "arktype": "^2.1.0", "typescript": ">=5.0.0", "valibot": "^1.0.0-beta.7 || ^1.0.0", "zod": "^3.24.0 || ^4.0.0-beta.0" }, "optionalPeers": ["arktype", "typescript", "valibot", "zod"] }, "sha512-L1inmpzLQyYu4+Q1DyrXsGJYCXbtXjC4cICw1uAKv0ppYPQv656lhZPU91Qd1VS6SO/bou1/q5ufVzBGbNsUpw=="],
+
+    "msdbot": ["msdbot@workspace:apps/bot"],
+
+    "prettier": ["prettier@3.6.2", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ=="],
+
+    "zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
+  }
+}

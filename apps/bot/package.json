@@ -1,0 +1,10 @@
+{
+	"name": "msdbot",
+	"version": "1.0.0",
+	"devDependencies": {
+		"@msdbot/tsconfig": "workspace:^"
+	},
+	"dependencies": {
+		"@msdbot/env": "workspace:^"
+	}
+}
