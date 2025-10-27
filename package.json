@@ -30,7 +30,7 @@
 		"typesafe-i18n": "typesafe-i18n"
 	},
 	"dependencies": {
-		"@napi-rs/canvas": "^0.1.72",
+		"@napi-rs/canvas": "^0.1.81",
 		"chalk": "^5.6.2",
 		"drizzle-orm": "^0.44.2",
 		"grammy": "^1.38.3",
