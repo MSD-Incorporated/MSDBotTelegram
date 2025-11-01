@@ -6,7 +6,7 @@
 	"exports": {
 		".": {
 			"import": "./src/index.ts",
-			"default": "./dist/index.ts"
+			"default": "./dist/index.js"
 		}
 	},
 	"dependencies": {
