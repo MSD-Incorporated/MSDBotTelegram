@@ -12,9 +12,9 @@ export const env = arkenv({
 	POSTGRES_PASSWORD: type("string").atLeastLength(1),
 	POSTGRES_DB: type("string").atLeastLength(1),
 	POSTGRES_HOST: type("string").atLeastLength(1),
-	POSTGRES_PORT: type("number.port"),
+	POSTGRES_PORT: type("number.port").default("5432"),
 
-	NODE_ENV: type.enumerated("dev", "prod").atLeastLength(3).default("dev"),
+	NODE_ENV: type.enumerated("dev", "prod").default("dev"),
 	TZ: type("string").atLeastLength(1),
 });
 

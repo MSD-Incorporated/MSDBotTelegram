@@ -1,5 +1,5 @@
 {
-	"name": "@msdbot/env",
+	"name": "@msdbot/i18n",
 	"version": "1.0.0",
 	"private": true,
 	"type": "module",
@@ -13,9 +13,7 @@
 		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
 	},
 	"dependencies": {
-		"@t3-oss/env-core": "^0.13.8",
-		"arkenv": "^0.7.3",
-		"zod": "^4.1.12"
+		"typesafe-i18n": "^5.26.2"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^"

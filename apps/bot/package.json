@@ -1,10 +1,14 @@
 {
 	"name": "msdbot",
 	"version": "1.0.0",
+	"scripts": {
+		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
+	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^"
 	},
 	"dependencies": {
-		"@msdbot/env": "workspace:^"
+		"@msdbot/env": "workspace:^",
+		"@msdbot/i18n": "workspace:^"
 	}
 }

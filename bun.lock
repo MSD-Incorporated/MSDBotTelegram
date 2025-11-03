@@ -12,6 +12,7 @@
       "version": "1.0.0",
       "dependencies": {
         "@msdbot/env": "workspace:^",
+        "@msdbot/i18n": "workspace:^",
       },
       "devDependencies": {
         "@msdbot/tsconfig": "workspace:^",
@@ -29,6 +30,16 @@
         "@msdbot/tsconfig": "workspace:^",
       },
     },
+    "packages/i18n": {
+      "name": "@msdbot/i18n",
+      "version": "1.0.0",
+      "dependencies": {
+        "typesafe-i18n": "^5.26.2",
+      },
+      "devDependencies": {
+        "@msdbot/tsconfig": "workspace:^",
+      },
+    },
     "packages/tsconfig": {
       "name": "@msdbot/tsconfig",
       "version": "0.0.0",
@@ -40,6 +51,8 @@
     "@ark/util": ["@ark/util@0.53.0", "", {}, "sha512-TGn4gLlA6dJcQiqrtCtd88JhGb2XBHo6qIejsDre+nxpGuUVW4G3YZGVrwjNBTO0EyR+ykzIo4joHJzOj+/cpA=="],
 
     "@msdbot/env": ["@msdbot/env@workspace:packages/env"],
+
+    "@msdbot/i18n": ["@msdbot/i18n@workspace:packages/i18n"],
 
     "@msdbot/tsconfig": ["@msdbot/tsconfig@workspace:packages/tsconfig"],
 
@@ -54,6 +67,10 @@
     "msdbot": ["msdbot@workspace:apps/bot"],
 
     "prettier": ["prettier@3.6.2", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ=="],
+
+    "typesafe-i18n": ["typesafe-i18n@5.26.2", "", { "peerDependencies": { "typescript": ">=3.5.1" }, "bin": { "typesafe-i18n": "cli/typesafe-i18n.mjs" } }, "sha512-2QAriFmiY5JwUAJtG7yufoE/XZ1aFBY++wj7YFS2yo89a3jLBfKoWSdq5JfQYk1V2BS7V2c/u+KEcaCQoE65hw=="],
+
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
   }
