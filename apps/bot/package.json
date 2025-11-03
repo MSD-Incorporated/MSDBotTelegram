@@ -4,11 +4,12 @@
 	"scripts": {
 		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
 	},
-	"devDependencies": {
-		"@msdbot/tsconfig": "workspace:^"
-	},
 	"dependencies": {
 		"@msdbot/env": "workspace:^",
-		"@msdbot/i18n": "workspace:^"
+		"@msdbot/i18n": "workspace:^",
+		"grammy": "^1.38.3"
+	},
+	"devDependencies": {
+		"@msdbot/tsconfig": "workspace:^"
 	}
 }

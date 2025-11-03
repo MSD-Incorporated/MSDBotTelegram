@@ -1,3 +1,6 @@
 import { L } from "@msdbot/i18n";
+import { client } from "./structures/client";
 
-console.log(L.en.HI({ name: "World" }));
+client.chatType(["group", "supergroup", "private"]).command("start", async ctx => {
+	return ctx.reply(L.ru.HI({ name: ctx.from.first_name }));
+});
