@@ -38,8 +38,5 @@ drizzle/meta/*.json
 !**/i18n/formatters.ts
 !**/i18n/constants.ts
 
-# gemini-cli settings
-.gemini/
-
 # GitHub App credentials
 gha-creds-*.json
