@@ -13,6 +13,7 @@
       "dependencies": {
         "@msdbot/env": "workspace:^",
         "@msdbot/i18n": "workspace:^",
+        "@msdbot/utils": "workspace:^",
         "grammy": "^1.38.3",
       },
       "devDependencies": {
@@ -45,6 +46,14 @@
       "name": "@msdbot/tsconfig",
       "version": "0.0.0",
     },
+    "packages/utils": {
+      "name": "@msdbot/utils",
+      "version": "1.0.0",
+      "devDependencies": {
+        "@msdbot/tsconfig": "workspace:^",
+        "typegram": "^5.2.0",
+      },
+    },
   },
   "packages": {
     "@ark/schema": ["@ark/schema@0.53.0", "", { "dependencies": { "@ark/util": "0.53.0" } }, "sha512-1PB7RThUiTlmIu8jbSurPrhHpVixPd4C+xNBUF/HrjIENCeDcAMg36n5mpMzED7OQGDVIzpfXXiMnaTiutjHJw=="],
@@ -58,6 +67,8 @@
     "@msdbot/i18n": ["@msdbot/i18n@workspace:packages/i18n"],
 
     "@msdbot/tsconfig": ["@msdbot/tsconfig@workspace:packages/tsconfig"],
+
+    "@msdbot/utils": ["@msdbot/utils@workspace:packages/utils"],
 
     "@t3-oss/env-core": ["@t3-oss/env-core@0.13.8", "", { "peerDependencies": { "arktype": "^2.1.0", "typescript": ">=5.0.0", "valibot": "^1.0.0-beta.7 || ^1.0.0", "zod": "^3.24.0 || ^4.0.0-beta.0" }, "optionalPeers": ["arktype", "typescript", "valibot", "zod"] }, "sha512-L1inmpzLQyYu4+Q1DyrXsGJYCXbtXjC4cICw1uAKv0ppYPQv656lhZPU91Qd1VS6SO/bou1/q5ufVzBGbNsUpw=="],
 
@@ -84,6 +95,8 @@
     "prettier": ["prettier@3.6.2", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ=="],
 
     "tr46": ["tr46@0.0.3", "", {}, "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="],
+
+    "typegram": ["typegram@5.2.0", "", {}, "sha512-QubWrgT+tVPpM3/KkT/Rdd2zTYUwx96hePKBSio8pAWUD847M6W6akZppFs5BKfLtzuHBeTgjps528LJ+H1k+w=="],
 
     "typesafe-i18n": ["typesafe-i18n@5.26.2", "", { "peerDependencies": { "typescript": ">=3.5.1" }, "bin": { "typesafe-i18n": "cli/typesafe-i18n.mjs" } }, "sha512-2QAriFmiY5JwUAJtG7yufoE/XZ1aFBY++wj7YFS2yo89a3jLBfKoWSdq5JfQYk1V2BS7V2c/u+KEcaCQoE65hw=="],
 
