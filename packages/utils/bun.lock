@@ -1,0 +1,13 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "devDependencies": {
+        "typegram": "^5.2.0",
+      },
+    },
+  },
+  "packages": {
+    "typegram": ["typegram@5.2.0", "", {}, "sha512-QubWrgT+tVPpM3/KkT/Rdd2zTYUwx96hePKBSio8pAWUD847M6W6akZppFs5BKfLtzuHBeTgjps528LJ+H1k+w=="],
+  }
+}
