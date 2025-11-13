@@ -7,7 +7,6 @@
 	"dependencies": {
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
-		"@msdbot/utils": "workspace:^",
 		"grammy": "^1.38.3"
 	},
 	"devDependencies": {
