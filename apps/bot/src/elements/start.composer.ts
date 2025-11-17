@@ -11,7 +11,7 @@ const git_commit = typeof GIT_COMMIT !== "undefined" ? GIT_COMMIT : await $`git 
 export const startComposer = new Composer<Context>();
 
 startComposer.chatType(["group", "supergroup", "private"]).command("start", async ctx => {
-	const text = ctx.t.start_command({ msdbot_version, version, bun_version, commit: git_commit ?? "unknown" });
+	const text = ctx.t.start_command({ msdbot_version, version, bun_version, commit: git_commit });
 
 	return ctx.reply(text);
 });
