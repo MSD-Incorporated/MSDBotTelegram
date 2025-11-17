@@ -24,10 +24,11 @@ export const textSanitaizer = <C extends string | number>(text: C): string =>
  * @param {C} content - The content to wrap.
  * @returns {`<blockquote class="tg-blockquote">${C}</blockquote>`} The content wrapped in a blockquote.
  */
-export const blockqoute = <C extends string | number>(
-	content: C
+export const blockquote = <C extends string | number, U extends boolean>(
+	content: C,
+	use_sanitizer: U = true as U
 ): `<blockquote class="tg-blockquote">${C}</blockquote>` => {
-	return `<blockquote class="tg-blockquote">${textSanitaizer(content) as C}</blockquote>`;
+	return `<blockquote class="tg-blockquote">${use_sanitizer ? (textSanitaizer(content) as C) : content}</blockquote>`;
 };
 
 /**

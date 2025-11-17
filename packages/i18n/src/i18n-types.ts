@@ -15,31 +15,45 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​�​�​ ​Д​о​б​р​о​ ​п​о​ж​а​л​о​в​а​т​ь​!​<​/​a​>​<​/​b​>​
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​Д​о​б​р​о​ ​п​о​ж​а​л​о​в​а​т​ь​!​<​/​b​>​
 ​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​g​i​t​h​u​b​.​c​o​m​/​M​S​D​-​I​n​c​o​r​p​o​r​a​t​e​d​/​M​S​D​B​o​t​T​e​l​e​g​r​a​m​"​>​M​S​D​B​o​t​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​m​s​d​b​o​t​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​n​o​d​e​j​s​.​o​r​g​"​>​N​o​d​e​J​S​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​b​u​n​.​s​h​"​>​B​u​n​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​b​u​n​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
 ​
-​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​M​a​s​e​d​M​S​D​"​>​�​�​‍​�​�​ ​Р​а​з​р​а​б​о​т​ч​и​к​<​/​a​>​<​/​b​>
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​M​a​s​e​d​M​S​D​"​>​�​�​‍​�​�​ ​Р​а​з​р​а​б​о​т​ч​и​к​<​/​a​>​<​/​b​>​丨​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​�​�​ ​К​а​н​а​л​<​/​a​>​<​/​b​>
 	 * @param {string} bun_version
 	 * @param {string} msdbot_version
 	 * @param {string} version
 	 */
 	start_command: RequiredParams<'bun_version' | 'msdbot_version' | 'version'>
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​Я​ ​т​у​т​!​
+​<​/​b​>​
+​<​b​l​o​c​k​q​u​o​t​e​ ​c​l​a​s​s​=​"​t​g​-​b​l​o​c​k​q​u​o​t​e​"​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​❓​ ​Н​е​ ​м​о​ж​е​т​е​ ​р​а​з​о​б​р​а​т​ь​с​я​?​<​/​b​>​<​/​b​l​o​c​k​q​u​o​t​e​>​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​р​о​с​т​о​ ​н​а​п​и​ш​и​т​е​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​/​<​/​c​o​d​e​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​п​о​с​л​е​ ​ч​е​г​о​,​ ​в​ы​ ​п​о​л​у​ч​и​т​е​ ​с​п​и​с​о​к​ ​и​м​е​ю​щ​и​х​с​я​ ​у​ ​м​е​н​я​ ​к​о​м​а​н​д​!​<​/​b​>
+	 */
+	im_here: string
 }
 
 export type TranslationFunctions = {
 	/**
-	 * <b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">👋 Добро пожаловать!</a></b>
+	 * <b class="tg-bold">👋 Добро пожаловать!</b>
 
 • <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://github.com/MSD-Incorporated/MSDBotTelegram">MSDBot</a></b> — <code class="tg-code">v{msdbot_version}</code>
 • <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://nodejs.org">NodeJS</a></b> — <code class="tg-code">{version}</code>
 • <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://bun.sh">Bun</a></b> — <code class="tg-code">v{bun_version}</code>
 
-<b class="tg-bold"><a class="tg-text-link" href="https://t.me/MasedMSD">🧑‍💻 Разработчик</a></b>
+<b class="tg-bold"><a class="tg-text-link" href="https://t.me/MasedMSD">🧑‍💻 Разработчик</a></b>丨<b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">📰 Канал</a></b>
 	 */
 	start_command: (arg: { bun_version: string, msdbot_version: string, version: string }) => LocalizedString
+	/**
+	 * <b class="tg-bold">👋 Я тут!
+</b>
+<blockquote class="tg-blockquote"><b class="tg-bold">❓ Не можете разобраться?</b></blockquote>
+<b class="tg-bold">Просто напишите</b> <code class="tg-code">/</code> <b class="tg-bold">после чего, вы получите список имеющихся у меня команд!</b>
+	 */
+	im_here: () => LocalizedString
 }
 
 export type Formatters = {}
