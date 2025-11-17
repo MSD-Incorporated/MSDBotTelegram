@@ -1,21 +1,24 @@
 import { Composer, InputFile } from "grammy";
 
 import type { Context } from "../utils";
+import image from "./image.png" with { type: "file" };
 
 export const extraComposer = new Composer<Context>();
 
-extraComposer.on("message:text", async (ctx, next) => {
-	await next();
+extraComposer
+	.filter(({ from }) => from !== undefined && !from.is_bot && Math.random() < 0.01)
+	.on("message:text", async (ctx, next) => {
+		await next();
 
-	if (ctx.message.from.is_bot) return;
-	if (Math.random() < 0.01) return ctx.react("👀");
-});
+		return ctx.react("👀");
+	});
 
-extraComposer.on("::mention", async (ctx, next) => {
-	await next();
+extraComposer
+	.filter(({ message, me }) => message !== undefined && message.text === `@${me.username}`)
+	.on("::mention", async (ctx, next) => {
+		await next();
 
-	if (ctx.message?.text == `@${ctx.me.username}`)
-		return ctx.replyWithPhoto(new InputFile("./apps/bot/src/elements/image.png"), {
+		return ctx.replyWithPhoto(new InputFile(await Bun.file(image).bytes()), {
 			caption: ctx.t.im_here(),
 		});
-});
+	});

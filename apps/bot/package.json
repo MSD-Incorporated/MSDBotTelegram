@@ -2,7 +2,7 @@
 	"name": "msdbot",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
+		"build": "bun build --entrypoint ./src/**.ts --compile --outfile dist/msdbot_telegram --target bun-linux-x64"
 	},
 	"dependencies": {
 		"@msdbot/env": "workspace:^",
