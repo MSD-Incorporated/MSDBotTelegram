@@ -17,9 +17,9 @@ type RootTranslation = {
 	/**
 	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​�​�​ ​Д​о​б​р​о​ ​п​о​ж​а​л​о​в​а​т​ь​!​<​/​a​>​<​/​b​>​
 ​
-​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​Т​е​к​у​щ​а​я​ ​в​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​g​i​t​h​u​b​.​c​o​m​/​M​S​D​-​I​n​c​o​r​p​o​r​a​t​e​d​/​M​S​D​B​o​t​T​e​l​e​g​r​a​m​"​>​M​S​D​B​o​t​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​m​s​d​b​o​t​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
-​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​Т​е​к​у​щ​а​я​ ​в​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​n​o​d​e​j​s​.​o​r​g​"​>​N​o​d​e​J​S​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
-​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​Т​е​к​у​щ​а​я​ ​в​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​b​u​n​.​s​h​"​>​B​u​n​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​b​u​n​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
+​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​g​i​t​h​u​b​.​c​o​m​/​M​S​D​-​I​n​c​o​r​p​o​r​a​t​e​d​/​M​S​D​B​o​t​T​e​l​e​g​r​a​m​"​>​M​S​D​B​o​t​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​m​s​d​b​o​t​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
+​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​n​o​d​e​j​s​.​o​r​g​"​>​N​o​d​e​J​S​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
+​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​е​р​с​и​я​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​b​u​n​.​s​h​"​>​B​u​n​<​/​a​>​<​/​b​>​ ​—​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​v​{​b​u​n​_​v​e​r​s​i​o​n​}​<​/​c​o​d​e​>​
 ​
 ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​M​a​s​e​d​M​S​D​"​>​�​�​‍​�​�​ ​Р​а​з​р​а​б​о​т​ч​и​к​<​/​a​>​<​/​b​>
 	 * @param {string} bun_version
@@ -33,9 +33,9 @@ export type TranslationFunctions = {
 	/**
 	 * <b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">👋 Добро пожаловать!</a></b>
 
-• <b class="tg-bold">Текущая версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://github.com/MSD-Incorporated/MSDBotTelegram">MSDBot</a></b> — <code class="tg-code">v{msdbot_version}</code>
-• <b class="tg-bold">Текущая версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://nodejs.org">NodeJS</a></b> — <code class="tg-code">{version}</code>
-• <b class="tg-bold">Текущая версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://bun.sh">Bun</a></b> — <code class="tg-code">v{bun_version}</code>
+• <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://github.com/MSD-Incorporated/MSDBotTelegram">MSDBot</a></b> — <code class="tg-code">v{msdbot_version}</code>
+• <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://nodejs.org">NodeJS</a></b> — <code class="tg-code">{version}</code>
+• <b class="tg-bold">Версия</b> <b class="tg-bold"><a class="tg-text-link" href="https://bun.sh">Bun</a></b> — <code class="tg-code">v{bun_version}</code>
 
 <b class="tg-bold"><a class="tg-text-link" href="https://t.me/MasedMSD">🧑‍💻 Разработчик</a></b>
 	 */

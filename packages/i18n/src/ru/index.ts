@@ -5,9 +5,9 @@ import type { BaseTranslation } from "../i18n-types";
 const ru = {
 	start_command: [
 		`${boldAndTextLink("👋 Добро пожаловать!", INFOMRATION_CHANNEL)}\n`,
-		`• ${bold(`Текущая версия`)} ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("v{msdbot_version:string}")}`,
-		`• ${bold("Текущая версия")} ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
-		`• ${bold("Текущая версия")} ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}\n`,
+		`• ${bold(`Версия`)} ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("v{msdbot_version:string}")}`,
+		`• ${bold("Версия")} ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
+		`• ${bold("Версия")} ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}\n`,
 		boldAndTextLink(`🧑‍💻 Разработчик`, DEVELOPER),
 	].join("\n"),
 } satisfies BaseTranslation;

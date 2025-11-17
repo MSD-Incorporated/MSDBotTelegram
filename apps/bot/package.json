@@ -10,6 +10,7 @@
 		"grammy": "^1.38.3"
 	},
 	"devDependencies": {
-		"@msdbot/tsconfig": "workspace:^"
+		"@msdbot/tsconfig": "workspace:^",
+		"@types/bun": "latest"
 	}
 }
