@@ -3,6 +3,8 @@ name: 🧹 Format
 on:
     push:
     pull_request:
+        branches:
+            - main
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
