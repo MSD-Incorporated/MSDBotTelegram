@@ -22,8 +22,8 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 
 	const refferer_id = Number(ctx.match.slice("ref_".length));
 	const refferal = await ctx.database.query.referrals.findFirst({
-		where: (refs, { eq }) => eq(refs.referral, ctx.from.id),
 		columns: { id: true },
+		where: (refs, { eq }) => eq(refs.referral, ctx.from.id),
 	});
 	const referrer = await ctx.database.query.users.findFirst({
 		columns: { user_id: true, first_name: true, last_name: true },

@@ -4,7 +4,6 @@ import { im_here_banner } from "@msdbot/assets";
 import type { Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();
-const banner = new InputFile(im_here_banner);
 
 extraComposer
 	.chatType(["group", "supergroup", "private"])
@@ -21,5 +20,5 @@ extraComposer
 	.on("::mention", async (ctx, next) => {
 		await next();
 
-		return ctx.replyWithPhoto(banner, { caption: ctx.t.im_here() });
+		return ctx.replyWithPhoto(new InputFile(im_here_banner), { caption: ctx.t.im_here() });
 	});
