@@ -12,6 +12,7 @@
       "name": "msdbot",
       "version": "1.0.0",
       "dependencies": {
+        "@msdbot/assets": "workspace:^",
         "@msdbot/env": "workspace:^",
         "@msdbot/i18n": "workspace:^",
         "grammy": "^1.38.3",
@@ -19,6 +20,13 @@
       "devDependencies": {
         "@msdbot/tsconfig": "workspace:^",
         "@types/bun": "latest",
+      },
+    },
+    "packages/assets": {
+      "name": "@msdbot/assets",
+      "version": "1.0.0",
+      "devDependencies": {
+        "@msdbot/tsconfig": "workspace:^",
       },
     },
     "packages/env": {
@@ -54,6 +62,8 @@
     "@ark/util": ["@ark/util@0.53.0", "", {}, "sha512-TGn4gLlA6dJcQiqrtCtd88JhGb2XBHo6qIejsDre+nxpGuUVW4G3YZGVrwjNBTO0EyR+ykzIo4joHJzOj+/cpA=="],
 
     "@grammyjs/types": ["@grammyjs/types@3.22.2", "", {}, "sha512-uu7DX2ezhnBPozL3bXHmwhLvaFsh59E4QyviNH4Cij7EdVekYrs6mCzeXsa2pDk30l3uXo7DBahlZLzTPtpYZg=="],
+
+    "@msdbot/assets": ["@msdbot/assets@workspace:packages/assets"],
 
     "@msdbot/env": ["@msdbot/env@workspace:packages/env"],
 

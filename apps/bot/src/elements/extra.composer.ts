@@ -1,10 +1,10 @@
 import { Composer, InputFile } from "grammy";
 
+import { im_here_banner } from "@msdbot/assets";
 import type { Context } from "../utils";
-import image from "./image.png" with { type: "file" };
 
 export const extraComposer = new Composer<Context>();
-const banner = new InputFile(await Bun.file(image).bytes());
+const banner = new InputFile(im_here_banner);
 
 extraComposer
 	.chatType(["group", "supergroup", "private"])

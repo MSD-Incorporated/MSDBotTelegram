@@ -5,6 +5,7 @@
 		"build": "bun build --entrypoint ./src/**.ts --compile --outfile dist/msdbot_telegram --target bun-linux-x64"
 	},
 	"dependencies": {
+		"@msdbot/assets": "workspace:^",
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
 		"grammy": "^1.38.3"
