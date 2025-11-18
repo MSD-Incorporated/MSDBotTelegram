@@ -1,18 +1,23 @@
+import type { Database } from "@msdbot/database";
 import { L, type Locales, type TranslationFunctions, isLocale } from "@msdbot/i18n";
 import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
 
 interface ExtendedContextFlavor {
+	database: Database["db"];
 	t: TranslationFunctions;
 	normalized_name: string;
 }
 
-interface Dependencies {}
+interface Dependencies {
+	database: Database["db"];
+}
 
 export type Context = DefaultContext & ExtendedContextFlavor;
 
-export function createContextConstructor({}: Dependencies) {
+export function createContextConstructor({ database }: Dependencies) {
 	return class extends DefaultContext implements ExtendedContextFlavor {
+		database: Database["db"];
 		t: TranslationFunctions;
 		normalized_name: string;
 
@@ -23,6 +28,7 @@ export function createContextConstructor({}: Dependencies) {
 			const locale = from.language_code;
 			const normalized_name = from.last_name ? `${from.first_name} ${from.last_name}` : from.first_name;
 
+			this.database = database;
 			this.normalized_name = normalized_name;
 			this.t = locale && isLocale(locale as Locales) ? L[locale as Locales] : L["ru"];
 		}

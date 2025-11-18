@@ -1,0 +1,27 @@
+{
+	"name": "@msdbot/database",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun",
+		"drizzle:generate": "bun --env-file=../../.env drizzle-kit generate",
+		"drizzle:migrate": "bun --env-file=../../.env drizzle-kit migrate"
+	},
+	"dependencies": {
+		"@msdbot/env": "workspace:^",
+		"drizzle-orm": "^0.44.7",
+		"pg": "^8.16.3"
+	},
+	"devDependencies": {
+		"@msdbot/tsconfig": "workspace:^",
+		"@types/pg": "^8.15.6",
+		"drizzle-kit": "^0.31.7"
+	}
+}

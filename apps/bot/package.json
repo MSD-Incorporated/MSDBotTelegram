@@ -6,6 +6,7 @@
 	},
 	"dependencies": {
 		"@msdbot/assets": "workspace:^",
+		"@msdbot/database": "workspace:^",
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
 		"grammy": "^1.38.3"
