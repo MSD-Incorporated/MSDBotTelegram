@@ -29,6 +29,15 @@ type RootTranslation = {
 	 */
 	start_command: RequiredParams<'bun_version' | 'commit' | 'msdbot_version' | 'version'>
 	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​Д​о​б​р​о​ ​п​о​ж​а​л​о​в​а​т​ь​!​<​/​b​>​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​ы​ ​у​с​п​е​ш​н​о​ ​з​а​р​е​г​и​с​т​р​и​р​о​в​а​л​и​с​ь​ ​п​о​ ​р​е​ф​е​р​а​л​ь​н​о​й​ ​с​с​ы​л​к​е​.​
+​<​/​b​>​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​В​а​ш​ ​р​е​ф​ф​е​р​е​р​:​<​/​b​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​t​g​:​/​/​o​p​e​n​m​e​s​s​a​g​e​?​u​s​e​r​_​i​d​=​{​r​e​f​f​e​r​e​r​_​i​d​}​"​>​{​r​e​f​f​e​r​e​r​_​n​a​m​e​}​<​/​a​>​<​/​b​>​ ​[​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​r​e​f​f​e​r​e​r​_​i​d​}​<​/​c​o​d​e​>​]
+	 * @param {number} refferer_id
+	 * @param {string} refferer_name
+	 */
+	start_refferal_command: RequiredParams<'refferer_id' | 'refferer_id' | 'refferer_name'>
+	/**
 	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​Я​ ​т​у​т​!​
 ​<​/​b​>​
 ​<​b​l​o​c​k​q​u​o​t​e​ ​c​l​a​s​s​=​"​t​g​-​b​l​o​c​k​q​u​o​t​e​"​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​❓​ ​Н​е​ ​м​о​ж​е​т​е​ ​р​а​з​о​б​р​а​т​ь​с​я​?​<​/​b​>​<​/​b​l​o​c​k​q​u​o​t​e​>​
@@ -48,6 +57,13 @@ export type TranslationFunctions = {
 <b class="tg-bold"><a class="tg-text-link" href="https://t.me/MasedMSD">🧑‍💻 Разработчик</a></b>丨<b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">📰 Канал</a></b>
 	 */
 	start_command: (arg: { bun_version: string, commit: string, msdbot_version: string, version: string }) => LocalizedString
+	/**
+	 * <b class="tg-bold">👋 Добро пожаловать!</b>
+<b class="tg-bold">Вы успешно зарегистрировались по реферальной ссылке.
+</b>
+<b class="tg-bold">👤 Ваш рефферер:</b> <b class="tg-bold"><a class="tg-text-link" href="tg://openmessage?user_id={refferer_id}">{refferer_name}</a></b> [<code class="tg-code">{refferer_id}</code>]
+	 */
+	start_refferal_command: (arg: { refferer_id: number, refferer_name: string }) => LocalizedString
 	/**
 	 * <b class="tg-bold">👋 Я тут!
 </b>

@@ -2,6 +2,7 @@ import type { Database } from "@msdbot/database";
 import { L, type Locales, type TranslationFunctions, isLocale } from "@msdbot/i18n";
 import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
+import { normalizeName } from "./little-utils";
 
 interface ExtendedContextFlavor {
 	database: Database["db"];
@@ -26,7 +27,7 @@ export function createContextConstructor({ database }: Dependencies) {
 
 			const from = this.update.message!.from;
 			const locale = from.language_code;
-			const normalized_name = from.last_name ? `${from.first_name} ${from.last_name}` : from.first_name;
+			const normalized_name = normalizeName(from);
 
 			this.database = database;
 			this.normalized_name = normalized_name;

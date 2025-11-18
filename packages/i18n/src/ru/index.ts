@@ -10,6 +10,12 @@ const ru = {
 		`• ${bold("Версия")} ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}\n`,
 		[boldAndTextLink(`🧑‍💻 Разработчик`, DEVELOPER), boldAndTextLink("📰 Канал", INFOMRATION_CHANNEL)].join("丨"),
 	].join("\n"),
+	start_refferal_command: [
+		bold(`👋 Добро пожаловать!`),
+		bold(`Вы успешно зарегистрировались по реферальной ссылке.\n`),
+		`${bold(`👤 Ваш рефферер:`)} ${boldAndTextLink("{refferer_name:string}", "tg://openmessage?user_id={refferer_id:number}")} [${code("{refferer_id:number}")}]`,
+	].join("\n"),
+
 	im_here: [
 		bold("👋 Я тут!\n"),
 		blockquote(bold("❓ Не можете разобраться?"), false),
