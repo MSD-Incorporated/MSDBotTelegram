@@ -1,4 +1,5 @@
 import database from "@msdbot/database";
+
 import { client } from "./structures/client";
 import { onStart } from "./utils";
 

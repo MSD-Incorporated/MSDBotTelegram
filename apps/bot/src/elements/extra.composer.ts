@@ -1,6 +1,6 @@
+import { im_here_banner } from "@msdbot/assets";
 import { Composer, InputFile } from "grammy";
 
-import { im_here_banner } from "@msdbot/assets";
 import type { Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();

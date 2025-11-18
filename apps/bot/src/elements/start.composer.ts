@@ -1,8 +1,8 @@
-import { Composer, InputFile } from "grammy";
-
 import { referral_banner } from "@msdbot/assets";
 import { referrals } from "@msdbot/database";
 import { $ } from "bun";
+import { Composer, InputFile } from "grammy";
+
 import { version as msdbot_version } from "../../package.json" with { type: "json" };
 import { normalizeName, type Context } from "../utils";
 
