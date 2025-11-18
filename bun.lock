@@ -49,7 +49,6 @@
       "version": "1.0.0",
       "dependencies": {
         "@t3-oss/env-core": "^0.13.8",
-        "arkenv": "^0.7.3",
         "zod": "^4.1.12",
       },
       "devDependencies": {
@@ -157,8 +156,6 @@
     "@types/react": ["@types/react@19.2.5", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-keKxkZMqnDicuvFoJbzrhbtdLSPhj/rZThDlKWCDbgXmUg0rEUFtRssDXKYmtXluZlIqiC5VqkCgRwzuyLHKHw=="],
 
     "abort-controller": ["abort-controller@3.0.0", "", { "dependencies": { "event-target-shim": "^5.0.0" } }, "sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg=="],
-
-    "arkenv": ["arkenv@0.7.3", "", { "peerDependencies": { "arktype": "^2.1.22" } }, "sha512-NOhYihh4ln5utmUi6NdsMh7wdsbJ82i19LmQqQeF+DAPaCeGq2YoMXHEpBN6gS6ibC7kecTEzh5oww5A60yGwg=="],
 
     "arkregex": ["arkregex@0.0.2", "", { "dependencies": { "@ark/util": "0.53.0" } }, "sha512-ttjDUICBVoXD/m8bf7eOjx8XMR6yIT2FmmW9vsN0FCcFOygEZvvIX8zK98tTdXkzi0LkRi5CmadB44jFEIyDNA=="],
 

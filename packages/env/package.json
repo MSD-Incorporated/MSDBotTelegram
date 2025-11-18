@@ -14,7 +14,6 @@
 	},
 	"dependencies": {
 		"@t3-oss/env-core": "^0.13.8",
-		"arkenv": "^0.7.3",
 		"zod": "^4.1.12"
 	},
 	"devDependencies": {

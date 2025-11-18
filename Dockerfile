@@ -14,7 +14,7 @@ COPY ./apps/bot ./apps/bot
 COPY package.json bun.lock ./
 COPY --from=bun_image /usr/local/bin/bun /usr/local/bin/
 
-ENV NODE_ENV=production
+ENV NODE_ENV=prod
 
 RUN echo "Building with GIT_COMMIT=${GIT_COMMIT}"
 

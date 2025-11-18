@@ -1,5 +1,6 @@
 import database from "@msdbot/database";
-import { env } from "@msdbot/env";
+import env from "@msdbot/env";
+
 import { Bot } from "grammy";
 
 import { extraComposer, startComposer } from "../elements";

@@ -1,21 +1,33 @@
-import arkenv, { type } from "arkenv";
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
 
-export const env = arkenv({
-	BOT_TOKEN: type("string")
-		.configure({ examples: ["123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"] })
-		.atLeastLength(1),
-	LOCAL_API: type("string.url")
-		.configure({ examples: ["http://telegram-bot-api:8081"] })
-		.atLeastLength(1),
+export const env = createEnv({
+	server: {
+		BOT_TOKEN: z.string().min(1),
+		LOCAL_API: z.string().min(1),
 
-	POSTGRES_USER: type("string").atLeastLength(1),
-	POSTGRES_PASSWORD: type("string").atLeastLength(1),
-	POSTGRES_DB: type("string").atLeastLength(1),
-	POSTGRES_HOST: type("string").atLeastLength(1),
-	POSTGRES_PORT: type("number.port").default("5432"),
+		POSTGRES_USER: z.string().min(1),
+		POSTGRES_PASSWORD: z.string().min(1),
+		POSTGRES_DB: z.string().min(1),
+		POSTGRES_HOST: z.string().min(1),
+		POSTGRES_PORT: z.coerce.number().default(5432),
 
-	NODE_ENV: type.enumerated("dev", "prod").default("dev"),
-	TZ: type("string").atLeastLength(1),
+		NODE_ENV: z.enum(["dev", "prod"]).default("dev"),
+		TZ: z.string().min(1),
+	},
+	runtimeEnv: {
+		BOT_TOKEN: process.env.BOT_TOKEN,
+		LOCAL_API: process.env.LOCAL_API,
+
+		POSTGRES_USER: process.env.POSTGRES_USER,
+		POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+		POSTGRES_DB: process.env.POSTGRES_DB,
+		POSTGRES_HOST: process.env.POSTGRES_HOST,
+		POSTGRES_PORT: process.env.POSTGRES_PORT,
+
+		NODE_ENV: process.env.NODE_ENV,
+		TZ: process.env.TZ,
+	},
 });
 
 const createConfig = () => ({
