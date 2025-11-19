@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1763485492957,
-      "tag": "0000_tricky_madripoor",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1763486728566,
-      "tag": "0001_steep_fixer",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1763487226224,
-      "tag": "0002_lean_dazzler",
+      "when": 1763535926619,
+      "tag": "0000_blushing_overlord",
       "breakpoints": true
     }
   ]

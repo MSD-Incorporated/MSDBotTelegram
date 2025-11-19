@@ -8,7 +8,7 @@ export const dicks = pgTable("dicks", {
 	user_id: bigint("user_id", { mode: "number" })
 		.unique()
 		.primaryKey()
-		.references(() => users.user_id)
+		.references(() => users.id)
 		.notNull(),
 	size: integer("size").default(0).notNull(),
 	timestamp: timestamp("timestamp", { mode: "date", precision: 3, withTimezone: true })
