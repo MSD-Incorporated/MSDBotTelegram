@@ -35,6 +35,6 @@ jobs:
               with:
                   context: .
                   push: true
-                  tags: mased/msdbot_telegram:latest
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
                   build-args: |
                       GIT_COMMIT=${{ steps.sha.outputs.short_sha }}
