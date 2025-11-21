@@ -1,5 +1,4 @@
 import { referral_banner } from "@msdbot/assets";
-import { referrals } from "@msdbot/database";
 import { $ } from "bun";
 import { Composer, InputFile } from "grammy";
 
@@ -23,24 +22,18 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 	if (!ctx.match) return replyStartCommand(ctx);
 
 	const referrer_id = Number(ctx.match.slice("ref_".length));
-	const referral = await ctx.database.query.referrals.findFirst({
-		columns: { id: true },
-		where: (refs, { eq }) => eq(refs.referral, ctx.from.id),
-	});
+	const referral = await ctx.database.referrals.resolve(ctx.from);
 
 	if (referral || ctx.from.id === referrer_id) return replyStartCommand(ctx);
 
-	const referrer = await ctx.database.query.users.findFirst({
-		columns: { id: true, first_name: true, last_name: true },
-		where: (users, { eq }) => eq(users.id, referrer_id),
-	});
+	const referrer = await ctx.database.users.resolve(
+		{ id: referrer_id },
+		{ columns: { id: true, first_name: true, last_name: true } }
+	);
 
 	if (!referrer) return replyStartCommand(ctx);
 
-	await ctx.database.insert(referrals).values({
-		referral: ctx.from.id,
-		referrer: referrer_id,
-	});
+	await ctx.database.referrals.create(ctx.from, referrer_id);
 
 	return ctx.replyWithPhoto(ref_banner, {
 		caption: ctx.t.start_referral_command({

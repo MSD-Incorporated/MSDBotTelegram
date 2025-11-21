@@ -3,7 +3,10 @@ import { SQL } from "bun";
 import { type ExtractTablesWithRelations } from "drizzle-orm";
 import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 
+import { DickSystem } from "./dick.system";
 import * as schema from "./drizzle/index";
+import { ReferralSystem } from "./referrals.system";
+import { UserSystem } from "./user.system";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;
@@ -18,6 +21,10 @@ export class Database {
 	 * The database instance.
 	 */
 	public readonly db: BunSQLDatabase<Schema>;
+
+	public readonly users: UserSystem;
+	public readonly dicks: DickSystem;
+	public readonly referrals: ReferralSystem;
 
 	/**
 	 * Creates a new instance of the Database class.
@@ -34,6 +41,9 @@ export class Database {
 		});
 
 		this.db = drizzle({ client: Bun.sql, schema });
+		this.users = new UserSystem(this.db);
+		this.dicks = new DickSystem(this.db);
+		this.referrals = new ReferralSystem(this.db);
 	}
 
 	/**
@@ -61,5 +71,8 @@ export class Database {
 
 export * from "drizzle-orm";
 export * from "./drizzle/index";
+
+export { DickSystem } from "./dick.system";
+export { UserSystem } from "./user.system";
 
 export default new Database();

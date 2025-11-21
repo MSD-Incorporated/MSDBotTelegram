@@ -2,11 +2,11 @@ import database from "@msdbot/database";
 import env from "@msdbot/env";
 import { Bot } from "grammy";
 
-import { extraComposer, startComposer } from "../elements";
+import { dickComposer, extraComposer, startComposer } from "../elements";
 import { autoQuote, createContextConstructor, parseMode, type Context } from "../utils";
 
 export const client = new Bot<Context>(env.BOT_TOKEN, {
-	ContextConstructor: createContextConstructor({ database: database["db"] }),
+	ContextConstructor: createContextConstructor({ database: database }),
 });
 
 client.use(autoQuote());
@@ -24,5 +24,6 @@ process.once("SIGTERM", async () => {
 	process.exit();
 });
 
+client.use(dickComposer);
 client.use(extraComposer);
 client.use(startComposer);

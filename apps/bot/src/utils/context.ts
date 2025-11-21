@@ -6,20 +6,20 @@ import type { Update, UserFromGetMe } from "grammy/types";
 import { normalizeName } from "./little-utils";
 
 interface ExtendedContextFlavor {
-	database: Database["db"];
+	database: Omit<Database, "client" | "close" | "connect">;
 	t: TranslationFunctions;
 	normalized_name: string;
 }
 
 interface Dependencies {
-	database: Database["db"];
+	database: Database;
 }
 
 export type Context = DefaultContext & ExtendedContextFlavor;
 
 export function createContextConstructor({ database }: Dependencies) {
 	return class extends DefaultContext implements ExtendedContextFlavor {
-		database: Database["db"];
+		database: Database;
 		t: TranslationFunctions;
 		normalized_name: string;
 
