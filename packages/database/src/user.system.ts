@@ -49,6 +49,8 @@ export class UserSystem {
 
 			return created as Exclude<typeof searchResult, undefined>;
 		}
+
+		return undefined as Exclude<typeof searchResult, undefined>;
 	}
 
 	public readonly find = async <

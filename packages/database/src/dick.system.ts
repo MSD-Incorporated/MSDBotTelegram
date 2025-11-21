@@ -52,6 +52,8 @@ export class DickSystem {
 
 			return created as Exclude<typeof searchResult, undefined>;
 		}
+
+		return undefined as Exclude<typeof searchResult, undefined>;
 	}
 
 	public readonly find = async <
@@ -91,8 +93,12 @@ export class DickSystem {
 		)[0];
 	};
 
-	public readonly update = async ({ id }: { id: number }, size: number) => {
-		return this.database.update(schema.dicks).set({ size }).where(eq(schema.dicks.user_id, id)).returning();
+	public readonly update = async (userId: number, size: number) => {
+		return this.database
+			.update(schema.dicks)
+			.set({ size, timestamp: new Date() })
+			.where(eq(schema.dicks.user_id, userId))
+			.returning();
 	};
 
 	public readonly addHistory = async ({ id }: { id: number }, size: number, difference: number) => {
