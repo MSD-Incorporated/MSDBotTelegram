@@ -22,9 +22,10 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 	if (!ctx.match) return replyStartCommand(ctx);
 
 	const referrer_id = Number(ctx.match.slice("ref_".length));
-	const referral = await ctx.database.referrals.resolve(ctx.from);
+	if (ctx.from.id === referrer_id) return replyStartCommand(ctx);
 
-	if (referral || ctx.from.id === referrer_id) return replyStartCommand(ctx);
+	const referral = await ctx.database.referrals.resolve(ctx.from);
+	if (referral) return replyStartCommand(ctx);
 
 	const referrer = await ctx.database.users.resolve(
 		{ id: referrer_id },
