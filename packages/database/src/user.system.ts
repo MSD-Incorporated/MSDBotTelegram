@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-
 import type { User } from "typegram";
+
 import * as schema from "./drizzle";
 import type { TUserInsert } from "./drizzle/types";
 import Database from "./index";

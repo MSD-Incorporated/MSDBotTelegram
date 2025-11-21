@@ -1,9 +1,9 @@
 import { asc, desc, eq } from "drizzle-orm";
-import type { TelegramUser } from "./user.system";
 
 import * as schema from "./drizzle";
 import Database from "./index";
 import type { ColumnRelation, IncludeRelation } from "./typings/types";
+import type { TelegramUser } from "./user.system";
 
 type DickParams<
 	CreateIfNotExist extends boolean,
