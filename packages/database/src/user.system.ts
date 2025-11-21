@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import type { User } from "typegram";
 
+import type { User } from "typegram";
 import * as schema from "./drizzle";
 import type { TUserInsert } from "./drizzle/types";
 import Database from "./index";
@@ -33,21 +33,18 @@ export class UserSystem {
 		user: CreateIfNotExist extends true ? TelegramUser : { id: number },
 		{ createIfNotExist, include, columns }: UserParams<"users", CreateIfNotExist, Include, Columns> = {}
 	) {
-		const searchResult = await this.find(user, { include, columns });
+		const searchResult = await this.find<Include, Columns>(user, { include, columns });
 
-		if (searchResult) {
-			return searchResult as Exclude<typeof searchResult, undefined>;
-		}
+		if (searchResult) return searchResult as Exclude<typeof searchResult, undefined>;
 
 		if (createIfNotExist) {
 			const payload = user as TelegramUser;
 			const created = await this.upsert(payload);
 
-			if (include) {
-				return (await this.find(user, { include, columns }))!;
-			}
+			if (include && Object.keys(include).length > 0)
+				return (await this.find<Include, Columns>(user, { include, columns }))!;
 
-			return created as Exclude<typeof searchResult, undefined>;
+			return created as unknown as Exclude<typeof searchResult, undefined>;
 		}
 
 		return undefined as Exclude<typeof searchResult, undefined>;
@@ -61,34 +58,36 @@ export class UserSystem {
 		{ include, columns }: UserParams<"users", false, Include, Columns> = {}
 	) =>
 		this.database.query["users"].findFirst({
-			columns: columns,
+			columns: columns as Columns,
 			where: eq(schema.users.id, id),
-			with: include,
+			with: include as Include,
 		});
 
 	public readonly upsert = async (payload: TelegramUser) => {
-		return this.database
-			.insert(schema.users)
-			.values({
-				id: payload.id,
-				first_name: payload.first_name,
-				last_name: payload.last_name ?? null,
-				username: payload.username ?? null,
-				is_premium: payload.is_premium ?? false,
-			})
-			.onConflictDoUpdate({
-				target: schema.users.id,
-				set: {
+		return (
+			await this.database
+				.insert(schema.users)
+				.values({
+					id: payload.id,
 					first_name: payload.first_name,
 					last_name: payload.last_name ?? null,
 					username: payload.username ?? null,
 					is_premium: payload.is_premium ?? false,
-				},
-			})
-			.returning();
+				})
+				.onConflictDoUpdate({
+					target: schema.users.id,
+					set: {
+						first_name: payload.first_name,
+						last_name: payload.last_name ?? null,
+						username: payload.username ?? null,
+						is_premium: payload.is_premium ?? false,
+					},
+				})
+				.returning()
+		)[0];
 	};
 
-	public readonly update = async (id: number, payload: TUserInsert) => {
-		return this.database.update(schema.users).set(payload).where(eq(schema.users.id, id)).returning();
+	public readonly update = async ({ id }: { id: number }, payload: TUserInsert) => {
+		return (await this.database.update(schema.users).set(payload).where(eq(schema.users.id, id)).returning())[0];
 	};
 }

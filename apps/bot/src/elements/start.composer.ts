@@ -34,7 +34,7 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 
 	if (!referrer) return replyStartCommand(ctx);
 
-	await ctx.database.referrals.create(ctx.from, referrer_id);
+	await ctx.database.referrals.create(ctx.from, { id: referrer_id });
 
 	return ctx.replyWithPhoto(ref_banner, {
 		caption: ctx.t.start_referral_command({

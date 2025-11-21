@@ -1,9 +1,9 @@
 import { asc, desc, eq } from "drizzle-orm";
+import type { TelegramUser } from "./user.system";
 
 import * as schema from "./drizzle";
 import Database from "./index";
 import type { ColumnRelation, IncludeRelation } from "./typings/types";
-import type { TelegramUser } from "./user.system";
 
 type DickParams<
 	CreateIfNotExist extends boolean,
@@ -40,7 +40,7 @@ export class DickSystem {
 		user: CreateIfNotExist extends true ? TelegramUser : { id: number },
 		{ createIfNotExist, include, columns }: DickParams<CreateIfNotExist, Include, Columns> = {}
 	) {
-		const searchResult = await this.find(user, { include, columns });
+		const searchResult = await this.find<Include, Columns>(user, { include, columns });
 
 		if (searchResult) return searchResult as Exclude<typeof searchResult, undefined>;
 
@@ -48,9 +48,10 @@ export class DickSystem {
 			const payload = user as TelegramUser;
 			const created = await this.create(payload);
 
-			if (include) return (await this.find(user, { include, columns }))!;
+			if (include && Object.keys(include).length > 0)
+				return (await this.find<Include, Columns>(user, { include, columns }))!;
 
-			return created as Exclude<typeof searchResult, undefined>;
+			return created as unknown as Exclude<typeof searchResult, undefined>;
 		}
 
 		return undefined as Exclude<typeof searchResult, undefined>;
@@ -64,9 +65,9 @@ export class DickSystem {
 		{ include, columns }: DickParams<false, Include, Columns> = {}
 	) =>
 		this.database.query["dicks"].findFirst({
-			columns: columns,
+			columns: columns as Columns,
 			where: eq(schema.dicks.user_id, id),
-			with: include,
+			with: include as Include,
 		});
 
 	public readonly create = async (payload: TelegramUser) => {
@@ -93,11 +94,11 @@ export class DickSystem {
 		)[0];
 	};
 
-	public readonly update = async (userId: number, size: number) => {
+	public readonly update = async ({ id }: { id: number }, size: number) => {
 		return this.database
 			.update(schema.dicks)
 			.set({ size, timestamp: new Date() })
-			.where(eq(schema.dicks.user_id, userId))
+			.where(eq(schema.dicks.user_id, id))
 			.returning();
 	};
 
@@ -122,9 +123,9 @@ export class DickSystem {
 		{ include, columns, limit = 10, orderBy = "desc" }: HistoryParams<Include, Columns> = {}
 	) =>
 		this.database.query["dick_history"].findMany({
-			columns: columns,
+			columns: columns as Columns,
 			where: eq(schema.dick_history.user_id, id),
-			with: include,
+			with: include as Include,
 			orderBy: [orderBy === "asc" ? asc(schema.dick_history.created_at) : desc(schema.dick_history.created_at)],
 			limit,
 		});

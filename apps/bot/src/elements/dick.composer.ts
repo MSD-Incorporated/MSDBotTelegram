@@ -4,10 +4,12 @@ import type { Context } from "../utils";
 export const dickComposer = new Composer<Context>();
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock"], async ctx => {
-	const { id, size, timestamp } = await ctx.database.dicks.resolve(ctx.from, {
+	const { id, size, timestamp, history } = await ctx.database.dicks.resolve(ctx.from, {
 		createIfNotExist: true,
-		columns: { id: false, size: true, timestamp: true },
+		columns: { id: true, size: true, timestamp: true },
+		include: { history: true },
 	});
+
 	const lastUsed = Date.now() - timestamp.getTime();
 
 	// if (lastUsed < timeout) {
