@@ -1,5 +1,8 @@
+GIT_SHA_FETCH := $(shell git rev-parse HEAD | cut -c 1-8)
+export GIT_COMMIT=$(GIT_SHA_FETCH)
+
 docker_build_bot:
-	docker buildx build -t "mased/msdbot_telegram" --progress=plain .
+	docker build --build-arg GIT_COMMIT=$(GIT_COMMIT) -t mased/msdbot_telegram .
 
 docker_bot_api:
 	docker run \
@@ -7,10 +10,8 @@ docker_bot_api:
 	--network msdbot_internal_network \
 	-p 8081:8081 \
 	--env-file .env \
-	-e TELEGRAM_LOCAL=1 \
 	-v /etc/timezone:/etc/timezone \
-	-v /etc/localtime:/etc/localtime \
-	-v telegram-bot-api:/var/lib/telegram-bot-api \
+	-v telegram_api_data:/var/lib/telegram-bot-api \
 	-d aiogram/telegram-bot-api:latest
 
 docker_bot:
@@ -18,17 +19,6 @@ docker_bot:
 	--name msdbot_telegram \
 	--network msdbot_internal_network \
 	--env-file .env \
-	--volumes-from telegram-bot-api \
-	--restart always \
-	-e NODE_ENV=production \
+	-m 64m --cpus="0.5" \
+	-e NODE_ENV=prod \
 	-d mased/msdbot_telegram
-
-docker_database:
-	docker run \
-	--name database \
-	-itd \
-	-p 5432:5432 \
-	--network msdbot_internal_network \
-	--env-file .env \
-	-v database:/var/lib/postgresql/data \
-	postgres:16-alpine

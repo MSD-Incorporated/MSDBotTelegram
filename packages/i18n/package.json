@@ -1,0 +1,21 @@
+{
+	"name": "@msdbot/i18n",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
+	},
+	"dependencies": {
+		"typesafe-i18n": "^5.26.2"
+	},
+	"devDependencies": {
+		"@msdbot/tsconfig": "workspace:^"
+	}
+}

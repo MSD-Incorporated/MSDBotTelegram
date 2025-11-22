@@ -1,0 +1,22 @@
+{
+	"name": "@msdbot/env",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
+	},
+	"dependencies": {
+		"@t3-oss/env-core": "^0.13.8",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@msdbot/tsconfig": "workspace:^"
+	}
+}

@@ -1,32 +1,30 @@
-# Images
-FROM oven/bun:latest AS bun_image
-FROM frolvlad/alpine-glibc AS base_image
+ARG BUN_VERSION="latest"
+ARG ALPINE_VERSION="latest"
+
+# Bun Image
+FROM oven/bun:${BUN_VERSION} AS bun_image
+FROM frolvlad/alpine-glibc:${ALPINE_VERSION} AS base_image
 
 # Build app
 FROM base_image AS build
+ARG GIT_COMMIT
 
-COPY ./src ./src
+COPY ./packages ./packages
+COPY ./apps/bot ./apps/bot
 COPY package.json bun.lock ./
 COPY --from=bun_image /usr/local/bin/bun /usr/local/bin/
 
-ENV NODE_ENV=production
-RUN --mount=type=cache,target=/etc/apk/cache apk add --update-cache pango-dev librsvg-dev
-RUN --mount=type=cache,target=/root/.npm bun --frozen-lockfile install
+ENV NODE_ENV=prod
 
-RUN bun run typesafe-i18n --no-watch && \
-	bun run build
+RUN echo "Building with GIT_COMMIT=${GIT_COMMIT}"
+
+RUN --mount=type=cache,target=/root/.cache bun install --frozen-lockfile --production --no-cache
+RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --define GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=bun-linux-x64
 
 # App
 FROM base_image AS app
 WORKDIR /app
 
-COPY --from=bun_image /usr/local/bin/bun /usr/local/bin/
-COPY --from=build ./dist ./
-COPY ./src/resources ./src/resources
-COPY package.json bun.lock ./
+COPY --from=build /dist /app
 
-ENV NODE_ENV=production
-RUN --mount=type=cache,target=/etc/apk/cache apk add --update-cache pango-dev fontconfig
-RUN --mount=type=cache,target=/root/.npm bun --frozen-lockfile --production -f install
-
-CMD [ "bun", "run", "index.js" ]
+CMD [ "./msdbot_telegram" ]

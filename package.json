@@ -1,6 +1,5 @@
 {
 	"name": "msdbot_telegram",
-	"version": "1.0.0",
 	"author": {
 		"name": "MasedMSD",
 		"url": "https://github.com/MasedMSD"
@@ -9,42 +8,19 @@
 		"type": "git",
 		"url": "https://github.com/MSD-Incorporated/MSDBotTelegram"
 	},
-	"packageManager": "bun@1.2.10",
-	"module": "./src/index.ts",
-	"main": "./dist/index.js",
+	"devDependencies": {
+		"prettier": "^3.6.2"
+	},
 	"license": "MIT",
+	"packageManager": "bun@1.3.0",
 	"private": true,
 	"scripts": {
-		"start": "node .",
-		"bun:start": "bun src/index.ts",
-		"bun:smol": "bun --smol src/index.ts",
-		"bun:watch": "bun --watch src/index.ts",
-		"pm2:start": "pm2 start npm --ignore-watch=\"node_modules\" --name \"msdbot_telegram\" -- start",
-		"pm2:bun_start": "pm2 start bun --ignore-watch=\"node_modules\" --name \"msdbot_telegram\" -- bun:start",
-		"pm2:restart": "pm2 restart \"msdbot_telegram\"",
-		"pm2:stop": "pm2 stop \"msdbot_telegram\"",
-		"drizzle:generate": "drizzle-kit generate",
-		"drizzle:migrate": "drizzle-kit migrate",
-		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun",
-		"format": "prettier --write --cache './{.vscode,.github,src,test}/**/*.{mjs,ts,tsx,js,jsx,json,yml,yaml}'",
-		"typesafe-i18n": "typesafe-i18n"
+		"build:bot": "bun build --entrypoint ./apps/bot/src/**.ts --compile --outfile dist/msdbot_telegram --target=bun-linux-x64",
+		"watch": "bun --watch run ./apps/bot/src/index.ts",
+		"format": "prettier --write --cache '{.github,apps,packages}/**/*.{js,ts,json,md,yml,yaml}'"
 	},
-	"dependencies": {
-		"@napi-rs/canvas": "^0.1.72",
-		"chalk": "^5.6.2",
-		"drizzle-orm": "^0.44.2",
-		"grammy": "^1.38.3",
-		"sagiri": "^4.3.0",
-		"telegra.ph": "^1.0.1",
-		"typesafe-i18n": "^5.26.2"
-	},
-	"devDependencies": {
-		"@types/bun": "^1.2.23",
-		"@types/node": "^24.0.7",
-		"drizzle-kit": "^0.31.4s",
-		"pg": "^8.16.3",
-		"prettier": "^3.6.2",
-		"typegram": "^5.2.0",
-		"typescript": "^5.8.3"
-	}
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
 }
