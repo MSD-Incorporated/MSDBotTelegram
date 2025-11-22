@@ -12,7 +12,6 @@ export const env = createEnv({
 		POSTGRES_HOST: z.string().min(1),
 		POSTGRES_PORT: z.coerce.number().default(5432),
 
-		NODE_ENV: z.enum(["dev", "prod"]).default("dev"),
 		TZ: z.string().min(1),
 	},
 	runtimeEnv: {
@@ -40,7 +39,7 @@ const createConfig = () => ({
 		PORT: env.POSTGRES_PORT,
 		URL: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
 	},
-	NODE_ENV: env.NODE_ENV,
+	NODE_ENV: process.env.NODE_ENV,
 	TZ: env.TZ,
 });
 
