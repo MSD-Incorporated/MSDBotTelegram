@@ -11,7 +11,7 @@ export const dickComposer = new Composer<Context>();
  *
  * @type {number}
  */
-export const timeout: number = 12 * 60 * 60 * 1000;
+export const timeout: number = 2 * 60 * 60 * 1000;
 
 /**
  * The timeout for a referral in milliseconds.
