@@ -26,7 +26,7 @@ export function createContextConstructor({ database }: Dependencies) {
 		constructor(update: Update, api: Api, me: UserFromGetMe) {
 			super(update, api, me);
 
-			const from = this.update.message!.from;
+			const from = (this.update.message ?? this.update.callback_query)!.from;
 			const locale = from.language_code;
 			const normalized_name = normalizeName(from);
 

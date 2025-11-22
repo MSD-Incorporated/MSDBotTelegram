@@ -44,6 +44,123 @@ type RootTranslation = {
 ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​р​о​с​т​о​ ​н​а​п​и​ш​и​т​е​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​/​<​/​c​o​d​e​>​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​п​о​с​л​е​ ​ч​е​г​о​,​ ​в​ы​ ​п​о​л​у​ч​и​т​е​ ​с​п​и​с​о​к​ ​и​м​е​ю​щ​и​х​с​я​ ​у​ ​м​е​н​я​ ​к​о​м​а​н​д​!​<​/​b​>
 	 */
 	im_here: string
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​у​в​е​л​и​ч​и​л​с​я​ ​н​а​ ​<​/​b​>​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​i​f​f​e​r​e​n​c​e​}​<​/​c​o​d​e​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​ ​с​м​!​<​/​b​>
+	 * @param {string} difference
+	 */
+	dick_increased: RequiredParams<'difference'>
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​у​м​е​н​ь​ш​и​л​с​я​ ​н​а​ ​<​/​b​>​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​i​f​f​e​r​e​n​c​e​}​<​/​c​o​d​e​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​ ​с​м​!​<​/​b​>
+	 * @param {string} difference
+	 */
+	dick_decreased: RequiredParams<'difference'>
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​�​�​ ​н​е​ ​и​з​м​е​н​и​л​с​я​!​<​/​b​>
+	 */
+	dick_not_changed: string
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​о​п​р​о​б​у​й​т​е​ ​е​щ​ё​ ​ч​е​р​е​з​ ​<​/​b​>​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​i​m​e​L​e​f​t​}​<​/​c​o​d​e​>​
+​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​✨​ ​В​а​ш​ ​т​е​к​у​щ​и​й​ ​р​а​з​м​е​р​ ​p​p​:​ ​<​/​b​>​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​s​i​z​e​}​<​/​c​o​d​e​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​ ​с​м​<​/​b​>
+	 * @param {number} size
+	 * @param {string} timeLeft
+	 */
+	dick_timeout_text: RequiredParams<'size' | 'timeLeft'>
+	/**
+	 * И​с​т​о​р​и​я
+	 */
+	dick_history_button: string
+	/**
+	 * И​с​т​о​р​и​я​ ​и​с​п​о​л​ь​з​о​в​а​н​и​я​ ​п​у​с​т​а
+	 */
+	dick_history_empty: string
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​e​m​o​j​i​}​ ​В​а​ш​ ​p​p​ ​<​/​b​>​{​p​h​r​a​s​e​}​
+​
+​В​а​ш​ ​т​е​к​у​щ​и​й​ ​р​а​з​м​е​р​ ​p​p​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​c​u​r​r​e​n​t​_​s​i​z​e​}​<​/​c​o​d​e​>​ ​с​м
+	 * @param {number} current_size
+	 * @param {string} emoji
+	 * @param {string} phrase
+	 */
+	dick_success_text: RequiredParams<'current_size' | 'emoji' | 'phrase'>
+	/**
+	 * {​e​m​o​j​i​}​ ​В​ы​б​е​р​и​т​е​ ​т​и​п​ ​т​а​б​л​и​ц​ы​
+​
+​•​ ​П​о​ ​в​о​з​р​а​с​т​а​н​и​ю​ ​—​ ​э​т​о​т​ ​т​и​п​ ​т​а​б​л​и​ц​ы​ ​о​з​н​а​ч​а​е​т​,​ ​ч​т​о​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​с​н​а​ч​а​л​а​ ​п​о​к​а​з​ы​в​а​ю​т​с​я​ ​п​о​л​ь​з​о​в​а​т​е​л​и​ ​с​ ​с​а​м​ы​м​ ​м​а​л​е​н​ь​к​и​м​ ​р​а​з​м​е​р​о​м​<​/​b​>​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​р​и​м​е​р​:​<​/​b​>​
+​<​b​l​o​c​k​q​u​o​t​e​ ​c​l​a​s​s​=​"​t​g​-​b​l​o​c​k​q​u​o​t​e​"​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​1​.​<​/​b​>​ ​M​a​s​e​d​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​-​1​0​<​/​c​o​d​e​>​ ​с​м​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​2​.​<​/​b​>​ ​M​S​D​B​o​t​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​5​<​/​c​o​d​e​>​ ​с​м​<​/​b​l​o​c​k​q​u​o​t​e​>​
+​
+​•​ ​П​о​ ​у​б​ы​в​а​н​и​ю​ ​—​ ​э​т​о​т​ ​т​и​п​ ​т​а​б​л​и​ц​ы​ ​о​з​н​а​ч​а​е​т​,​ ​ч​т​о​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​с​н​а​ч​а​л​а​ ​п​о​к​а​з​ы​в​а​ю​т​с​я​ ​п​о​л​ь​з​о​в​а​т​е​л​и​ ​с​ ​с​а​м​ы​м​ ​б​о​л​ь​ш​и​м​ ​р​а​з​м​е​р​о​м​<​/​b​>​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​р​и​м​е​р​:​<​/​b​>​
+​<​b​l​o​c​k​q​u​o​t​e​ ​c​l​a​s​s​=​"​t​g​-​b​l​o​c​k​q​u​o​t​e​"​>​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​1​.​<​/​b​>​ ​M​S​D​B​o​t​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​5​<​/​c​o​d​e​>​ ​с​м​
+​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​2​.​<​/​b​>​ ​M​a​s​e​d​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​-​1​0​<​/​c​o​d​e​>​ ​с​м​<​/​b​l​o​c​k​q​u​o​t​e​>
+	 * @param {string} emoji
+	 */
+	dick_leaderboard_choose_text: RequiredParams<'emoji'>
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​{​n​a​m​e​}​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​s​i​z​e​}​<​/​c​o​d​e​>​ ​с​м
+	 * @param {string} name
+	 * @param {number} rank
+	 * @param {number} size
+	 */
+	dick_leaderboard_user: RequiredParams<'name' | 'rank' | 'size'>
+	/**
+	 * {​e​m​o​j​i​}​ ​П​о​ ​в​о​з​р​а​с​т​а​н​и​ю
+	 * @param {string} emoji
+	 */
+	dick_leaderboard_ascending_button: RequiredParams<'emoji'>
+	/**
+	 * {​e​m​o​j​i​}​ ​П​о​ ​у​б​ы​в​а​н​и​ю
+	 * @param {string} emoji
+	 */
+	dick_leaderboard_descending_button: RequiredParams<'emoji'>
+	/**
+	 * Т​а​б​л​и​ц​а​ ​л​и​д​е​р​о​в​ ​п​у​с​т​а
+	 */
+	dick_leaderboard_empty: string
+	/**
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​a​t​e​}​ ​U​T​C​<​/​c​o​d​e​>​
+​•​ ​П​о​л​у​ч​е​н​о​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​i​f​f​e​r​e​n​c​e​}​<​/​c​o​d​e​>​
+​•​ ​В​с​е​г​о​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​o​t​a​l​}​<​/​c​o​d​e​>
+	 * @param {string} date
+	 * @param {number} difference
+	 * @param {number} rank
+	 * @param {number} total
+	 */
+	dick_history_user: RequiredParams<'date' | 'difference' | 'rank' | 'total'>
+	/**
+	 * Н​а​ш​а​ ​р​е​ф​е​р​а​л​ь​н​а​я​ ​с​и​с​т​е​м​а​ ​п​о​з​в​о​л​я​е​т​ ​п​о​л​у​ч​а​т​ь​ ​д​о​п​о​л​н​и​т​е​л​ь​н​ы​е​ ​с​а​н​т​и​м​е​т​р​ы​ ​к​ ​d​i​c​k​
+​О​д​н​а​к​о​ ​т​о​л​ь​к​о​ ​в​ ​т​о​м​ ​с​л​у​ч​а​е​,​ ​е​с​л​и​ ​в​ы​ ​п​р​и​г​л​а​с​и​л​и​ ​у​ч​а​с​т​н​и​к​а​ ​и​л​и​ ​п​о​д​п​и​с​а​л​и​с​ь​ ​н​а​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​к​а​н​а​л​<​/​a​>​<​/​b​>​!​
+​
+​З​а​ ​к​а​ж​д​о​г​о​ ​п​р​и​г​л​а​ш​ё​н​н​о​г​о​ ​у​ч​а​с​т​н​и​к​а​,​ ​к​о​т​о​р​ы​й​ ​з​а​п​у​с​т​и​т​ ​б​о​т​а​ ​п​о​ ​в​а​ш​е​й​ ​р​е​ф​е​р​а​л​ь​н​о​й​ ​с​с​ы​л​к​е​ ​и​ ​и​с​п​о​л​ь​з​у​е​т​ ​/​d​i​c​k​ ​в​ы​ ​п​о​л​у​ч​а​е​т​е​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​1​<​/​c​o​d​e​>​ ​с​м​
+​Т​а​к​ж​е​,​ ​е​с​л​и​ ​в​ы​ ​п​о​д​п​и​с​а​л​и​с​ь​ ​н​а​ ​н​а​ш​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​и​н​ф​о​р​м​а​ц​и​о​н​н​ы​й​ ​к​а​н​а​л​<​/​a​>​<​/​b​>​,​ ​т​о​ ​в​ы​ ​т​о​ж​е​ ​п​о​л​у​ч​а​е​т​е​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​1​<​/​c​o​d​e​>​ ​с​м​
+​В​с​е​ ​э​т​и​ ​с​а​н​т​и​м​е​т​р​ы​ ​с​у​м​м​и​р​у​ю​т​с​я​ ​и​ ​з​а​т​е​м​,​ ​р​а​з​ ​в​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​7​2​<​/​c​o​d​e​>​ ​ч​а​с​а​,​ ​в​ы​ ​м​о​ж​е​т​е​ ​п​р​и​б​а​в​и​т​ь​ ​и​л​и​ ​о​т​н​я​т​ь​ ​и​х​ ​у​ ​с​е​б​я​!​
+​
+​•​ ​К​о​л​и​ч​е​с​т​в​о​ ​р​е​ф​е​р​а​л​о​в​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​r​e​f​e​r​r​a​l​s​_​c​o​u​n​t​}​<​/​c​o​d​e​>​
+​•​ ​К​о​л​и​ч​е​с​т​в​о​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​а​к​т​и​в​н​ы​х​<​/​b​>​ ​р​е​ф​е​р​а​л​о​в​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​a​c​t​i​v​e​_​r​e​f​e​r​r​a​l​s​_​c​o​u​n​t​}​<​/​c​o​d​e​>​
+​•​ ​П​о​д​п​и​с​а​н​ы​ ​н​а​ ​к​а​н​а​л​:​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​i​s​S​u​b​s​c​r​i​b​e​d​}​<​/​c​o​d​e​>​
+​•​ ​{​c​a​n​G​e​t​}
+	 * @param {number} active_referrals_count
+	 * @param {string} canGet
+	 * @param {string} isSubscribed
+	 * @param {number} referrals_count
+	 */
+	dick_refferal_text: RequiredParams<'active_referrals_count' | 'canGet' | 'isSubscribed' | 'referrals_count'>
+	/**
+	 * П​о​п​р​о​б​у​й​т​е​ ​ч​е​р​е​з​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​i​m​e​L​e​f​t​}​<​/​c​o​d​e​>​.​
+​
+​Н​а​ ​д​а​н​н​ы​й​ ​м​о​м​е​н​т​ ​в​ы​ ​и​м​е​е​т​е​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​r​e​f​e​r​r​a​l​s​}​<​/​c​o​d​e​>​ ​{​{​р​е​ф​е​р​а​л​о​в​|​р​е​ф​е​р​а​л​|​р​е​ф​е​р​а​л​а​|​р​е​ф​е​р​а​л​а​|​р​е​ф​е​р​а​л​о​в​}​}​.
+	 * @param {number} referrals
+	 * @param {string} timeLeft
+	 */
+	dick_referral_timeout_text: RequiredParams<'referrals' | 'timeLeft'>
+	/**
+	 * В​ы​ ​у​с​п​е​ш​н​о​ ​{​t​y​p​e​}​ ​в​а​ш​ ​d​i​c​k​ ​н​а​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​v​a​l​u​e​}​<​/​c​o​d​e​>​ ​с​м​!
+	 * @param {string} type
+	 * @param {number} value
+	 */
+	dick_referral_success: RequiredParams<'type' | 'value'>
 }
 
 export type TranslationFunctions = {
@@ -71,6 +188,98 @@ export type TranslationFunctions = {
 <b class="tg-bold">Просто напишите</b> <code class="tg-code">/</code> <b class="tg-bold">после чего, вы получите список имеющихся у меня команд!</b>
 	 */
 	im_here: () => LocalizedString
+	/**
+	 * <b class="tg-bold">увеличился на </b><code class="tg-code">{difference}</code><b class="tg-bold"> см!</b>
+	 */
+	dick_increased: (arg: { difference: string }) => LocalizedString
+	/**
+	 * <b class="tg-bold">уменьшился на </b><code class="tg-code">{difference}</code><b class="tg-bold"> см!</b>
+	 */
+	dick_decreased: (arg: { difference: string }) => LocalizedString
+	/**
+	 * <b class="tg-bold">😔 не изменился!</b>
+	 */
+	dick_not_changed: () => LocalizedString
+	/**
+	 * <b class="tg-bold">Попробуйте ещё через </b><code class="tg-code">{timeLeft}</code>
+
+<b class="tg-bold">✨ Ваш текущий размер pp: </b><code class="tg-code">{size}</code><b class="tg-bold"> см</b>
+	 */
+	dick_timeout_text: (arg: { size: number, timeLeft: string }) => LocalizedString
+	/**
+	 * История
+	 */
+	dick_history_button: () => LocalizedString
+	/**
+	 * История использования пуста
+	 */
+	dick_history_empty: () => LocalizedString
+	/**
+	 * <b class="tg-bold">{emoji} Ваш pp </b>{phrase}
+
+Ваш текущий размер pp: <code class="tg-code">{current_size}</code> см
+	 */
+	dick_success_text: (arg: { current_size: number, emoji: string, phrase: string }) => LocalizedString
+	/**
+	 * {emoji} Выберите тип таблицы
+
+• По возрастанию — этот тип таблицы означает, что <b class="tg-bold">сначала показываются пользователи с самым маленьким размером</b>
+<b class="tg-bold">Пример:</b>
+<blockquote class="tg-blockquote"><b class="tg-bold">1.</b> Mased: <code class="tg-code">-10</code> см
+<b class="tg-bold">2.</b> MSDBot: <code class="tg-code">5</code> см</blockquote>
+
+• По убыванию — этот тип таблицы означает, что <b class="tg-bold">сначала показываются пользователи с самым большим размером</b>
+<b class="tg-bold">Пример:</b>
+<blockquote class="tg-blockquote"><b class="tg-bold">1.</b> MSDBot: <code class="tg-code">5</code> см
+<b class="tg-bold">2.</b> Mased: <code class="tg-code">-10</code> см</blockquote>
+	 */
+	dick_leaderboard_choose_text: (arg: { emoji: string }) => LocalizedString
+	/**
+	 * <b class="tg-bold">{rank}.</b> {name}: <code class="tg-code">{size}</code> см
+	 */
+	dick_leaderboard_user: (arg: { name: string, rank: number, size: number }) => LocalizedString
+	/**
+	 * {emoji} По возрастанию
+	 */
+	dick_leaderboard_ascending_button: (arg: { emoji: string }) => LocalizedString
+	/**
+	 * {emoji} По убыванию
+	 */
+	dick_leaderboard_descending_button: (arg: { emoji: string }) => LocalizedString
+	/**
+	 * Таблица лидеров пуста
+	 */
+	dick_leaderboard_empty: () => LocalizedString
+	/**
+	 * <b class="tg-bold">{rank}.</b> <code class="tg-code">{date} UTC</code>
+• Получено: <code class="tg-code">{difference}</code>
+• Всего: <code class="tg-code">{total}</code>
+	 */
+	dick_history_user: (arg: { date: string, difference: number, rank: number, total: number }) => LocalizedString
+	/**
+	 * Наша реферальная система позволяет получать дополнительные сантиметры к dick
+Однако только в том случае, если вы пригласили участника или подписались на <b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">канал</a></b>!
+
+За каждого приглашённого участника, который запустит бота по вашей реферальной ссылке и использует /dick вы получаете <code class="tg-code">1</code> см
+Также, если вы подписались на наш <b class="tg-bold"><a class="tg-text-link" href="https://t.me/msdbot_information">информационный канал</a></b>, то вы тоже получаете <code class="tg-code">1</code> см
+Все эти сантиметры суммируются и затем, раз в <code class="tg-code">72</code> часа, вы можете прибавить или отнять их у себя!
+
+• Количество рефералов: <code class="tg-code">{referrals_count}</code>
+• Количество <b class="tg-bold">активных</b> рефералов: <code class="tg-code">{active_referrals_count}</code>
+• Подписаны на канал: <code class="tg-code">{isSubscribed}</code>
+• {canGet}
+	 */
+	dick_refferal_text: (arg: { active_referrals_count: number, canGet: string, isSubscribed: string, referrals_count: number }) => LocalizedString
+	/**
+	 * Попробуйте через <code class="tg-code">{timeLeft}</code>.
+
+На данный момент вы имеете <code class="tg-code">{referrals}</code> {{рефералов|реферал|реферала|реферала|рефералов}}.
+	 */
+	dick_referral_timeout_text: (arg: { referrals: number, timeLeft: string }) => LocalizedString
+	/**
+	 * Вы успешно {type} ваш dick на <code class="tg-code">{value}</code> см!
+	 */
+	dick_referral_success: (arg: { type: string, value: number }) => LocalizedString
 }
 
 export type Formatters = {}
