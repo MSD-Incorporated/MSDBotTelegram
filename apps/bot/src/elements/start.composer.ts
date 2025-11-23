@@ -31,7 +31,7 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 
 	const referrer = await ctx.database.users.resolve(
 		{ id: referrer_id },
-		{ columns: { id: true, first_name: true, last_name: true } }
+		{ columns: { first_name: true, last_name: true } }
 	);
 
 	if (!referrer) return replyStartCommand(ctx);
@@ -40,7 +40,7 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 
 	return ctx.replyWithPhoto(ref_banner, {
 		caption: ctx.t.start_referral_command({
-			referrer_id: referrer.id,
+			referrer_id: referrer_id,
 			referrer_name: normalizeName(referrer),
 		}),
 	});

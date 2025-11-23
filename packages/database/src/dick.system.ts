@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, desc, eq, sql } from "drizzle-orm";
 
 import * as schema from "./drizzle";
 import Database from "./index";
@@ -23,6 +23,7 @@ type HistoryParams<
 	columns?: Columns;
 	limit?: number;
 	orderBy?: "asc" | "desc";
+	offset?: number;
 }>;
 
 export class DickSystem {
@@ -120,13 +121,26 @@ export class DickSystem {
 		Columns extends ColumnRelation<"dick_history"> = {},
 	>(
 		{ id }: { id: number },
-		{ include, columns, limit = 10, orderBy = "desc" }: HistoryParams<Include, Columns> = {}
+		{ include, columns, limit = 10, orderBy = "desc", offset = 0 }: HistoryParams<Include, Columns> = {}
 	) =>
 		this.database.query["dick_history"].findMany({
 			columns: columns as Columns,
 			where: eq(schema.dick_history.user_id, id),
 			with: include as Include,
+			offset,
 			orderBy: [orderBy === "asc" ? asc(schema.dick_history.created_at) : desc(schema.dick_history.created_at)],
 			limit,
 		});
+
+	public readonly countHistory = async ({ id, offset = 0 }: { id: number; offset?: number }) => {
+		return (
+			(
+				await this.database
+					.select({ count: sql`count(*)`.mapWith(Number) })
+					.from(schema.dick_history)
+					.where(eq(schema.dick_history.user_id, id))
+					.offset(offset)
+			)[0]?.count ?? 0
+		);
+	};
 }

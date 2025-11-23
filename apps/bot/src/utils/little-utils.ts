@@ -1,4 +1,5 @@
-import type { UserFromGetMe } from "grammy/types";
+import type { InlineKeyboardButton, UserFromGetMe } from "grammy/types";
+import type { Context } from "./context";
 
 export const onStart = ({ id, username, first_name }: UserFromGetMe) =>
 	console.log(`${first_name} | @${username} [${id}] started!`);
@@ -39,3 +40,26 @@ export const random = <MIN extends number, MAX extends number, IM extends boolea
 	max: MAX,
 	includeMax?: IM
 ): number => Math.floor(Math.random() * (max - min + (includeMax ? 1 : 0)) + min);
+
+export const keyboardBuilder = (ctx: Context, name: string, page: number, sub_name: string, totalPages: number) => {
+	const keyboard: InlineKeyboardButton[][] = [[]];
+
+	if (page > 1)
+		keyboard[0]?.push({
+			callback_data: `${name}_${sub_name}_${page - 1}`,
+			text: ctx.t.keyboard_back_page(),
+		});
+
+	keyboard[0]?.push({
+		callback_data: `${name}_${sub_name}_${page}`,
+		text: ctx.t.keyboard_current_page({ page, totalPages }),
+	});
+
+	if (page < totalPages)
+		keyboard[0]?.push({
+			callback_data: `${name}_${sub_name}_${page + 1}`,
+			text: ctx.t.keyboard_next_page(),
+		});
+
+	return keyboard;
+};

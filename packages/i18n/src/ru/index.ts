@@ -3,6 +3,12 @@ import { blockquote, bold, boldAndTextLink, code } from "../formatters";
 import type { BaseTranslation } from "../i18n-types";
 
 const ru = {
+	keyboard_same_page: "Вы уже на этой странице",
+	keyboard_wrong_user: "Эта кнопка предназначена не вам",
+	keyboard_back_page: "‹ Назад",
+	keyboard_current_page: "{page:number}/{totalPages:number}",
+	keyboard_next_page: "Вперёд ›",
+
 	start_command: [
 		`${bold("👋 Добро пожаловать!")}\n`,
 		`• ${bold(`Версия`)} ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("v{msdbot_version:string}")} [${code("{commit:string}")}]`,
