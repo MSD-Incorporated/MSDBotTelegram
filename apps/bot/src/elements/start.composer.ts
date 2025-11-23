@@ -19,8 +19,6 @@ const replyStartCommand = (ctx: Context) =>
 export const startComposer = new Composer<Context>();
 
 startComposer.chatType(["group", "supergroup", "private"]).command("start", async ctx => {
-	console.log(msdbot_version);
-
 	if (!ctx.match) return replyStartCommand(ctx);
 
 	const referrer_id = Number(ctx.match.slice("ref_".length));
