@@ -13,13 +13,6 @@ export const dickComposer = new Composer<Context>();
  */
 export const timeout: number = 2 * 60 * 60 * 1000;
 
-/**
- * The timeout for a referral in milliseconds.
- *
- * @type {number}
- */
-export const referral_timeout: number = 72 * 60 * 60 * 1000;
-
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0) return { text: t.dick_decreased({ difference: difference.toString().slice(1) }), emoji: "📉" };
 	if (difference > 0) return { text: t.dick_increased({ difference: difference.toString() }), emoji: "📈" };
