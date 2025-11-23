@@ -143,4 +143,25 @@ export class DickSystem {
 			)[0]?.count ?? 0
 		);
 	};
+
+	public readonly countLeaderboard = async () => {
+		return (await this.database.select({ count: sql`count(*)`.mapWith(Number) }).from(schema.dicks))[0]?.count ?? 0;
+	};
+
+	public readonly getLeaderboard = async ({
+		limit = 10,
+		offset = 0,
+		orderBy = "desc",
+	}: {
+		limit?: number;
+		offset?: number;
+		orderBy?: "asc" | "desc";
+	}) => {
+		return await this.database
+			.select({ user_id: schema.dicks.user_id, size: schema.dicks.size })
+			.from(schema.dicks)
+			.orderBy(({ size }) => (orderBy === "asc" ? asc(size) : desc(size)))
+			.limit(limit)
+			.offset(offset);
+	};
 }
