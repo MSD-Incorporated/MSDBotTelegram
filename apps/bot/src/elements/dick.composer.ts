@@ -27,7 +27,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 
 	const lastUsed = Date.now() - timestamp.getTime();
 
-	if (lastUsed - timeout) {
+	if (lastUsed < timeout) {
 		const timeLeft = dateFormatter.format(timeout - lastUsed).slice(12);
 		const { dick_timeout_text, dick_history_button } = ctx.t;
 
@@ -42,7 +42,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	const newSize = size + difference;
 
 	await ctx.database.dicks.update(ctx.from, newSize);
-	await ctx.database.dicks.addHistory(ctx.from, newSize, difference);
+	await ctx.database.dicks.addHistory(ctx.from, size, difference);
 
 	const { text: phrase, emoji } = getPhrase(difference, ctx.t);
 	return ctx.reply(ctx.t.dick_success_text({ phrase, emoji, current_size: newSize }));
