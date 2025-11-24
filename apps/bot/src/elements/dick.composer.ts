@@ -101,22 +101,6 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 	});
 });
 
-dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leaderboard"], async ctx => {
-	const { dick_leaderboard_choose_text, dick_leaderboard_ascending_button, dick_leaderboard_descending_button } =
-		ctx.t;
-
-	return ctx.reply(dick_leaderboard_choose_text({ emoji: "📊" }), {
-		reply_markup: {
-			inline_keyboard: [
-				[
-					{ text: dick_leaderboard_ascending_button({ emoji: "📈" }), callback_data: "leaderboard_asc_1" },
-					{ text: dick_leaderboard_descending_button({ emoji: "📉" }), callback_data: "leaderboard_desc_1" },
-				],
-			],
-		},
-	});
-});
-
 dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
 	const inline_keyboard = ctx.msg!.reply_markup?.inline_keyboard!;
 	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
@@ -144,8 +128,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 	const keyboard = keyboardBuilder(ctx, "leaderboard", page, type, pagesLength);
 
 	return ctx.api
-		.editMessageText(ctx.chat.id, ctx.msgId!, (await Promise.all(text)).join("\n"), {
-			reply_markup: { inline_keyboard: keyboard },
-		})
+		.editMessageText(
+			ctx.chat.id,
+			ctx.msgId!,
+			(await Promise.all(text)).join("\n") ?? ctx.t.dick_leaderboard_empty(),
+			{
+				reply_markup: { inline_keyboard: keyboard },
+			}
+		)
 		.catch(err => console.error(err));
 });
