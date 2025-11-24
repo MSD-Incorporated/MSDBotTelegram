@@ -1,5 +1,5 @@
 import type { Database } from "@msdbot/database";
-import { L, type Locales, type TranslationFunctions, isLocale } from "@msdbot/i18n";
+import { L, type TranslationFunctions } from "@msdbot/i18n";
 import { type Api, Context as DefaultContext } from "grammy";
 import type { Update, UserFromGetMe } from "grammy/types";
 
@@ -32,7 +32,8 @@ export function createContextConstructor({ database }: Dependencies) {
 
 			this.database = database;
 			this.normalized_name = normalized_name;
-			this.t = locale && isLocale(locale as Locales) ? L[locale as Locales] : L["ru"];
+			this.t = L["ru"];
+			// this.t = locale && isLocale(locale as Locales) ? L[locale as Locales] : L["ru"];
 		}
 	} as unknown as new (update: Update, api: Api, me: UserFromGetMe) => Context;
 }
