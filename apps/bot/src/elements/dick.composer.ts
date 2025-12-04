@@ -6,11 +6,6 @@ import { dateFormatter, keyboardBuilder, normalizeName, type Context } from "../
 
 export const dickComposer = new Composer<Context>();
 
-/**
- * The timeout for a dick command in milliseconds.
- *
- * @type {number}
- */
 export const timeout: number = 2 * 60 * 60 * 1000;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
