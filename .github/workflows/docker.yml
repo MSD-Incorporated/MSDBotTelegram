@@ -36,5 +36,7 @@ jobs:
                   context: .
                   push: true
                   tags: ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
                   build-args: |
                       GIT_COMMIT=${{ steps.sha.outputs.short_sha }}
