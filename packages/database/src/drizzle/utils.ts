@@ -7,14 +7,17 @@ export const creationTimestamp = timestamp("created_at", {
 	mode: "date",
 	precision: 3,
 	withTimezone: true,
-}).defaultNow();
+})
+	.defaultNow()
+	.notNull();
 
 /**
  * Timestamp for updates, defaults to current time, updates on change, and is non-nullable.
  */
 export const updateTimestamp = timestamp("updated_at", { mode: "date", precision: 3, withTimezone: true })
 	.defaultNow()
-	.$onUpdate(() => new Date());
+	.$onUpdate(() => new Date())
+	.notNull();
 
 /**
  * Object containing creation and update timestamps.
