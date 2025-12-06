@@ -110,6 +110,8 @@ dickComposer
 			diceGuess === undefined ||
 			typeof Number(balance) !== "number" ||
 			typeof Number(diceGuess) !== "number" ||
+			isNaN(Number(balance)) ||
+			isNaN(Number(diceGuess)) ||
 			Number(diceGuess) > 6 ||
 			Number(diceGuess) < 1
 		)
