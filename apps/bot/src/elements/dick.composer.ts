@@ -112,6 +112,8 @@ dickComposer
 			typeof Number(diceGuess) !== "number" ||
 			isNaN(Number(balance)) ||
 			isNaN(Number(diceGuess)) ||
+			Number.isInteger(Number(balance)) === false ||
+			Number.isInteger(Number(diceGuess)) === false ||
 			Number(diceGuess) > 6 ||
 			Number(diceGuess) < 1
 		)
