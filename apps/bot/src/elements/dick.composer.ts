@@ -100,7 +100,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 dickComposer
 	.chatType(["group", "supergroup", "private"])
 	.filter(({ msg }) => msg !== undefined && msg.text?.split(" ").length === 3)
-	.filter(({ chat }) => chat !== undefined && chat.id === -1001705068191)
+	// .filter(({ chat }) => chat !== undefined && chat.id === -1001705068191)
 	.command(["roll", "dice", "di"], async ctx => {
 		const [balance, diceGuess] = ctx.match.split(" ");
 
@@ -123,22 +123,24 @@ dickComposer
 		if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
 
 		if (size < 0) {
-			if (Number(balance) > -1 * size) return ctx.reply(bold(`Ваш pp меньше чем вы можете поставить`));
+			if (Number(balance) > 0 || size < Number(balance) || size > Number(balance))
+				return ctx.reply(bold(`Ваш pp меньше чем вы можете поставить`));
 
 			const { dice } = await ctx.replyWithDice("🎲");
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.update(ctx.from, size + Number(balance));
+				await ctx.database.dicks.update(ctx.from, size + -1 * Number(balance));
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
-			await ctx.database.dicks.update(ctx.from, size - Number(balance));
+			await ctx.database.dicks.update(ctx.from, size - -1 * Number(balance));
 			return ctx.reply(bold("🤑 Вы угадали!"));
 		}
 
 		if (size > 0) {
-			if (size < Number(balance)) return ctx.reply(bold(`Ваш pp больше чем вы можете поставить`));
+			if (size < Number(balance) || Number(balance) < 0)
+				return ctx.reply(bold(`Ваш pp больше чем вы можете поставить`));
 
 			const { dice } = await ctx.replyWithDice("🎲");
 			await sleep(3000);
