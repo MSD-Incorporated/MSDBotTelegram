@@ -1,11 +1,12 @@
 import { Composer } from "grammy";
 import { randomInt } from "node:crypto";
 
-import type { TranslationFunctions } from "@msdbot/i18n";
+import { bold, code, type TranslationFunctions } from "@msdbot/i18n";
+
+import { sleep } from "bun";
 import { dateFormatter, keyboardBuilder, normalizeName, type Context } from "../utils";
 
 export const dickComposer = new Composer<Context>();
-
 export const timeout: number = 2 * 60 * 60 * 1000;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
@@ -96,6 +97,62 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 	});
 });
 
+dickComposer
+	.chatType(["group", "supergroup", "private"])
+	.filter(({ msg }) => msg !== undefined && msg.text?.split(" ").length === 3)
+	.filter(({ chat }) => chat !== undefined && chat.id === 946070039)
+	.command(["roll", "dice", "di"], async ctx => {
+		const [balance, diceGuess] = ctx.match.split(" ");
+
+		if (
+			balance === undefined ||
+			balance === "0" ||
+			diceGuess === undefined ||
+			typeof Number(balance) !== "number" ||
+			typeof Number(diceGuess) !== "number" ||
+			Number(diceGuess) > 6 ||
+			Number(diceGuess) < 1
+		)
+			return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/dice <ставка> <число кубика>`));
+
+		const { size } = await ctx.database.dicks.resolve(ctx.from, {
+			createIfNotExist: true,
+			columns: { size: true },
+		});
+
+		if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
+
+		if (size < 0) {
+			if (Number(balance) > -1 * size) return ctx.reply(bold(`Ваш pp меньше чем вы можете поставить`));
+
+			const { dice } = await ctx.replyWithDice("🎲");
+			await sleep(3000);
+
+			if (Number(diceGuess) !== dice.value) {
+				await ctx.database.dicks.update(ctx.from, size + Number(balance));
+				return ctx.reply(bold("😔 Вы не угадали"));
+			}
+
+			await ctx.database.dicks.update(ctx.from, size - Number(balance));
+			return ctx.reply(bold("🤑 Вы угадали!"));
+		}
+
+		if (size > 0) {
+			if (size < Number(balance)) return ctx.reply(bold(`Ваш pp больше чем вы можете поставить`));
+
+			const { dice } = await ctx.replyWithDice("🎲");
+			await sleep(3000);
+
+			if (Number(diceGuess) !== dice.value) {
+				await ctx.database.dicks.update(ctx.from, size - Number(balance));
+				return ctx.reply(bold("😔 Вы не угадали"));
+			}
+
+			await ctx.database.dicks.update(ctx.from, size + Number(balance));
+			return ctx.reply(bold("🤑 Вы угадали!"));
+		}
+	});
+
 dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
 	const inline_keyboard = ctx.msg!.reply_markup?.inline_keyboard!;
 	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
@@ -127,9 +184,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 			ctx.chat.id,
 			ctx.msgId!,
 			(await Promise.all(text)).join("\n") ?? ctx.t.dick_leaderboard_empty(),
-			{
-				reply_markup: { inline_keyboard: keyboard },
-			}
+			{ reply_markup: { inline_keyboard: keyboard } }
 		)
 		.catch(err => console.error(err));
 });
