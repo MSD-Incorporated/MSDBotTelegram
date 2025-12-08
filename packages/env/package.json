@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@t3-oss/env-core": "^0.13.8",
-		"zod": "^4.1.12"
+		"zod": "^4.1.13"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^"
