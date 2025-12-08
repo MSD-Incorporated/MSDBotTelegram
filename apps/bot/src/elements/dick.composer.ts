@@ -37,7 +37,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	const difference = randomInt(-12, 12 + 1);
 	const newSize = size + difference;
 
-	await ctx.database.dicks.update(ctx.from, newSize);
+	await ctx.database.dicks.update(ctx.from, { size: newSize, timestamp: new Date() });
 	await ctx.database.dicks.addHistory(ctx.from, size, difference);
 
 	const { text: phrase, emoji } = getPhrase(difference, ctx.t);
@@ -133,11 +133,11 @@ dickComposer
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.update(ctx.from, size + -1 * Number(balance));
+				await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(balance) });
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
-			await ctx.database.dicks.update(ctx.from, size - -1 * Number(balance));
+			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) });
 			return ctx.reply(bold("🤑 Вы угадали!"));
 		}
 
@@ -149,11 +149,11 @@ dickComposer
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.update(ctx.from, size - Number(balance));
+				await ctx.database.dicks.update(ctx.from, { size: size - Number(balance) });
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
-			await ctx.database.dicks.update(ctx.from, size + Number(balance));
+			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) });
 			return ctx.reply(bold("🤑 Вы угадали!"));
 		}
 	});

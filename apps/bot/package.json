@@ -9,7 +9,8 @@
 		"@msdbot/database": "workspace:^",
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
-		"grammy": "^1.38.3"
+		"grammy": "^1.38.3",
+		"sagiri": "^4.3.0"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^",

@@ -95,10 +95,13 @@ export class DickSystem {
 		)[0];
 	};
 
-	public readonly update = async ({ id }: { id: number }, size: number) => {
+	public readonly update = async (
+		{ id }: { id: number },
+		{ size, timestamp }: { size: number; timestamp?: Date }
+	) => {
 		return this.database
 			.update(schema.dicks)
-			.set({ size, timestamp: new Date() })
+			.set({ size, timestamp })
 			.where(eq(schema.dicks.user_id, id))
 			.returning();
 	};
