@@ -22,7 +22,7 @@
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^",
 		"@types/pg": "^8.15.6",
-		"drizzle-kit": "^0.31.7",
+		"drizzle-kit": "^0.31.8",
 		"typegram": "^5.2.0"
 	}
 }
