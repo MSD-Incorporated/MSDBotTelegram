@@ -18,7 +18,7 @@ COPY packages/tsconfig/package.json ./packages/tsconfig/
 
 ENV NODE_ENV=prod
 
-RUN --mount=type=cache,target=/root/.cache bun install --frozen-lockfile --production
+RUN --mount=type=cache,target=/root/.cache bun install --production
 
 COPY ./packages ./packages
 COPY ./apps/bot ./apps/bot
