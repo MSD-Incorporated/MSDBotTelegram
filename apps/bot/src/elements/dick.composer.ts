@@ -137,7 +137,7 @@ dickComposer
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
-			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) });
+			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) * 2 });
 			return ctx.reply(bold("🤑 Вы угадали!"));
 		}
 
@@ -153,7 +153,7 @@ dickComposer
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
-			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) });
+			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) * 2 });
 			return ctx.reply(bold("🤑 Вы угадали!"));
 		}
 	});
