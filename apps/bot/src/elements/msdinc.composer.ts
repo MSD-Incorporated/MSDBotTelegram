@@ -4,7 +4,7 @@ import sagiri from "sagiri";
 
 import type { Context } from "../utils";
 
-const channelID = -1003663516104 as const;
+const channelID = -1001528929804 as const;
 const chatID = -1001765200223 as const;
 
 const urlParser = (urls: string[]) => {
