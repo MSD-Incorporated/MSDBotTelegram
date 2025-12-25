@@ -3,10 +3,14 @@ import env from "@msdbot/env";
 import { Bot } from "grammy";
 
 import { dickComposer, extraComposer, startComposer } from "../elements";
+import { MSDIncComposer } from "../elements/msdinc.composer";
 import { autoQuote, createContextConstructor, parseMode, type Context } from "../utils";
 
 export const client = new Bot<Context>(env.BOT_TOKEN, {
 	ContextConstructor: createContextConstructor({ database: database }),
+	client: {
+		apiRoot: env.NODE_ENV === "prod" ? (env.LOCAL_API !== undefined ? env.LOCAL_API : undefined) : undefined,
+	},
 });
 
 client.use(autoQuote());
@@ -27,3 +31,4 @@ process.once("SIGTERM", async () => {
 client.use(dickComposer);
 client.use(extraComposer);
 client.use(startComposer);
+client.use(MSDIncComposer);
