@@ -4,7 +4,8 @@ import sagiri from "sagiri";
 
 import type { Context } from "../utils";
 
-const channelID = -1003663516104;
+const channelID = -1003663516104 as const;
+const chatID = -1001765200223 as const;
 
 const urlParser = (urls: string[]) => {
 	const sortedURLs: [string, string][] = [];
@@ -58,6 +59,23 @@ const search_full = async (ctx: Context, file_id?: string) => {
 };
 
 export const MSDIncComposer = new Composer<Context>();
+
+MSDIncComposer.chatType("supergroup")
+	.filter(
+		({ message }) =>
+			message?.chat.type === "supergroup" && message.chat.id === chatID && message.message_thread_id === 43535
+	)
+	.on(":photo", async (ctx, next) => {
+		await next();
+
+		const data = (await search_full(ctx)) as { text: string[]; file: Buffer<ArrayBuffer> };
+		if (!data.text || data.text[0] == "Не удалось найти!") return;
+
+		return ctx.replyWithPhoto(new InputFile(data.file), {
+			caption: data.text.join("\n"),
+			parse_mode: "HTML",
+		});
+	});
 
 MSDIncComposer.chatType(["group", "supergroup"])
 	.filter(

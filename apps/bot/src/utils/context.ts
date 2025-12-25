@@ -26,8 +26,24 @@ export function createContextConstructor({ database }: Dependencies) {
 		constructor(update: Update, api: Api, me: UserFromGetMe) {
 			super(update, api, me);
 
-			const from = (this.update.message ?? this.update.callback_query)!.from;
-			const locale = from.language_code;
+			if (this.update.channel_post !== undefined) {
+				this.database = database;
+				this.normalized_name = this.update.channel_post.chat.title;
+				this.t = L["ru"];
+
+				return;
+			}
+
+			if (this.update.message_reaction !== undefined) {
+				this.database = database;
+				this.normalized_name = "";
+				this.t = L["ru"];
+
+				return;
+			}
+
+			const from = (this.update.message ?? this.update.callback_query ?? this.update.message_reaction)!.from;
+			const locale = from?.language_code;
 			const normalized_name = normalizeName(from);
 
 			this.database = database;
