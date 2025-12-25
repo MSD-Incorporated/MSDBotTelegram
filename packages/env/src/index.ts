@@ -14,6 +14,7 @@ export const env = createEnv({
 		POSTGRES_HOST: z.string().min(1),
 		POSTGRES_PORT: z.coerce.number().default(5432),
 
+		NODE_ENV: z.enum(["dev", "prod"]),
 		TZ: z.string().min(1),
 	},
 	runtimeEnv: {
