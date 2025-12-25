@@ -65,6 +65,8 @@ MSDIncComposer.chatType("supergroup")
 		({ message }) =>
 			message?.chat.type === "supergroup" && message.chat.id === chatID && message.message_thread_id === 43535
 	)
+
+	.filter(({ message }) => message?.media_group_id === undefined)
 	.on(":photo", async (ctx, next) => {
 		await next();
 
