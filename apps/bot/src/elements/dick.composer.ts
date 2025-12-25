@@ -99,7 +99,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 
 dickComposer
 	.chatType(["group", "supergroup", "private"])
-	.filter(({ chat }) => chat !== undefined && chat.id === -1001705068191)
+	.filter(({ chat }) => chat !== undefined && (chat.id === -1001705068191 || chat.id === -1002299010777))
 	.command(["roll", "dice", "di"], async ctx => {
 		const [balance, diceGuess] = ctx.match.split(" ");
 
