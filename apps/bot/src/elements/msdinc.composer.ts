@@ -79,6 +79,26 @@ MSDIncComposer.chatType("supergroup")
 		});
 	});
 
+MSDIncComposer.filter(({ from }) => from !== undefined && from.id === 946070039).command(
+	["sauce", "search_full"],
+	async (ctx, next) => {
+		await next();
+
+		if (!ctx.message?.reply_to_message || !ctx.message?.reply_to_message?.photo?.length) return;
+
+		const photos = ctx.message.reply_to_message.photo;
+		const file_id = photos[photos.length - 1]!.file_id;
+
+		const data = (await search_full(ctx, file_id)) as { text: string[]; file: Buffer<ArrayBuffer> };
+		if (!data.text) return;
+
+		return ctx.replyWithPhoto(new InputFile(data.file), {
+			caption: data.text.join("\n"),
+			parse_mode: "HTML",
+		});
+	}
+);
+
 MSDIncComposer.chatType(["group", "supergroup"])
 	.filter(
 		({ message }) => message?.forward_origin?.type === "channel" && message.forward_origin.chat.id === channelID
