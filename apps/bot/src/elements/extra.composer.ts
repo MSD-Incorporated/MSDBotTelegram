@@ -12,7 +12,7 @@ extraComposer
 	.on("message:text", async (ctx, next) => {
 		await next();
 
-		return ctx.react("👀");
+		return ctx.react("👀").catch(() => {});
 	});
 
 extraComposer
