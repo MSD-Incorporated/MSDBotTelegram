@@ -138,7 +138,13 @@ dickComposer
 			}
 
 			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) * 2 });
-			return ctx.reply(bold("🤑 Вы угадали!"));
+			return ctx.reply(
+				[
+					bold("🤑 Вы угадали!\n"),
+					`• Ваш текущий размер pp: ${code(size - -1 * Number(balance) * 2)} см`,
+					`• Ваша ставка была: ${code(balance)} см`,
+				].join("\n")
+			);
 		}
 
 		if (size > 0) {
@@ -154,7 +160,13 @@ dickComposer
 			}
 
 			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) * 2 });
-			return ctx.reply(bold("🤑 Вы угадали!"));
+			return ctx.reply(
+				[
+					bold("🤑 Вы угадали!\n"),
+					`• Ваш текущий размер pp: ${code(size + Number(balance) * 2)} см`,
+					`• Ваша ставка была: ${code(balance)} см`,
+				].join("\n")
+			);
 		}
 	});
 
