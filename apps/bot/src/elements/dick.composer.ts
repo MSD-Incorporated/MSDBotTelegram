@@ -34,7 +34,21 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 		});
 	}
 
-	const difference = randomInt(-12, 12 + 1);
+	let min = -20;
+	let max = 20;
+	const scalingStep = 25;
+
+	if (size < 0) {
+		const bonus = Math.floor(Math.abs(size) / scalingStep);
+		min -= bonus;
+	}
+
+	if (size > 0) {
+		const bonus = Math.floor(size / scalingStep);
+		max += bonus;
+	}
+
+	const difference = randomInt(min, max + 1);
 	const newSize = size + difference;
 
 	await ctx.database.dicks.update(ctx.from, { size: newSize, timestamp: new Date() });
