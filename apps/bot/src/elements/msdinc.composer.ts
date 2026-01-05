@@ -65,7 +65,6 @@ MSDIncComposer.chatType("supergroup")
 		({ message }) =>
 			message?.chat.type === "supergroup" && message.chat.id === chatID && message.message_thread_id === 43535
 	)
-
 	.filter(({ message }) => message?.media_group_id === undefined)
 	.on(":photo", async (ctx, next) => {
 		await next();
@@ -79,9 +78,9 @@ MSDIncComposer.chatType("supergroup")
 		});
 	});
 
-MSDIncComposer.filter(({ from }) => from !== undefined && from.id === 946070039).command(
-	["sauce", "search_full"],
-	async (ctx, next) => {
+MSDIncComposer.chatType(["group", "supergroup", "private"])
+	.filter(({ from }) => from!.id === 946070039)
+	.command(["sauce", "search_full"], async (ctx, next) => {
 		await next();
 
 		if (!ctx.message?.reply_to_message || !ctx.message?.reply_to_message?.photo?.length) return;
@@ -90,14 +89,13 @@ MSDIncComposer.filter(({ from }) => from !== undefined && from.id === 946070039)
 		const file_id = photos[photos.length - 1]!.file_id;
 
 		const data = (await search_full(ctx, file_id)) as { text: string[]; file: Buffer<ArrayBuffer> };
-		if (!data.text) return;
+		if (!data.text || data.text[0] === "Не удалось найти!") return ctx.reply("Не удалось найти!");
 
-		return ctx.replyWithPhoto(new InputFile(data.file), {
+		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
 			caption: data.text.join("\n"),
 			parse_mode: "HTML",
 		});
-	}
-);
+	});
 
 MSDIncComposer.chatType(["group", "supergroup"])
 	.filter(
