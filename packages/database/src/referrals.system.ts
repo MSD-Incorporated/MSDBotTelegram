@@ -32,7 +32,7 @@ export class ReferralSystem {
 		params: ReferralParams<CreateIfNotExist, Include, Columns> = {}
 	) {
 		const { createIfNotExist, referrerId, include, columns } = params;
-		const searchResult = await this.find<Include, Columns>(user, { include, columns });
+		const searchResult = await this.findReferrer<Include, Columns>(user, { include, columns });
 
 		if (searchResult) return searchResult as Exclude<typeof searchResult, undefined>;
 
@@ -43,7 +43,7 @@ export class ReferralSystem {
 			if (!created) return undefined as Exclude<typeof searchResult, undefined>;
 
 			if (include && Object.keys(include).length > 0)
-				return (await this.find<Include, Columns>(user, { include, columns }))!;
+				return (await this.findReferrer<Include, Columns>(user, { include, columns }))!;
 
 			return created as unknown as Exclude<typeof searchResult, undefined>;
 		}
@@ -51,7 +51,7 @@ export class ReferralSystem {
 		return undefined as Exclude<typeof searchResult, undefined>;
 	}
 
-	public readonly find = async <
+	public readonly findReferrer = async <
 		Include extends IncludeRelation<"referrals"> = {},
 		Columns extends ColumnRelation<"referrals"> = {},
 	>(

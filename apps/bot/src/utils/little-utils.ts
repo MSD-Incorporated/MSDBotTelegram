@@ -27,6 +27,13 @@ export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", 
 	timeZone: "+00:00",
 });
 
+export const isSubscriber = async (ctx: Context, chat_id: number) =>
+	ctx.from &&
+	ctx.api
+		.getChatMember(chat_id, ctx.from.id)
+		.then(member => new Set(["creator", "administrator", "member"]).has(member.status))
+		.catch(() => false);
+
 /**
  * Generates a random number between the specified minimum and maximum values.
  *
@@ -62,4 +69,13 @@ export const keyboardBuilder = (ctx: Context, name: string, page: number, sub_na
 		});
 
 	return keyboard;
+};
+
+export const formatTime = (milliseconds: number): string => {
+	const totalSeconds = Math.floor(milliseconds / 1000);
+	const hours = Math.floor(totalSeconds / 3600);
+	const minutes = Math.floor((totalSeconds % 3600) / 60);
+	const seconds = totalSeconds % 60;
+	const pad = (num: number) => num.toString().padStart(2, "0");
+	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };

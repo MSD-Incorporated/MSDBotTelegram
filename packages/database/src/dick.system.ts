@@ -97,11 +97,11 @@ export class DickSystem {
 
 	public readonly update = async (
 		{ id }: { id: number },
-		{ size, timestamp }: { size: number; timestamp?: Date }
+		{ size, timestamp, referral_timestamp }: { size: number; timestamp?: Date; referral_timestamp?: Date }
 	) => {
 		return this.database
 			.update(schema.dicks)
-			.set({ size, timestamp })
+			.set({ size, timestamp, referral_timestamp })
 			.where(eq(schema.dicks.user_id, id))
 			.returning();
 	};

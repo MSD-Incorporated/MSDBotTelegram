@@ -1,13 +1,16 @@
 import { Composer } from "grammy";
 import { randomInt } from "node:crypto";
 
-import { bold, code, type TranslationFunctions } from "@msdbot/i18n";
+import { bold, boldAndTextLink, code, type TranslationFunctions } from "@msdbot/i18n";
 
+import { and, count, countDistinct, dick_history, eq, gte, referrals } from "@msdbot/database";
 import { sleep } from "bun";
-import { dateFormatter, keyboardBuilder, normalizeName, type Context } from "../utils";
+import type { InlineKeyboardButton } from "grammy/types";
+import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName, type Context } from "../utils";
 
 export const dickComposer = new Composer<Context>();
 export const timeout: number = 2 * 60 * 60 * 1000;
+export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0) return { text: t.dick_decreased({ difference: difference.toString().slice(1) }), emoji: "📉" };
@@ -16,6 +19,11 @@ const getPhrase = (difference: number, t: TranslationFunctions) => {
 };
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock"], async ctx => {
+	const res = await ctx.database.dicks.resolve(ctx.from, {
+		createIfNotExist: true,
+		columns: { size: true, timestamp: true },
+	});
+
 	const { size, timestamp } = await ctx.database.dicks.resolve(ctx.from, {
 		createIfNotExist: true,
 		columns: { size: true, timestamp: true },
@@ -219,3 +227,140 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 		)
 		.catch(err => console.error(err));
 });
+
+dickComposer
+	.chatType(["group", "supergroup", "private"])
+	.command(["referrals", "referals", "ref", "refs", "referral"], async ctx => {
+		const [refs] = await ctx.database.db
+			.select({ count: count() })
+			.from(referrals)
+			.where(eq(referrals.referrer, ctx.from.id));
+
+		const [activeRefs] = await ctx.database.db
+			.select({ count: countDistinct(referrals) })
+			.from(referrals)
+			.innerJoin(dick_history, eq(referrals.referral, dick_history.user_id))
+			.where(
+				and(
+					eq(referrals.referrer, ctx.from.id),
+					gte(dick_history.created_at, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
+				)
+			);
+
+		const isSubscribed = await isSubscriber(ctx, -1002336315136);
+		const value = (activeRefs?.count ?? 0) + Number(isSubscribed) * 3;
+		const { referral_timestamp } = await ctx.database.dicks.resolve(ctx.from, {
+			columns: { referral_timestamp: true },
+		});
+
+		const text = [
+			bold("📊 Ваша реферальная статистика:\n"),
+			bold("👥 Рефералов: ") + code(refs?.count ?? 0),
+			bold("🤑 Активных: ") + code(activeRefs?.count ?? 0),
+			bold("🗳️ Подписаны на ") +
+				boldAndTextLink("канал", "https://t.me/msdbot_information") +
+				bold(":") +
+				code(isSubscribed ? " да" : " нет"),
+			bold("\nЗа подписку на канал вы можете получить 3 см."),
+			bold("А за каждого реферала ещё по сантиметру!\n"),
+			bold("Всё это суммируется и вы можете получить в ту сторону, в какую захотите (плюс или минус)"),
+		].join("\n");
+
+		const now = Date.now();
+		const lastUsed = now - referral_timestamp.getTime();
+
+		if (lastUsed < referral_timeout) {
+			const timeLeft = formatTime(referral_timeout - lastUsed);
+
+			return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: activeRefs?.count ?? 0 }), {
+				reply_markup: {
+					inline_keyboard: [
+						[
+							{
+								text: "🔗 Скопировать ссылку",
+								copy_text: { text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}` },
+							},
+						],
+					],
+				},
+			});
+		}
+
+		const keyboard: InlineKeyboardButton[][] = [[], []];
+
+		if (value !== 0) {
+			keyboard[0]?.push({
+				text: `➖ Убрать ${value} см`,
+				callback_data: `referrals_${ctx.from.id}_remove_${value}`,
+			});
+
+			keyboard[0]?.push({
+				text: `➕ Добавить ${value} см`,
+				callback_data: `referrals_${ctx.from.id}_add_${value}`,
+			});
+
+			keyboard[1]?.push({
+				text: "🔗 Скопировать ссылку",
+				copy_text: {
+					text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}`,
+				},
+			});
+		}
+
+		if (value == 0) {
+			keyboard[0]?.push({
+				text: "🔗 Скопировать ссылку",
+				copy_text: {
+					text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}`,
+				},
+			});
+		}
+
+		return ctx.reply(text, { reply_markup: { inline_keyboard: keyboard } });
+	});
+
+dickComposer
+	.chatType(["group", "supergroup", "private"])
+	.callbackQuery(/referrals_(\d+)_(remove|add)_(\d+)/, async ctx => {
+		const type: "add" | "remove" = ctx.callbackQuery.data.split("_")[2] as "add" | "remove";
+		const value: number = Number(ctx.callbackQuery.data.split("_")[3]);
+
+		if (ctx.from.id !== Number(ctx.callbackQuery.data.split("_")[1]))
+			return ctx.answerCallbackQuery(ctx.t.keyboard_wrong_user());
+
+		const { size, referral_timestamp } = await ctx.database.dicks.resolve(ctx.from, {
+			columns: { size: true, referral_timestamp: true },
+		});
+
+		const now = Date.now();
+		const lastUsed = now - referral_timestamp.getTime();
+
+		if (lastUsed < referral_timeout) {
+			const timeLeft = formatTime(referral_timeout - lastUsed);
+			const [activeRefs] = await ctx.database.db
+				.select({ count: countDistinct(referrals) })
+				.from(referrals)
+				.innerJoin(dick_history, eq(referrals.referral, dick_history.user_id))
+				.where(
+					and(
+						eq(referrals.referrer, ctx.from.id),
+						gte(dick_history.created_at, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
+					)
+				);
+
+			return ctx.answerCallbackQuery(
+				ctx.t.dick_referral_timeout_text({ timeLeft, referrals: activeRefs?.count ?? 0 })
+			);
+		}
+
+		await ctx.database.dicks.update(ctx.from, {
+			size: type == "add" ? size + value : size - value,
+			referral_timestamp: new Date(Date.now()),
+		});
+
+		await ctx.database.dicks.addHistory(ctx.from, size, type == "add" ? value : Number(`-${value}`));
+
+		return ctx.editMessageText(
+			ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value })
+		);
+	});
