@@ -3,6 +3,7 @@ import env from "@msdbot/env";
 import { Bot } from "grammy";
 
 import { dickComposer, extraComposer, startComposer } from "../elements";
+import { BackupElement } from "../elements/backup.element";
 import { MSDIncComposer } from "../elements/msdinc.composer";
 import { autoQuote, createContextConstructor, parseMode, type Context } from "../utils";
 
@@ -27,6 +28,10 @@ process.once("SIGTERM", async () => {
 	await database.close();
 	process.exit();
 });
+
+const backupElement = new BackupElement(client);
+client.use(backupElement.composer);
+backupElement.startCron();
 
 client.use(dickComposer);
 client.use(extraComposer);

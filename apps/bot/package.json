@@ -9,6 +9,7 @@
 		"@msdbot/database": "workspace:^",
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
+		"backupx": "^0.1.2",
 		"grammy": "^1.38.3",
 		"sagiri": "^4.3.0"
 	},

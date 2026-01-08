@@ -40,3 +40,6 @@ drizzle/meta/*.json
 
 # GitHub App credentials
 gha-creds-*.json
+
+# Backups
+backups/**
