@@ -1,4 +1,4 @@
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import type { User } from "typegram";
 
 import * as schema from "./drizzle";
@@ -57,12 +57,15 @@ export class UserSystem {
 		Include extends IncludeRelation<"users"> = {},
 		Columns extends ColumnRelation<"users"> = {},
 	>(
-		{ id, username }: { id: number; username?: string } | { id?: number; username: string },
+		data: { id: number; username?: string } | { id?: number; username: string },
 		{ include, columns }: UserParams<"users", false, Include, Columns> = {}
 	) =>
 		this.database.query["users"].findFirst({
 			columns: columns as Columns,
-			where: or(eq(schema.users.id, id!), eq(schema.users.username, (username ?? "").replace("@", ""))),
+			where:
+				data.username === undefined
+					? eq(schema.users.id, data.id!)
+					: eq(schema.users.username, (data.username ?? "").replace("@", "")),
 			with: include as Include,
 		});
 
