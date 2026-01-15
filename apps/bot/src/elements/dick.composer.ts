@@ -364,3 +364,60 @@ dickComposer
 			ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value })
 		);
 	});
+
+dickComposer.chatType(["group", "supergroup", "private"]).command("send", async ctx => {
+	const [userToSendMention, amount]: string[] = ctx.match.split(" ");
+
+	if (userToSendMention === undefined || amount === undefined || isNaN(Number(amount)))
+		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/send <пользователь> <сумма>`));
+
+	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
+
+	const userToSend = (
+		isNaN(Number(userToSendMention))
+			? await ctx.database.users.find(
+					{ username: userToSendMention },
+					{ columns: { id: true, first_name: true, last_name: true } }
+				)
+			: await ctx.database.users.find(
+					{ id: Number(userToSendMention) },
+					{ columns: { id: true, first_name: true, last_name: true } }
+				)
+	)!;
+
+	const userToSendDick = await ctx.database.dicks.resolve(userToSend, {
+		createIfNotExist: false,
+		columns: { size: true },
+	});
+
+	if (!userToSendDick) return ctx.reply(bold(`Пользователь ${userToSendMention} не найден`));
+
+	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
+
+	if (size < 0) {
+		if (Number(amount) > 0 || size > Number(amount)) return ctx.reply(bold(`Ваш pp меньше чем вы можете отдать`));
+		if (userToSendDick.size > 0)
+			return ctx.reply("Вы не можете передать отрицательный размер pp пользователю с положительным pp");
+
+		await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(amount) });
+		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size - -1 * Number(amount) });
+
+		return ctx.reply(
+			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
+		);
+	}
+
+	if (size > 0) {
+		if (size < Number(amount) || Number(amount) < 0) return ctx.reply(bold(`Ваш pp больше чем вы можете отдать`));
+		if (userToSendDick.size < 0)
+			return ctx.reply("Вы не можете передать положительный размер pp пользователю с отрицательным pp");
+
+		await ctx.database.dicks.update(ctx.from, { size: size - Number(amount) });
+		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size + Number(amount) });
+
+		return ctx.reply(
+			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
+		);
+	}
+});

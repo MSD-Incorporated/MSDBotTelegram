@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import type { User } from "typegram";
 
 import * as schema from "./drizzle";
@@ -42,7 +42,10 @@ export class UserSystem {
 			const created = await this.upsert(payload);
 
 			if (include && Object.keys(include).length > 0)
-				return (await this.find<Include, Columns>(user, { include, columns }))!;
+				return (await this.find<Include, Columns>(user, { include, columns }))! as Exclude<
+					typeof searchResult,
+					undefined
+				>;
 
 			return created as unknown as Exclude<typeof searchResult, undefined>;
 		}
@@ -54,12 +57,12 @@ export class UserSystem {
 		Include extends IncludeRelation<"users"> = {},
 		Columns extends ColumnRelation<"users"> = {},
 	>(
-		{ id }: { id: number },
+		{ id, username }: { id: number; username?: string } | { id?: number; username: string },
 		{ include, columns }: UserParams<"users", false, Include, Columns> = {}
 	) =>
 		this.database.query["users"].findFirst({
 			columns: columns as Columns,
-			where: eq(schema.users.id, id),
+			where: or(eq(schema.users.id, id!), eq(schema.users.username, username!.replace("@", ""))),
 			with: include as Include,
 		});
 
