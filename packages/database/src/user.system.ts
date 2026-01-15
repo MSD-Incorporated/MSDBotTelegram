@@ -62,7 +62,7 @@ export class UserSystem {
 	) =>
 		this.database.query["users"].findFirst({
 			columns: columns as Columns,
-			where: or(eq(schema.users.id, id!), eq(schema.users.username, username!.replace("@", ""))),
+			where: or(eq(schema.users.id, id!), eq(schema.users.username, (username ?? "").replace("@", ""))),
 			with: include as Include,
 		});
 
