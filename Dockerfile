@@ -9,10 +9,18 @@ ARG GIT_COMMIT
 ENV NODE_ENV=prod
 
 COPY package.json bun.lock bunfig.toml ./
-COPY ./packages ./packages
-COPY ./apps/bot ./apps/bot
+
+COPY packages/assets/package.json ./packages/assets/package.json
+COPY packages/database/package.json ./packages/database/package.json
+COPY packages/env/package.json ./packages/env/package.json
+COPY packages/i18n/package.json ./packages/i18n/package.json
+COPY packages/tsconfig/package.json ./packages/tsconfig/package.json
+COPY apps/bot/package.json ./apps/bot/package.json
 
 RUN --mount=type=cache,target=/root/.cache bun install --production
+
+COPY ./packages ./packages
+COPY ./apps/bot ./apps/bot
 
 RUN echo "Building with GIT_COMMIT=${GIT_COMMIT}"
 RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --define GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=bun-linux-x64
