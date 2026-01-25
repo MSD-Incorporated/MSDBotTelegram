@@ -1,7 +1,7 @@
 import { Composer } from "grammy";
 import { randomInt } from "node:crypto";
 
-import { bold, boldAndTextLink, code, type TranslationFunctions } from "@msdbot/i18n";
+import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 
 import { and, count, countDistinct, dick_history, eq, gte, referrals } from "@msdbot/database";
 import { sleep } from "bun";
@@ -13,8 +13,16 @@ export const timeout: number = 2 * 60 * 60 * 1000;
 export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
-	if (difference < 0) return { text: t.dick_decreased({ difference: difference.toString().slice(1) }), emoji: "📉" };
-	if (difference > 0) return { text: t.dick_increased({ difference: difference.toString() }), emoji: "📈" };
+	if (difference < 0)
+		return {
+			text: t.dick_decreased({ difference: difference.toString().slice(1) }),
+			emoji: premium_emoji("📉", "5246762912428603768"),
+		};
+	if (difference > 0)
+		return {
+			text: t.dick_increased({ difference: difference.toString() }),
+			emoji: premium_emoji("📈", "5244837092042750681"),
+		};
 	return { text: t.dick_not_changed(), emoji: "😐" };
 };
 

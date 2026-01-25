@@ -1,5 +1,5 @@
 import { BUN_URL, DEVELOPER, INFOMRATION_CHANNEL, MSDBOT_URL, NODEJS_URL } from "../constants";
-import { blockquote, bold, boldAndTextLink, code } from "../formatters";
+import { blockquote, bold, boldAndTextLink, code, premium_emoji } from "../formatters";
 import type { BaseTranslation } from "../i18n-types";
 
 const ru = {
@@ -32,7 +32,9 @@ const ru = {
 	dick_not_changed: bold("😔 не изменился!"),
 	dick_timeout_text: [
 		bold(`Попробуйте ещё через `) + `${code("{timeLeft:string}")}\n`,
-		bold(`✨ Ваш текущий размер pp: `) + `${code("{size:number}")}` + bold(` см`),
+		bold(`${premium_emoji("✨", "5325547803936572038")} Ваш текущий размер pp: `, false) +
+			`${code("{size:number}")}` +
+			bold(` см`),
 	].join("\n"),
 	dick_history_button: "История",
 	dick_history_empty: "История использования пуста",

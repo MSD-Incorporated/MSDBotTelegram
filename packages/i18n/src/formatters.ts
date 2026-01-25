@@ -38,8 +38,11 @@ export const blockquote = <C extends string | number, U extends boolean>(
  * @param {C} content - The content to wrap.
  * @returns {`<b class="tg-bold">${C}</b>`} The content wrapped in a bold tag.
  */
-export const bold = <C extends string | number>(content: C): `<b class="tg-bold">${C}</b>` => {
-	return `<b class="tg-bold">${textSanitaizer(content) as C}</b>`;
+export const bold = <C extends string | number, U extends boolean>(
+	content: C,
+	use_sanitizer: U = true as U
+): `<b class="tg-bold">${C}</b>` => {
+	return `<b class="tg-bold">${(use_sanitizer ? content : textSanitaizer(content)) as C}</b>`;
 };
 
 /**
@@ -142,8 +145,8 @@ export const text_mention = <C extends string | number, U extends string>(
 export const premium_emoji = <E extends string, I extends string | number>(
 	emoji: E,
 	id: I
-): `<tg-emoji emoji-id="${I}">${E}</tg-premium-emoji>` => {
-	return `<tg-emoji emoji-id="${id}">${emoji}</tg-premium-emoji>`;
+): `<tg-emoji emoji-id="${I}">${E}</tg-emoji>` => {
+	return `<tg-emoji emoji-id="${id}">${emoji}</tg-emoji>`;
 };
 
 export const initFormatters: FormattersInitializer<Locales, Formatters> = (_locale: Locales) => {

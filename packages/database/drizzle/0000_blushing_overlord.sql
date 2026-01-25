@@ -61,18 +61,20 @@ END $$;
 
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'referrals_referral_users_id_fk') THEN
-        ALTER TABLE "referrals"
-        ADD CONSTRAINT "referrals_refferal_users_id_fk"
-        FOREIGN KEY ("referral") REFERENCES "public"."users"("id")
-        ON DELETE no action ON UPDATE no action;
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'referrals' AND column_name = 'referrer') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'referrals_referrer_users_id_fk') THEN
+            ALTER TABLE IF EXISTS "referrals"
+            ADD CONSTRAINT "referrals_referrer_users_id_fk"
+            FOREIGN KEY ("referrer") REFERENCES "public"."users"("id")
+            ON DELETE NO ACTION ON UPDATE NO ACTION;
+        END IF;
     END IF;
 END $$;
 
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'referrals_referrer_users_id_fk') THEN
-        ALTER TABLE "referrals"
+        ALTER TABLE IF EXISTS "referrals"
         ADD CONSTRAINT "referrals_referrer_users_id_fk"
         FOREIGN KEY ("referrer") REFERENCES "public"."users"("id")
         ON DELETE no action ON UPDATE no action;
