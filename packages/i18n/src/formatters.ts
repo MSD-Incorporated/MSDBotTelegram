@@ -110,11 +110,12 @@ export const text_link = <C extends string | number, U extends string>(
  * @param {U} url - The URL for the link.
  * @returns {`<b class="tg-bold"><a class="tg-text-link" href="${U}">${C}</a></b>`} The bold anchor tag with the text link.
  */
-export const boldAndTextLink = <C extends string | number, U extends string>(
+export const boldAndTextLink = <C extends string | number, U extends string, US extends boolean>(
 	text: C,
-	url: U
+	url: U,
+	use_sanitizer: US = true as US
 ): `<b class="tg-bold"><a class="tg-text-link" href="${U}">${C}</a></b>` =>
-	`<b class="tg-bold"><a class="tg-text-link" href="${url}">${textSanitaizer(text) as C}</a></b>`;
+	`<b class="tg-bold"><a class="tg-text-link" href="${url}">${(use_sanitizer ? text : textSanitaizer(text)) as C}</a></b>`;
 
 /**
  * Creates an anchor tag for a text mention with a user ID.

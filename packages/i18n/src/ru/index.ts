@@ -14,7 +14,10 @@ const ru = {
 		`• ${bold(`Версия`)} ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("v{msdbot_version:string}")} [${code("{commit:string}")}]`,
 		`• ${bold("Версия")} ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
 		`• ${bold("Версия")} ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}\n`,
-		[boldAndTextLink(`🧑‍💻 Разработчик`, DEVELOPER), boldAndTextLink("📰 Канал", INFOMRATION_CHANNEL)].join("丨"),
+		[
+			boldAndTextLink(`${premium_emoji("🧑‍💻", "5190458330719461749")} Разработчик`, DEVELOPER, false),
+			boldAndTextLink(`${premium_emoji("📰", "5433982607035474385")} Канал`, INFOMRATION_CHANNEL),
+		].join("丨"),
 	].join("\n"),
 	start_referral_command: [
 		bold(`👋 Добро пожаловать!`),
@@ -29,10 +32,11 @@ const ru = {
 
 	dick_increased: bold(`увеличился на `) + `${code("{difference:string}")}` + bold(` см!`),
 	dick_decreased: bold(`уменьшился на `) + `${code("{difference:string}")}` + bold(` см!`),
-	dick_not_changed: bold("😔 не изменился!"),
+	dick_not_changed: bold(`${premium_emoji("😔", "5370781385885751708")} не изменился!`, false),
 	dick_timeout_text: [
 		bold(`Попробуйте ещё через `) + `${code("{timeLeft:string}")}\n`,
-		bold(`${premium_emoji("✨", "5325547803936572038")} Ваш текущий размер pp: `, false) +
+		premium_emoji("✨", "5325547803936572038") +
+			bold(` Ваш текущий размер pp: `, false) +
 			`${code("{size:number}")}` +
 			bold(` см`),
 	].join("\n"),
