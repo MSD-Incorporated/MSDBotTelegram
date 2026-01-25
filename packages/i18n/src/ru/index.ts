@@ -10,29 +10,29 @@ const ru = {
 	keyboard_next_page: "Вперёд ›",
 
 	start_command: [
-		`${bold("👋 Добро пожаловать!")}\n`,
+		`${premium_emoji("👋", "5472055112702629499") + bold(" Добро пожаловать!")}\n`,
 		`• ${bold(`Версия`)} ${boldAndTextLink("MSDBot", MSDBOT_URL)} — ${code("v{msdbot_version:string}")} [${code("{commit:string}")}]`,
 		`• ${bold("Версия")} ${boldAndTextLink("NodeJS", NODEJS_URL)} — ${code("{version:string}")}`,
 		`• ${bold("Версия")} ${boldAndTextLink("Bun", BUN_URL)} — ${code("v{bun_version:string}")}\n`,
 		[
-			boldAndTextLink(`${premium_emoji("🧑‍💻", "5190458330719461749")} Разработчик`, DEVELOPER, false),
-			boldAndTextLink(`${premium_emoji("📰", "5433982607035474385")} Канал`, INFOMRATION_CHANNEL),
+			premium_emoji("🧑‍💻", "5190458330719461749") + boldAndTextLink(` Разработчик`, DEVELOPER, false),
+			premium_emoji("📰", "5433982607035474385") + boldAndTextLink(` Канал`, INFOMRATION_CHANNEL, false),
 		].join("丨"),
 	].join("\n"),
 	start_referral_command: [
-		bold(`👋 Добро пожаловать!`),
+		premium_emoji("👋", "5472055112702629499") + bold(` Добро пожаловать!`),
 		bold(`Вы успешно зарегистрировались по реферальной ссылке.\n`),
 		`${bold(`👤 Ваш реферер:`)} ${boldAndTextLink("{referrer_name:string}", "tg://openmessage?user_id={referrer_id:number}")} [${code("{referrer_id:number}")}]`,
 	].join("\n"),
 	im_here: [
-		bold("👋 Я тут!\n"),
+		premium_emoji("👋", "5472055112702629499") + bold(" Я тут!\n"),
 		blockquote(bold("❓ Не можете разобраться?"), false),
 		[bold("Просто напишите"), code("/"), bold("после чего, вы получите список имеющихся у меня команд!")].join(" "),
 	].join("\n"),
 
 	dick_increased: bold(`увеличился на `) + `${code("{difference:string}")}` + bold(` см!`),
 	dick_decreased: bold(`уменьшился на `) + `${code("{difference:string}")}` + bold(` см!`),
-	dick_not_changed: bold(`${premium_emoji("😔", "5370781385885751708")} не изменился!`, false),
+	dick_not_changed: premium_emoji("😔", "5370781385885751708") + bold(` не изменился!`, false),
 	dick_timeout_text: [
 		bold(`Попробуйте ещё через `) + `${code("{timeLeft:string}")}\n`,
 		premium_emoji("✨", "5325547803936572038") +
@@ -43,7 +43,7 @@ const ru = {
 	dick_history_button: "История",
 	dick_history_empty: "История использования пуста",
 	dick_success_text: [
-		bold(`{emoji:string} Ваш pp `) + `{phrase:string}`,
+		bold(`{emoji:string} Ваш pp `, false) + `{phrase:string}`,
 		`Ваш текущий размер pp: ${code("{current_size:number}")} см`,
 	].join("\n\n"),
 	dick_leaderboard_choose_text: [

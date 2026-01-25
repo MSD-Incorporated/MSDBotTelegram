@@ -23,7 +23,7 @@ const getPhrase = (difference: number, t: TranslationFunctions) => {
 			text: t.dick_increased({ difference: difference.toString() }),
 			emoji: premium_emoji("📈", "5244837092042750681"),
 		};
-	return { text: t.dick_not_changed(), emoji: "😐" };
+	return { text: t.dick_not_changed(), emoji: premium_emoji("😔", "5370781385885751708") };
 };
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock"], async ctx => {
