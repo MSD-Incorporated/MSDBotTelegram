@@ -128,6 +128,24 @@ export const text_mention = <C extends string | number, U extends string>(
 ): `<a class="tg-text-mention" href="tg://user?id=${U}">${C}</a>` =>
 	`<a class="tg-text-mention" href="tg://user?id=${id}">${textSanitaizer(name) as C}</a>`;
 
+/**
+ * Creates a premium emoji tag.
+ *
+ * @template {string} E - The type of the emoji string.
+ * @template {string | number} I - The type of the emoji ID, either string or number.
+ * @param {E} emoji - The emoji character.
+ * @param {I} id - The ID of the premium emoji.
+ * @returns {`<tg-emoji emoji-id="${I}">${E}</tg-premium-emoji>`} The premium emoji tag.
+ *
+ * @example <tg-emoji emoji-id="5368324170671202286">👍</tg-emoji>
+ */
+export const premium_emoji = <E extends string, I extends string | number>(
+	emoji: E,
+	id: I
+): `<tg-emoji emoji-id="${I}">${E}</tg-premium-emoji>` => {
+	return `<tg-emoji emoji-id="${id}">${emoji}</tg-premium-emoji>`;
+};
+
 export const initFormatters: FormattersInitializer<Locales, Formatters> = (_locale: Locales) => {
 	const formatters: Formatters = {};
 
