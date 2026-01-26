@@ -93,7 +93,7 @@ const ru = {
 			false
 		) + code("{isSubscribed:string}"),
 	].join("\n"),
-	dick_referral_success: bold(`Вы успешно {type:string} ваш dick на`) + code(`{value:number}`) + bold(`см!`),
+	dick_referral_success: bold(`Вы успешно {type:string} ваш dick на `) + code(`{value:number}`) + bold(` см!`),
 } satisfies BaseTranslation;
 
 export default ru;
