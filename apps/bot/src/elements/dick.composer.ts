@@ -1,11 +1,10 @@
+import { and, count, countDistinct, dick_history, eq, gte, referrals } from "@msdbot/database";
+import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
+import { sleep } from "bun";
 import { Composer } from "grammy";
+import type { InlineKeyboardButton } from "grammy/types";
 import { randomInt } from "node:crypto";
 
-import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
-
-import { and, count, countDistinct, dick_history, eq, gte, referrals } from "@msdbot/database";
-import { sleep } from "bun";
-import type { InlineKeyboardButton } from "grammy/types";
 import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName, type Context } from "../utils";
 
 export const dickComposer = new Composer<Context>();
@@ -27,14 +26,9 @@ const getPhrase = (difference: number, t: TranslationFunctions) => {
 };
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock"], async ctx => {
-	const res = await ctx.database.dicks.resolve(ctx.from, {
-		createIfNotExist: true,
-		columns: { size: true, timestamp: true },
-	});
-
 	const { size, timestamp } = await ctx.database.dicks.resolve(ctx.from, {
-		createIfNotExist: true,
 		columns: { size: true, timestamp: true },
+		createIfNotExist: true,
 	});
 
 	const lastUsed = Date.now() - timestamp.getTime();
@@ -115,7 +109,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 	const { dick_leaderboard_choose_text, dick_leaderboard_ascending_button, dick_leaderboard_descending_button } =
 		ctx.t;
 
-	return ctx.reply(dick_leaderboard_choose_text({ emoji: "📊" }), {
+	return ctx.reply(dick_leaderboard_choose_text({ emoji: premium_emoji("📊", "5231200819986047254") }), {
 		reply_markup: {
 			inline_keyboard: [
 				[
@@ -129,7 +123,10 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 
 dickComposer
 	.chatType(["group", "supergroup", "private"])
-	.filter(({ chat }) => chat !== undefined && (chat.id === -1001705068191 || chat.id === -1002299010777))
+	.filter(
+		({ chat }) =>
+			chat !== undefined && (chat.id === -1001705068191 || chat.id === -1002299010777 || chat.id === 946070039)
+	)
 	.command(["roll", "dice", "di"], async ctx => {
 		const [balance, diceGuess] = ctx.match.split(" ");
 
@@ -164,15 +161,15 @@ dickComposer
 
 			if (Number(diceGuess) !== dice.value) {
 				await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(balance) });
-				return ctx.reply(bold("😔 Вы не угадали"));
+				return ctx.reply(bold(`${premium_emoji("😔", "5370781385885751708")} Вы не угадали...`, false));
 			}
 
 			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) * 2 });
 			return ctx.reply(
 				[
-					bold("🤑 Вы угадали!\n"),
-					`• Ваш текущий размер pp: ${code(size - -1 * Number(balance) * 2)} см`,
-					`• Ваша ставка была: ${code(balance)} см`,
+					bold(`${premium_emoji("🤑", "5373303394976929925")} Вы угадали!\n`, false),
+					bold(`• Ваш текущий размер pp: `) + `${code(size - -1 * Number(balance) * 2)}` + bold(` см`),
+					bold(`• Ваша ставка была: `) + `${code(balance)}` + bold(` см`),
 				].join("\n")
 			);
 		}
@@ -262,10 +259,10 @@ dickComposer
 		});
 
 		const text = [
-			bold("📊 Ваша реферальная статистика:\n"),
-			bold("👥 Рефералов: ") + code(refs?.count ?? 0),
-			bold("🤑 Активных: ") + code(activeRefs?.count ?? 0),
-			bold("🗳️ Подписаны на ") +
+			bold(`${premium_emoji("📊", "5231200819986047254")} Ваша реферальная статистика:\n`, false),
+			bold(`${premium_emoji("👥", "5372926953978341366")} Рефералов: `, false) + code(refs?.count ?? 0),
+			bold(`${premium_emoji("🤑", "5373303394976929925")} Активных: `, false) + code(activeRefs?.count ?? 0),
+			bold(`${premium_emoji("🗳️", "5359741159566484212")} Подписаны на `, false) +
 				boldAndTextLink("канал", "https://t.me/msdbot_information") +
 				bold(":") +
 				code(isSubscribed ? " да" : " нет"),
@@ -280,18 +277,25 @@ dickComposer
 		if (lastUsed < referral_timeout) {
 			const timeLeft = formatTime(referral_timeout - lastUsed);
 
-			return ctx.reply(ctx.t.dick_referral_timeout_text({ timeLeft, referrals: activeRefs?.count ?? 0 }), {
-				reply_markup: {
-					inline_keyboard: [
-						[
-							{
-								text: "🔗 Скопировать ссылку",
-								copy_text: { text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}` },
-							},
+			return ctx.reply(
+				ctx.t.dick_referral_timeout_text({
+					timeLeft,
+					referrals: activeRefs?.count ?? 0,
+					isSubscribed: isSubscribed ? "да" : "нет",
+				}),
+				{
+					reply_markup: {
+						inline_keyboard: [
+							[
+								{
+									text: "🔗 Скопировать ссылку",
+									copy_text: { text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}` },
+								},
+							],
 						],
-					],
-				},
-			});
+					},
+				}
+			);
 		}
 
 		const keyboard: InlineKeyboardButton[][] = [[], []];
@@ -357,7 +361,11 @@ dickComposer
 				);
 
 			return ctx.answerCallbackQuery(
-				ctx.t.dick_referral_timeout_text({ timeLeft, referrals: activeRefs?.count ?? 0 })
+				ctx.t.dick_referral_timeout_text({
+					timeLeft,
+					referrals: activeRefs?.count ?? 0,
+					isSubscribed: (await isSubscriber(ctx, -1002336315136)) ? "да" : "нет",
+				})
 			);
 		}
 

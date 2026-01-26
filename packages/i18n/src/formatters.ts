@@ -42,7 +42,7 @@ export const bold = <C extends string | number, U extends boolean>(
 	content: C,
 	use_sanitizer: U = true as U
 ): `<b class="tg-bold">${C}</b>` => {
-	return `<b class="tg-bold">${(use_sanitizer ? content : textSanitaizer(content)) as C}</b>`;
+	return `<b class="tg-bold">${(use_sanitizer ? textSanitaizer(content) : content) as C}</b>`;
 };
 
 /**
@@ -115,7 +115,7 @@ export const boldAndTextLink = <C extends string | number, U extends string, US 
 	url: U,
 	use_sanitizer: US = true as US
 ): `<b class="tg-bold"><a class="tg-text-link" href="${U}">${C}</a></b>` =>
-	`<b class="tg-bold"><a class="tg-text-link" href="${url}">${(use_sanitizer ? text : textSanitaizer(text)) as C}</a></b>`;
+	`<b class="tg-bold"><a class="tg-text-link" href="${url}">${(use_sanitizer ? textSanitaizer(text) : text) as C}</a></b>`;
 
 /**
  * Creates an anchor tag for a text mention with a user ID.
