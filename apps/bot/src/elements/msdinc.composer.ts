@@ -1,5 +1,5 @@
 import { env } from "@msdbot/env";
-import { Composer, InputFile } from "grammy";
+import { Composer } from "grammy";
 import sagiri from "sagiri";
 
 import type { Context } from "../utils";
@@ -72,10 +72,7 @@ MSDIncComposer.chatType("supergroup")
 		const data = (await search_full(ctx)) as { text: string[]; file: Buffer<ArrayBuffer> };
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
 
-		return ctx.replyWithPhoto(new InputFile(data.file), {
-			caption: data.text.join("\n"),
-			parse_mode: "HTML",
-		});
+		return ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
 	});
 
 MSDIncComposer.chatType(["group", "supergroup", "private"])
@@ -91,10 +88,7 @@ MSDIncComposer.chatType(["group", "supergroup", "private"])
 		const data = (await search_full(ctx, file_id)) as { text: string[]; file: Buffer<ArrayBuffer> };
 		if (!data.text || data.text[0] === "Не удалось найти!") return ctx.reply("Не удалось найти!");
 
-		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
-			caption: data.text.join("\n"),
-			parse_mode: "HTML",
-		});
+		return ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
 	});
 
 MSDIncComposer.chatType(["group", "supergroup"])
@@ -110,8 +104,5 @@ MSDIncComposer.chatType(["group", "supergroup"])
 		const data = (await search_full(ctx)) as { text: string[]; file: Buffer<ArrayBuffer> };
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
 
-		return ctx.replyWithPhoto(new InputFile(data.file), {
-			caption: data.text.join("\n"),
-			parse_mode: "HTML",
-		});
+		return ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
 	});
