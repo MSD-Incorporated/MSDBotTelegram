@@ -1,4 +1,4 @@
-import { and, count, countDistinct, dick_history, eq, gte, referrals } from "@msdbot/database";
+import { and, count, countDistinct, desc, dick_history, eq, gte, inArray, referrals } from "@msdbot/database";
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
 import { Composer } from "grammy";
@@ -10,6 +10,9 @@ import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName
 export const dickComposer = new Composer<Context>();
 export const timeout: number = 2 * 60 * 60 * 1000;
 export const referral_timeout: number = 24 * 60 * 60 * 1000;
+
+const TYPES = ["dick", "dice", "referral", "transfer"] as const;
+const PAGE_SIZE = 10;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0)
@@ -39,7 +42,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 
 		return ctx.reply(dick_timeout_text({ timeLeft, size }), {
 			reply_markup: {
-				inline_keyboard: [[{ text: dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1` }]],
+				inline_keyboard: [[{ text: dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1_0` }]],
 			},
 		});
 	}
@@ -68,43 +71,97 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	return ctx.reply(ctx.t.dick_success_text({ phrase, emoji, current_size: newSize }));
 });
 
-dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/dick_history_(\d+)_(\d+)/gm, async ctx => {
-	const user_id = Number(ctx.callbackQuery.data.split("_")[2]);
-	if (ctx.callbackQuery.from!.id !== user_id) return ctx.answerCallbackQuery(ctx.t.keyboard_wrong_user());
+dickComposer
+	.chatType(["group", "supergroup", "private"])
+	.callbackQuery([/^dick_history_(\d+)_(\d+)_(\d+)$/, /^history_filter_(\d+)_(\d+)_(\d+)$/], async ctx => {
+		const userId: number = Number(ctx.match[1]);
+		let page: number = Number(ctx.match[2]);
+		let mask: number = Number(ctx.match[3]);
 
-	const inline_keyboard = ctx.msg?.reply_markup?.inline_keyboard!;
-	const totalPagesButton = inline_keyboard[0]!.find(button => button.text.includes("/"));
-	const currentPage = Number(totalPagesButton?.text.split("/")[0]);
-	const page = Number(ctx.callbackQuery.data.split("_")[3]);
+		if (ctx.callbackQuery.data.startsWith("dick_history")) {
+			const match = ctx.callbackQuery.data.match(/^dick_history_(\d+)_(\d+)_(\d+)$/)!;
+			page = Number(match[2]);
+			mask = Number(match[3]);
+		} else {
+			const match = ctx.callbackQuery.data.match(/^history_filter_(\d+)_(\d+)_(\d+)$/)!;
+			const bit = Number(match[2]);
+			const currentMask = Number(match[3]);
 
-	if (currentPage == page) return ctx.answerCallbackQuery(ctx.t.keyboard_same_page());
+			mask = currentMask ^ (1 << bit);
+			page = 1;
+		}
 
-	const totalDickHistory = await ctx.database.dicks.countHistory({ id: ctx.from.id });
-	if (totalDickHistory <= 0) return ctx.answerCallbackQuery(ctx.t.dick_history_empty());
+		let selectedTypes = TYPES.filter((_, i) => (mask >> i) & 1);
+		if (selectedTypes.length === 0) selectedTypes = ["dick", "dice", "referral", "transfer"];
 
-	const dickHistory = await ctx.database.dicks.getHistory(ctx.callbackQuery.from, {
-		limit: 10,
-		offset: (page - 1) * 10,
-		columns: { size: true, difference: true, created_at: true, type: true },
+		await ctx.answerCallbackQuery();
+
+		const conditions = [eq(dick_history.user_id, userId), inArray(dick_history.type, selectedTypes)];
+
+		const [totalCount] = await ctx.database.db
+			.select({ value: count() })
+			.from(dick_history)
+			.where(and(...conditions));
+
+		const totalPages = Math.ceil((totalCount?.value ?? 0) / PAGE_SIZE);
+
+		const history = await ctx.database.db
+			.select()
+			.from(dick_history)
+			.where(and(...conditions))
+			.orderBy(desc(dick_history.created_at))
+			.limit(PAGE_SIZE)
+			.offset((page - 1) * PAGE_SIZE);
+
+		const text = history.length
+			? history
+					.map(({ size, difference, created_at, type }, index) => {
+						return ctx.t.dick_history_user({
+							rank: page * 10 - 10 + index + 1,
+							date: dateFormatter.format(created_at!).slice(0, 17),
+							difference,
+							type: ctx.t.dick_history_types[(type ?? "dick") as keyof typeof ctx.t.dick_history_types](),
+							total: size + difference,
+						});
+					})
+					.join("\n\n")
+			: "История пуста.";
+
+		const buttons: InlineKeyboardButton[][] = [];
+
+		if (totalPages > 1) {
+			const paginationRow: InlineKeyboardButton[] = [];
+
+			if (page > 1)
+				paginationRow.push({
+					text: "‹ Назад",
+					callback_data: `dick_history_${userId}_${page - 1}_${mask}`,
+				});
+
+			paginationRow.push({ text: `${page}/${totalPages}`, callback_data: `dick_history_${userId}_${page}_` });
+
+			if (page < totalPages)
+				paginationRow.push({
+					text: "Вперёд ›",
+					callback_data: `dick_history_${userId}_${page + 1}_${mask}`,
+				});
+
+			buttons.push(paginationRow);
+		}
+
+		buttons.push(
+			[
+				{ text: mask & 1 ? "✅ Dick" : "Dick", callback_data: `history_filter_${userId}_0_${mask}` },
+				{ text: mask & 2 ? "✅ Казино" : "Казино", callback_data: `history_filter_${userId}_1_${mask}` },
+			],
+			[
+				{ text: mask & 4 ? "✅ Рефералы" : "Рефералы", callback_data: `history_filter_${userId}_2_${mask}` },
+				{ text: mask & 8 ? "✅ Переводы" : "Переводы", callback_data: `history_filter_${userId}_3_${mask}` },
+			]
+		);
+
+		return ctx.editMessageText(text, { reply_markup: { inline_keyboard: buttons } });
 	});
-
-	const pagesLength = Math.ceil(totalDickHistory / 10);
-	const history = dickHistory.map(({ size, difference, created_at, type }, index) => {
-		return ctx.t.dick_history_user({
-			rank: page * 10 - 10 + index + 1,
-			date: dateFormatter.format(created_at!).slice(0, 17),
-			difference,
-			type: ctx.t.dick_history_types[(type ?? "dick") as keyof typeof ctx.t.dick_history_types](),
-			total: size + difference,
-		});
-	});
-
-	const keyboard = keyboardBuilder(ctx, "dick_history", page, user_id.toString(), pagesLength);
-
-	return ctx.api.editMessageText(ctx.chat.id, ctx.msgId!, history.join("\n\n"), {
-		reply_markup: { inline_keyboard: keyboard },
-	});
-});
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leaderboard"], async ctx => {
 	const { dick_leaderboard_choose_text, dick_leaderboard_ascending_button, dick_leaderboard_descending_button } =
