@@ -40,7 +40,7 @@ export class Database {
 			ssl: false,
 		});
 
-		this.db = drizzle({ client: Bun.sql, schema });
+		this.db = drizzle({ client: this.client, schema });
 		this.users = new UserSystem(this.db);
 		this.dicks = new DickSystem(this.db);
 		this.referrals = new ReferralSystem(this.db);
