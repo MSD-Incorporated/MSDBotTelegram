@@ -2,7 +2,16 @@ import { BUN_URL, DEVELOPER, INFOMRATION_CHANNEL, MSDBOT_URL, NODEJS_URL } from 
 import { blockquote, bold, boldAndTextLink, code, premium_emoji } from "../formatters";
 import type { BaseTranslation } from "../i18n-types";
 
+const dick_history_types = {
+	dick: "Команда /dick",
+	dice: "Казино",
+	referral: "Рефералы",
+	transfer: "Переводы",
+};
+
 const ru = {
+	dick_history_types,
+
 	keyboard_same_page: "Вы уже на этой странице",
 	keyboard_wrong_user: "Эта кнопка предназначена не вам",
 	keyboard_back_page: "‹ Назад",
@@ -69,6 +78,7 @@ const ru = {
 		`${bold("{rank:number}.")} ${code("{date:string} UTC")}`,
 		`• Получено: ${code("{difference:number}")}`,
 		`• Всего: ${code("{total:number}")}`,
+		`• Тип: ${code("{type:string}")}`,
 	].join("\n"),
 	dick_refferal_text: [
 		"Наша реферальная система позволяет получать дополнительные сантиметры к dick",

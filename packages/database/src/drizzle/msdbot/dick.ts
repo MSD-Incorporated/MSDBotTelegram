@@ -1,7 +1,9 @@
-import { bigint, integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
+import { bigint, integer, pgEnum, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 
 import { users } from "../user";
 import { creationTimestamp, timestamps } from "../utils";
+
+export const dickHistoryTypes = pgEnum("types", ["dick", "dice", "referral", "transfer"]);
 
 export const dicks = pgTable("dicks", {
 	id: serial("id").unique(),
@@ -27,5 +29,6 @@ export const dick_history = pgTable("dick_history", {
 		.notNull(),
 	size: integer("size").default(0).notNull(),
 	difference: integer("difference").notNull(),
+	type: dickHistoryTypes("type").default("dick").notNull(),
 	created_at: creationTimestamp,
 });

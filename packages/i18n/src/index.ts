@@ -4,3 +4,4 @@ export * from "./i18n-util";
 export * from "./i18n-util.async";
 
 export * from "./formatters";
+export * from "./ru/index";

@@ -106,7 +106,12 @@ export class DickSystem {
 			.returning();
 	};
 
-	public readonly addHistory = async ({ id }: { id: number }, size: number, difference: number) => {
+	public readonly addHistory = async (
+		{ id }: { id: number },
+		size: number,
+		difference: number,
+		type?: "dick" | "dice" | "referral" | "transfer"
+	) => {
 		return (
 			await this.database
 				.insert(schema.dick_history)
@@ -114,6 +119,7 @@ export class DickSystem {
 					user_id: id,
 					size,
 					difference,
+					type,
 				})
 				.returning()
 		)[0];

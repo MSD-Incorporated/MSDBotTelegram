@@ -85,15 +85,16 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/dick_hi
 	const dickHistory = await ctx.database.dicks.getHistory(ctx.callbackQuery.from, {
 		limit: 10,
 		offset: (page - 1) * 10,
-		columns: { size: true, difference: true, created_at: true },
+		columns: { size: true, difference: true, created_at: true, type: true },
 	});
 
 	const pagesLength = Math.ceil(totalDickHistory / 10);
-	const history = dickHistory.map(({ size, difference, created_at }, index) => {
+	const history = dickHistory.map(({ size, difference, created_at, type }, index) => {
 		return ctx.t.dick_history_user({
 			rank: page * 10 - 10 + index + 1,
 			date: dateFormatter.format(created_at!).slice(0, 17),
 			difference,
+			type: ctx.t.dick_history_types[(type ?? "dick") as keyof typeof ctx.t.dick_history_types](),
 			total: size + difference,
 		});
 	});
@@ -125,7 +126,11 @@ dickComposer
 	.chatType(["group", "supergroup", "private"])
 	.filter(
 		({ chat }) =>
-			chat !== undefined && (chat.id === -1001705068191 || chat.id === -1002299010777 || chat.id === 946070039)
+			chat !== undefined &&
+			(chat.id === -1001705068191 ||
+				chat.id === -1002299010777 ||
+				chat.id === 946070039 ||
+				chat.id === 6545869146)
 	)
 	.command(["roll", "dice", "di"], async ctx => {
 		const [balance, diceGuess] = ctx.match.split(" ");
@@ -160,10 +165,12 @@ dickComposer
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
+				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance) * 2, "dice");
 				await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(balance) });
 				return ctx.reply(bold(`${premium_emoji("😔", "5370781385885751708")} Вы не угадали...`, false));
 			}
 
+			await ctx.database.dicks.addHistory(ctx.from, size, Number(balance) * 2, "dice");
 			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) * 2 });
 			return ctx.reply(
 				[
@@ -182,10 +189,12 @@ dickComposer
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
+				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance), "dice");
 				await ctx.database.dicks.update(ctx.from, { size: size - Number(balance) });
 				return ctx.reply(bold("😔 Вы не угадали"));
 			}
 
+			await ctx.database.dicks.addHistory(ctx.from, size, Number(balance) * 2, "dice");
 			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) * 2 });
 			return ctx.reply(
 				[
@@ -374,7 +383,7 @@ dickComposer
 			referral_timestamp: new Date(Date.now()),
 		});
 
-		await ctx.database.dicks.addHistory(ctx.from, size, type == "add" ? value : Number(`-${value}`));
+		await ctx.database.dicks.addHistory(ctx.from, size, type == "add" ? value : Number(`-${value}`), "referral");
 
 		return ctx.editMessageText(
 			ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value })
@@ -408,7 +417,6 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 	});
 
 	if (!userToSendDick) return ctx.reply(bold(`Пользователь ${userToSendMention} не найден`));
-
 	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
 
 	if (size < 0) {
@@ -416,7 +424,9 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 		if (userToSendDick.size > 0)
 			return ctx.reply("Вы не можете передать отрицательный размер pp пользователю с положительным pp");
 
+		await ctx.database.dicks.addHistory(ctx.from, size, Number(amount), "transfer");
 		await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(amount) });
+		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
 		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size - -1 * Number(amount) });
 
 		return ctx.reply(
@@ -429,7 +439,9 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 		if (userToSendDick.size < 0)
 			return ctx.reply("Вы не можете передать положительный размер pp пользователю с отрицательным pp");
 
+		await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(amount), "transfer");
 		await ctx.database.dicks.update(ctx.from, { size: size - Number(amount) });
+		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
 		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size + Number(amount) });
 
 		return ctx.reply(
