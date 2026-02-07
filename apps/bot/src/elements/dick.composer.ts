@@ -68,7 +68,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	await ctx.database.dicks.addHistory(ctx.from, size, difference);
 
 	const { text: phrase, emoji } = getPhrase(difference, ctx.t);
-	return ctx.reply(ctx.t.dick_success_text({ phrase, emoji, current_size: newSize }));
+	return ctx.reply(ctx.t.dick_success_text({ phrase, emoji, current_size: newSize }), {
+		reply_markup: {
+			inline_keyboard: [
+				[{ text: ctx.t.dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1_0` }],
+			],
+		},
+	});
 });
 
 dickComposer
