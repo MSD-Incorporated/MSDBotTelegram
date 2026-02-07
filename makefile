@@ -4,10 +4,19 @@ export GIT_COMMIT=$(GIT_SHA_FETCH)
 docker_build_bot:
 	docker build --build-arg GIT_COMMIT=$(GIT_COMMIT) -t mased/msdbot_telegram .
 
+watchtower:
+	docker run -d \
+	--name watchtower \
+	-v ~/.docker/config.json:/config.json \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	containrrr/watchtower \
+	msdbot_telegram \
+	--cleanup --interval 60 --api-version 1.44
+
 docker_database:
 	docker run \
 	--name database \
-	--network msdbot_internal_network \
+	--network network \
 	-itd \
 	-p 5432:5432 \
 	--env-file .env \
@@ -17,7 +26,7 @@ docker_database:
 docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
-	--network msdbot_internal_network \
+	--network network \
 	-p 8081:8081 \
 	--env-file .env \
 	-v /etc/timezone:/etc/timezone \
@@ -28,7 +37,7 @@ docker_bot_api:
 docker_bot:
 	docker run \
 	--name msdbot_telegram \
-	--network msdbot_internal_network \
+	--network network \
 	--env-file .env \
 	-v telegram_api_data:/var/lib/telegram-bot-api \
 	-m 200m --cpus="2.5" \
