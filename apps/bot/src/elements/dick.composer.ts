@@ -228,7 +228,7 @@ dickComposer
 			await sleep(3000);
 
 			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance) * 2, "dice");
+				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance), "dice");
 				await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(balance) });
 				return ctx.reply(bold(`${premium_emoji("😔", "5370781385885751708")} Вы не угадали...`, false));
 			}
