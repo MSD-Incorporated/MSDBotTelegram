@@ -76,9 +76,9 @@ const ru = {
 	dick_leaderboard_empty: "Таблица лидеров пуста",
 	dick_history_user: [
 		`${bold("{rank:number}.")} ${code("{date:string} UTC")}`,
-		`• Получено: ${code("{difference:number}")}`,
-		`• Всего: ${code("{total:number}")}`,
-		`• Тип: ${code("{type:string}")}`,
+		`• ${bold("Получено:")} ${code("{difference:number}")}`,
+		`• ${bold("Всего:")} ${code("{total:number}")}`,
+		`• ${bold("Тип:")} ${code("{type:string}")}`,
 	].join("\n"),
 	dick_refferal_text: [
 		"Наша реферальная система позволяет получать дополнительные сантиметры к dick",
