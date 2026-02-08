@@ -157,12 +157,32 @@ dickComposer
 
 		buttons.push(
 			[
-				{ text: mask & 1 ? "✅ Dick" : "Dick", callback_data: `history_filter_${userId}_0_${mask}` },
-				{ text: mask & 2 ? "✅ Казино" : "Казино", callback_data: `history_filter_${userId}_1_${mask}` },
+				{
+					text: mask & 1 ? "✅ Dick" : "Dick",
+					callback_data: `history_filter_${userId}_0_${mask}`,
+					// @ts-ignore
+					style: mask & 1 ? "success" : undefined,
+				},
+				{
+					text: mask & 2 ? "✅ Казино" : "Казино",
+					callback_data: `history_filter_${userId}_1_${mask}`,
+					// @ts-ignore
+					style: mask & 2 ? "success" : undefined,
+				},
 			],
 			[
-				{ text: mask & 4 ? "✅ Рефералы" : "Рефералы", callback_data: `history_filter_${userId}_2_${mask}` },
-				{ text: mask & 8 ? "✅ Переводы" : "Переводы", callback_data: `history_filter_${userId}_3_${mask}` },
+				{
+					text: mask & 4 ? "✅ Рефералы" : "Рефералы",
+					callback_data: `history_filter_${userId}_2_${mask}`,
+					// @ts-ignore
+					style: mask & 4 ? "success" : undefined,
+				},
+				{
+					text: mask & 8 ? "✅ Переводы" : "Переводы",
+					callback_data: `history_filter_${userId}_3_${mask}`,
+					// @ts-ignore
+					style: mask & 8 ? "success" : undefined,
+				},
 			]
 		);
 
