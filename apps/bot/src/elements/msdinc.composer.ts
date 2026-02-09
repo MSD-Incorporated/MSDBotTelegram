@@ -85,80 +85,76 @@ MSDIncComposer.chatType("supergroup")
 		await ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
 		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
 			caption: [
-				bold(
-					premium_emoji("👤", "5879770735999717115") +
-						` Author: ${
-							"#" +
-							(data.author
-								? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
-										.replace(/ \((.*)\)/, "")
-										.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
-										.replace(/[^a-zA-Z]/g, "")
-								: "Unknown")
-						}`,
-					false
-				),
+				bold(premium_emoji("👤", "5879770735999717115") + ` Author: `) +
+					`${
+						"#" +
+						(data.author
+							? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
+									.replace(/ \((.*)\)/, "")
+									.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
+									.replace(/[^a-zA-Z]/g, "")
+							: "Unknown")
+					}`,
+
 				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: #Pussy #Boobs #Ass`, false),
 				premium_emoji("🌐", "5879585266426973039") +
-					bold(
-						` Source:` +
-							(data.material
-								? `${
-										"#" +
-										(
-											data.material
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.replace(/ \((.*)\)/, "")
-												.toLowerCase()
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.charAt(0)
-												.toUpperCase() +
-											data.material
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.replace(/ \((.*)\)/, "")
-												.toLowerCase()
-												.slice(1)
-										)
-											.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-											.replace(/[^a-zA-Z]/g, "")
-									}`
-								: "") +
-							(data.characters.length >= 1
-								? `${
-										"#" +
-										(
-											data.characters
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.replace(/ \((.*)\)/, "")
-												.toLowerCase()
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.charAt(0)
-												.toUpperCase() +
-											data.characters
-												.split(", ")
-												.slice(0, 1)
-												.join("")
-												.replace(/ \((.*)\)/, "")
-												.toLowerCase()
-												.slice(1)
-										)
-											.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-											.replace(/[^a-zA-Z]/g, "")
-									}`
-								: ""),
-						false
-					) +
-					"\n",
+					bold(` Source: `) +
+					(data.material
+						? `${
+								"#" +
+								(
+									data.material
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.replace(/ \((.*)\)/, "")
+										.toLowerCase()
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.charAt(0)
+										.toUpperCase() +
+									data.material
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.replace(/ \((.*)\)/, "")
+										.toLowerCase()
+										.slice(1)
+								)
+									.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+									.replace(/[^a-zA-Z]/g, "")
+							}`
+						: "") +
+					(data.characters.length >= 1
+						? ` ${
+								"#" +
+								(
+									data.characters
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.replace(/ \((.*)\)/, "")
+										.toLowerCase()
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.charAt(0)
+										.toUpperCase() +
+									data.characters
+										.split(", ")
+										.slice(0, 1)
+										.join("")
+										.replace(/ \((.*)\)/, "")
+										.toLowerCase()
+										.slice(1)
+								)
+									.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+									.replace(/[^a-zA-Z]/g, "")
+							}`
+						: ""),
+
+				+"\n",
 				[
 					boldAndTextLink("MSD Incorporated", "https://t.me/msd_inc"),
 					boldAndTextLink("Donate", "https://t.me/msd_inc/14"),
