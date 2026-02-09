@@ -89,7 +89,7 @@ MSDIncComposer.chatType("supergroup")
 				? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
 						.replace(/ \((.*)\)/, "")
 						.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
-						.replace(/[^a-zA-Z]/g, "")
+						.replace(/[^a-zA-Z0-9]/g, "")
 				: "Unknown")
 		}`;
 
@@ -118,7 +118,7 @@ MSDIncComposer.chatType("supergroup")
 								.slice(1)
 						)
 							.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-							.replace(/[^a-zA-Z]/g, "")
+							.replace(/[^a-zA-Z0-9]/g, "")
 					}`
 				: "") +
 			(data.characters.length >= 1
@@ -145,7 +145,7 @@ MSDIncComposer.chatType("supergroup")
 								.slice(1)
 						)
 							.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-							.replace(/[^a-zA-Z]/g, "")
+							.replace(/[^a-zA-Z0-9]/g, "")
 					}`
 				: "");
 
