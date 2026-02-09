@@ -168,18 +168,25 @@ MSDIncComposer.chatType("supergroup")
 					}`
 				: "");
 
+		const text = [
+			premium_emoji("👤", "5879770735999717115") + bold(` Author: `) + author,
+			premium_emoji("🏷", "5854776233950188167") + bold(` Tags: `) + data.tags,
+		];
+
+		if (source && source !== "#Original")
+			text.push(premium_emoji("🌐", "5879585266426973039") + bold(` Source: `) + source);
+
+		text.push(
+			"\n" +
+				[
+					boldAndTextLink("MSD Incorporated", "https://t.me/msd_inc"),
+					boldAndTextLink("Donate", "https://t.me/msd_inc/14"),
+					bold("#Hentai"),
+				].join(" • ")
+		);
+
 		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
-			caption: [
-				premium_emoji("👤", "5879770735999717115") + bold(` Author: `) + author,
-				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: `) + data.tags,
-				premium_emoji("🌐", "5879585266426973039") + bold(` Source: `) + source,
-				"\n" +
-					[
-						boldAndTextLink("MSD Incorporated", "https://t.me/msd_inc"),
-						boldAndTextLink("Donate", "https://t.me/msd_inc/14"),
-						bold("#Hentai"),
-					].join(" • "),
-			].join("\n"),
+			caption: text.join("\n"),
 		});
 	});
 
