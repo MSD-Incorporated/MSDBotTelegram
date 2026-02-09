@@ -1,7 +1,8 @@
 import { env } from "@msdbot/env";
-import { Composer } from "grammy";
+import { Composer, InputFile } from "grammy";
 import sagiri from "sagiri";
 
+import { bold, boldAndTextLink, premium_emoji } from "@msdbot/i18n";
 import type { Context } from "../utils";
 
 const channelID = -1001528929804 as const;
@@ -53,6 +54,9 @@ const search_full = async (ctx: Context, file_id?: string) => {
 				.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
 				.join(" | ")}`,
 		],
+		author: author ?? creator ?? null,
+		characters: characters ?? null,
+		material: material ?? null,
 
 		file: image,
 	};
@@ -69,10 +73,96 @@ MSDIncComposer.chatType("supergroup")
 	.on(":photo", async (ctx, next) => {
 		await next();
 
-		const data = (await search_full(ctx)) as { text: string[]; file: Buffer<ArrayBuffer> };
+		const data = (await search_full(ctx)) as {
+			text: string[];
+			author: string;
+			characters: string;
+			material: string;
+			file: Buffer<ArrayBuffer>;
+		};
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
 
-		return ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
+		await ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
+		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
+			caption: [
+				bold(
+					premium_emoji("👤", "5879770735999717115") +
+						` Author: ${
+							"#" + data.author
+								? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
+										.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
+										.replace(/[^a-zA-Z]/g, "")
+								: "Unknown"
+						}`,
+					false
+				),
+				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: #Pussy #Boobs #Ass`, false),
+				premium_emoji("🌐", "5879585266426973039") +
+					bold(
+						` Source:` + data.material
+							? `${
+									"#" +
+									(
+										data.material
+											.split(", ")
+											.slice(0, 1)
+											.join("")
+											.replace(/ \((.*)\)/, "")
+											.toLowerCase()
+											.split(", ")
+											.slice(0, 1)
+											.join("")
+											.charAt(0)
+											.toUpperCase() +
+										data.material
+											.split(", ")
+											.slice(0, 1)
+											.join("")
+											.replace(/ \((.*)\)/, "")
+											.toLowerCase()
+											.slice(1)
+									)
+										.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+										.replace(/[^a-zA-Z]/g, "")
+								}`
+							: "" +
+									(data.characters.length >= 1
+										? `${
+												"#" +
+												(
+													data.characters
+														.split(", ")
+														.slice(0, 1)
+														.join("")
+														.replace(/ \((.*)\)/, "")
+														.toLowerCase()
+														.split(", ")
+														.slice(0, 1)
+														.join("")
+														.charAt(0)
+														.toUpperCase() +
+													data.characters
+														.split(", ")
+														.slice(0, 1)
+														.join("")
+														.replace(/ \((.*)\)/, "")
+														.toLowerCase()
+														.slice(1)
+												)
+													.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+													.replace(/[^a-zA-Z]/g, "")
+											}`
+										: ""),
+						false
+					) +
+					"\n",
+				[
+					boldAndTextLink("MSD Incorporated", "https://t.me/msd_inc"),
+					boldAndTextLink("Donate", "https://t.me/msd_inc/14"),
+					bold("#Hentai"),
+				].join(" • "),
+			].join("\n"),
+		});
 	});
 
 MSDIncComposer.chatType(["group", "supergroup", "private"])
