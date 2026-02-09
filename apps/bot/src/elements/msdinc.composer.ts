@@ -169,12 +169,12 @@ MSDIncComposer.chatType("supergroup")
 				: "");
 
 		const text = [
-			premium_emoji("👤", "5879770735999717115") + bold(` Author: `) + author,
-			premium_emoji("🏷", "5854776233950188167") + bold(` Tags: `) + data.tags,
+			premium_emoji("👤", "5879770735999717115") + " " + bold(`Author: `) + author,
+			premium_emoji("🏷", "5854776233950188167") + " " + bold(`Tags: `) + data.tags,
 		];
 
 		if (source && source !== "#Original")
-			text.push(premium_emoji("🌐", "5879585266426973039") + bold(` Source: `) + source);
+			text.push(premium_emoji("🌐", "5879585266426973039") + " " + bold(`Source: `) + source);
 
 		text.push(
 			"\n" +
