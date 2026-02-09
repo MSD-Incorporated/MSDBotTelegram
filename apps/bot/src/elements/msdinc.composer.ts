@@ -117,6 +117,7 @@ MSDIncComposer.chatType("supergroup")
 						(
 							data.material
 								.split(", ")
+								.filter(val => val !== "patreon")
 								.slice(0, 1)
 								.join("")
 								.replace(/ \((.*)\)/, "")
@@ -128,6 +129,7 @@ MSDIncComposer.chatType("supergroup")
 								.toUpperCase() +
 							data.material
 								.split(", ")
+								.filter(val => val !== "patreon")
 								.slice(0, 1)
 								.join("")
 								.replace(/ \((.*)\)/, "")
