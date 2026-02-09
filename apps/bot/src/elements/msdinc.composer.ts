@@ -88,71 +88,74 @@ MSDIncComposer.chatType("supergroup")
 				bold(
 					premium_emoji("👤", "5879770735999717115") +
 						` Author: ${
-							"#" + data.author
+							"#" +
+							(data.author
 								? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
+										.replace(/ \((.*)\)/, "")
 										.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
 										.replace(/[^a-zA-Z]/g, "")
-								: "Unknown"
+								: "Unknown")
 						}`,
 					false
 				),
 				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: #Pussy #Boobs #Ass`, false),
 				premium_emoji("🌐", "5879585266426973039") +
 					bold(
-						` Source:` + data.material
-							? `${
-									"#" +
-									(
-										data.material
-											.split(", ")
-											.slice(0, 1)
-											.join("")
-											.replace(/ \((.*)\)/, "")
-											.toLowerCase()
-											.split(", ")
-											.slice(0, 1)
-											.join("")
-											.charAt(0)
-											.toUpperCase() +
-										data.material
-											.split(", ")
-											.slice(0, 1)
-											.join("")
-											.replace(/ \((.*)\)/, "")
-											.toLowerCase()
-											.slice(1)
-									)
-										.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-										.replace(/[^a-zA-Z]/g, "")
-								}`
-							: "" +
-									(data.characters.length >= 1
-										? `${
-												"#" +
-												(
-													data.characters
-														.split(", ")
-														.slice(0, 1)
-														.join("")
-														.replace(/ \((.*)\)/, "")
-														.toLowerCase()
-														.split(", ")
-														.slice(0, 1)
-														.join("")
-														.charAt(0)
-														.toUpperCase() +
-													data.characters
-														.split(", ")
-														.slice(0, 1)
-														.join("")
-														.replace(/ \((.*)\)/, "")
-														.toLowerCase()
-														.slice(1)
-												)
-													.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-													.replace(/[^a-zA-Z]/g, "")
-											}`
-										: ""),
+						` Source:` +
+							(data.material
+								? `${
+										"#" +
+										(
+											data.material
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.replace(/ \((.*)\)/, "")
+												.toLowerCase()
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.charAt(0)
+												.toUpperCase() +
+											data.material
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.replace(/ \((.*)\)/, "")
+												.toLowerCase()
+												.slice(1)
+										)
+											.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+											.replace(/[^a-zA-Z]/g, "")
+									}`
+								: "") +
+							(data.characters.length >= 1
+								? `${
+										"#" +
+										(
+											data.characters
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.replace(/ \((.*)\)/, "")
+												.toLowerCase()
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.charAt(0)
+												.toUpperCase() +
+											data.characters
+												.split(", ")
+												.slice(0, 1)
+												.join("")
+												.replace(/ \((.*)\)/, "")
+												.toLowerCase()
+												.slice(1)
+										)
+											.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
+											.replace(/[^a-zA-Z]/g, "")
+									}`
+								: ""),
 						false
 					) +
 					"\n",
