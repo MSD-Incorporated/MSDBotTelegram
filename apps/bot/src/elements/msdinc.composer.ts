@@ -43,7 +43,22 @@ const search_full = async (ctx: Context, file_id?: string) => {
 	const material = res.raw.data.material;
 	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
 
+	const tags: string[] = [];
+
 	if (urlParser(urls).length == 0) return { text: ["Не удалось найти!"] };
+
+	if (res.raw.data.gelbooru_id) {
+		const gelbooruPost = (await (
+			await fetch(
+				`https://gelbooru.com/index.php?page=dapi&q=index&json=1&s=post&id=${res.raw.data.gelbooru_id}&api_key=${env.GELBOORU_API_KEY}&user_id=${env.GELBOORU_USER_ID}`
+			)
+		).json()) as { post: Array<{ tags: string }> };
+		const tagList = gelbooruPost.post[0]?.tags.split(" ");
+
+		if (tagList?.includes("pussy")) tags.push("#Pussy");
+		if (tagList?.includes("breasts") || tagList?.includes("ass")) tags.push("#Boobs");
+		if (tagList?.includes("ass")) tags.push("#Ass");
+	}
 
 	return {
 		text: [
@@ -57,6 +72,7 @@ const search_full = async (ctx: Context, file_id?: string) => {
 		author: author ?? creator ?? null,
 		characters: characters ?? null,
 		material: material ?? null,
+		tags: tags.length > 0 ? tags.join(" ") : null,
 
 		file: image,
 	};
@@ -78,6 +94,7 @@ MSDIncComposer.chatType("supergroup")
 			author: string;
 			characters: string;
 			material: string;
+			tags: string;
 			file: Buffer<ArrayBuffer>;
 		};
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
@@ -152,7 +169,7 @@ MSDIncComposer.chatType("supergroup")
 		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
 			caption: [
 				premium_emoji("👤", "5879770735999717115") + bold(` Author: `) + author,
-				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: `) + `#Pussy #Boobs #Ass`,
+				premium_emoji("🏷", "5854776233950188167") + bold(` Tags: `) + data.tags,
 				premium_emoji("🌐", "5879585266426973039") + bold(` Source: `) + source,
 				"\n" +
 					[

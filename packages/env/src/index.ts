@@ -7,6 +7,8 @@ export const env = createEnv({
 		LOCAL_API: z.string().or(z.undefined()).optional(),
 
 		SAUCENAO_TOKEN: z.string().min(1),
+		GELBOORU_USER_ID: z.string().min(1),
+		GELBOORU_API_KEY: z.string().min(1),
 
 		POSTGRES_USER: z.string().min(1),
 		POSTGRES_PASSWORD: z.string().min(1),
@@ -22,6 +24,8 @@ export const env = createEnv({
 		LOCAL_API: process.env.LOCAL_API,
 
 		SAUCENAO_TOKEN: process.env.SAUCENAO_TOKEN ?? undefined,
+		GELBOORU_USER_ID: process.env.GELBOORU_USER_ID ?? undefined,
+		GELBOORU_API_KEY: process.env.GELBOORU_API_KEY ?? undefined,
 
 		POSTGRES_USER: process.env.POSTGRES_USER,
 		POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
@@ -39,6 +43,8 @@ const createConfig = () => ({
 	LOCAL_API: env.LOCAL_API ?? undefined,
 	MSDINC: {
 		SAUCENAO_TOKEN: env.SAUCENAO_TOKEN,
+		GELBOORU_USER_ID: env.GELBOORU_USER_ID,
+		GELBOORU_API_KEY: env.GELBOORU_API_KEY,
 	},
 	DATABASE: {
 		USER: env.POSTGRES_USER,
