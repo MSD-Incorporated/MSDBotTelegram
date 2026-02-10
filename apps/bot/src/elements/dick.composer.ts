@@ -8,7 +8,7 @@ import { randomInt } from "node:crypto";
 import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName, type Context } from "../utils";
 
 export const dickComposer = new Composer<Context>();
-export const timeout: number = 4 * 60 * 60 * 1000;
+export const timeout: number = 6 * 60 * 60 * 1000;
 export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const TYPES = ["dick", "dice", "referral", "transfer"] as const;
