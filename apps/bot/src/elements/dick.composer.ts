@@ -42,7 +42,15 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 
 		return ctx.reply(dick_timeout_text({ timeLeft, size }), {
 			reply_markup: {
-				inline_keyboard: [[{ text: dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1_0` }]],
+				inline_keyboard: [
+					[
+						{
+							text: dick_history_button(),
+							callback_data: `dick_history_${ctx.from.id}_1_0`,
+							icon_custom_emoji_id: "5282843764451195532",
+						},
+					],
+				],
 			},
 		});
 	}
@@ -71,7 +79,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	return ctx.reply(ctx.t.dick_success_text({ phrase, emoji, current_size: newSize }), {
 		reply_markup: {
 			inline_keyboard: [
-				[{ text: ctx.t.dick_history_button(), callback_data: `dick_history_${ctx.from.id}_1_0` }],
+				[
+					{
+						text: ctx.t.dick_history_button(),
+						callback_data: `dick_history_${ctx.from.id}_1_0`,
+						icon_custom_emoji_id: "5282843764451195532",
+					},
+				],
 			],
 		},
 	});
@@ -160,13 +174,11 @@ dickComposer
 				{
 					text: mask & 1 ? "✅ Dick" : "Dick",
 					callback_data: `history_filter_${userId}_0_${mask}`,
-					// @ts-ignore
 					style: mask & 1 ? "success" : undefined,
 				},
 				{
 					text: mask & 2 ? "✅ Казино" : "Казино",
 					callback_data: `history_filter_${userId}_1_${mask}`,
-					// @ts-ignore
 					style: mask & 2 ? "success" : undefined,
 				},
 			],
@@ -174,13 +186,11 @@ dickComposer
 				{
 					text: mask & 4 ? "✅ Рефералы" : "Рефералы",
 					callback_data: `history_filter_${userId}_2_${mask}`,
-					// @ts-ignore
 					style: mask & 4 ? "success" : undefined,
 				},
 				{
 					text: mask & 8 ? "✅ Переводы" : "Переводы",
 					callback_data: `history_filter_${userId}_3_${mask}`,
-					// @ts-ignore
 					style: mask & 8 ? "success" : undefined,
 				},
 			]
@@ -197,8 +207,16 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leader
 		reply_markup: {
 			inline_keyboard: [
 				[
-					{ text: dick_leaderboard_ascending_button({ emoji: "📈" }), callback_data: "leaderboard_asc_1" },
-					{ text: dick_leaderboard_descending_button({ emoji: "📉" }), callback_data: "leaderboard_desc_1" },
+					{
+						text: dick_leaderboard_ascending_button(),
+						callback_data: "leaderboard_asc_1",
+						icon_custom_emoji_id: "5244837092042750681",
+					},
+					{
+						text: dick_leaderboard_descending_button(),
+						callback_data: "leaderboard_desc_1",
+						icon_custom_emoji_id: "5246762912428603768",
+					},
 				],
 			],
 		},
@@ -394,17 +412,20 @@ dickComposer
 
 		if (value !== 0) {
 			keyboard[0]?.push({
-				text: `➖ Убрать ${value} см`,
+				text: `Убрать ${value} см`,
 				callback_data: `referrals_${ctx.from.id}_remove_${value}`,
+				icon_custom_emoji_id: "5229113891081956317",
 			});
 
 			keyboard[0]?.push({
-				text: `➕ Добавить ${value} см`,
+				text: `Добавить ${value} см`,
 				callback_data: `referrals_${ctx.from.id}_add_${value}`,
+				icon_custom_emoji_id: "5226945370684140473",
 			});
 
 			keyboard[1]?.push({
-				text: "🔗 Скопировать ссылку",
+				text: "Скопировать ссылку",
+				icon_custom_emoji_id: "5271604874419647061",
 				copy_text: {
 					text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}`,
 				},

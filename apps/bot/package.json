@@ -10,7 +10,7 @@
 		"@msdbot/env": "workspace:^",
 		"@msdbot/i18n": "workspace:^",
 		"backupx": "^0.1.2",
-		"grammy": "^1.38.3",
+		"grammy": "^1.40.0",
 		"node-cron": "^4.2.1",
 		"sagiri": "^4.3.0"
 	},

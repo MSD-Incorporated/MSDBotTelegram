@@ -58,7 +58,7 @@ const ru = {
 
 	dick_success_text: [
 		bold(`{emoji:string} Ваш pp `, false) + `{phrase:string}`,
-		`Ваш текущий размер pp: ${code("{current_size:number}")} см`,
+		bold(`Ваш текущий размер pp: `) + code("{current_size:number}") + ` см`,
 	].join("\n\n"),
 
 	dick_leaderboard_choose_text: [
@@ -71,8 +71,8 @@ const ru = {
 		`<blockquote class="tg-blockquote">${bold("1.")} MSDBot: ${code("5")} см\n${bold("2.")} Mased: ${code("-10")} см</blockquote>`,
 	].join("\n"),
 	dick_leaderboard_user: `${bold("{rank:number}.")} {name:string}: ${code("{size:number}")} см`,
-	dick_leaderboard_ascending_button: "{emoji:string} По возрастанию",
-	dick_leaderboard_descending_button: "{emoji:string} По убыванию",
+	dick_leaderboard_ascending_button: "По возрастанию",
+	dick_leaderboard_descending_button: "По убыванию",
 	dick_leaderboard_empty: "Таблица лидеров пуста",
 	dick_history_user: [
 		`${bold("{rank:number}.")} ${code("{date:string} UTC")}`,
