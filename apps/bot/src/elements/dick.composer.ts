@@ -434,7 +434,8 @@ dickComposer
 
 		if (value == 0) {
 			keyboard[0]?.push({
-				text: "🔗 Скопировать ссылку",
+				text: "Скопировать ссылку",
+				icon_custom_emoji_id: "5271604874419647061",
 				copy_text: {
 					text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}`,
 				},
