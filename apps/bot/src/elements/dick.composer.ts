@@ -398,7 +398,8 @@ dickComposer
 						inline_keyboard: [
 							[
 								{
-									text: "🔗 Скопировать ссылку",
+									text: "Скопировать ссылку",
+									icon_custom_emoji_id: "5271604874419647061",
 									copy_text: { text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}` },
 								},
 							],
