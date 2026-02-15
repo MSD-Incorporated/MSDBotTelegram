@@ -1,6 +1,9 @@
 import { im_here_banner } from "@msdbot/assets";
 import { Composer, InputFile } from "grammy";
 
+import { env } from "@msdbot/env";
+import { pre } from "@msdbot/i18n";
+import { $ } from "bun";
 import { random, type Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();
@@ -110,4 +113,85 @@ extraComposer
 		await next();
 
 		return ctx.reply(trashtalkResponses[random(0, trashtalkResponses.length - 1)]!).catch(() => {});
+	});
+
+const clean = async (text: string | Promise<string> | unknown) => {
+	if (text && text.constructor && text.constructor.name == "Promise") text = await text;
+	if (typeof text !== "string") text = require("util").inspect(text, { depth: 2 });
+
+	text = (text as string)
+		.replace(/`/g, "`" + String.fromCharCode(8203))
+		.replace(/@/g, "@" + String.fromCharCode(8203));
+
+	Object.values(env).forEach(val => {
+		if (val) text = (text as string).replace(val.toString(), "***");
+	});
+
+	return text;
+};
+
+extraComposer
+	.chatType(["private"])
+	.filter(({ from }) => from.id === 946070039)
+	.command("eval", async ctx => {
+		const args = ctx.match.split(" ");
+		try {
+			const evaled = eval(args.join(" "));
+
+			await clean(evaled)
+				.then(async cleaned => {
+					return ctx
+						.reply(pre((cleaned as string).slice(0, 4096), "typescript"))
+						.catch(err =>
+							ctx.reply(
+								`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+							)
+						);
+				})
+				.catch(async err =>
+					ctx.reply(
+						`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+					)
+				);
+		} catch (err) {
+			await clean((err as Error).message)
+				.then(async cleaned => {
+					return ctx
+						.reply(pre((cleaned as string).slice(0, 4096), "typescript"))
+						.catch(err =>
+							ctx.reply(
+								`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+							)
+						);
+				})
+				.catch(async err =>
+					ctx.reply(
+						`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+					)
+				);
+		}
+	});
+
+extraComposer
+	.chatType(["private"])
+	.filter(({ from }) => from.id === 946070039)
+	.command(["sh", "shell"], async ctx => {
+		const args = ctx.match.split(" ");
+		await $`${args}`
+			.quiet()
+			.then(async res => {
+				const cleaned = await clean(res.text());
+				return ctx
+					.reply(pre(((cleaned || "Success") as string).slice(0, 4096), "sh"))
+					.catch(err =>
+						ctx.reply(
+							`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+						)
+					);
+			})
+			.catch(err =>
+				ctx.reply(
+					`Ошибка в коде\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+				)
+			);
 	});
