@@ -4,6 +4,9 @@ export GIT_COMMIT=$(GIT_SHA_FETCH)
 docker_build_bot:
 	docker build --build-arg GIT_COMMIT=$(GIT_COMMIT) -t mased/msdbot_telegram .
 
+docker_restart:
+	docker stop msdbot_telegram && docker rm msdbot_telegram && make docker_bot
+
 watchtower:
 	docker run -d \
 	--name watchtower \
