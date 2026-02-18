@@ -203,6 +203,10 @@ extraComposer
 	.command("stats", async ctx => {
 		const memoryUsage = process.memoryUsage();
 		const rssInMB = Math.round((memoryUsage.rss / 1024 / 1024) * 100) / 100;
+
+		const heapTotalInMB = Math.round((memoryUsage.heapTotal / 1024 / 1024) * 100) / 100;
+		const heapUsedInMB = Math.round((memoryUsage.heapUsed / 1024 / 1024) * 100) / 100;
+
 		const freeMemInMB = Math.round((freemem() / 1024 / 1024) * 100) / 100;
 		const totalMemInMB = Math.round((totalmem() / 1024 / 1024) * 100) / 100;
 
@@ -217,6 +221,8 @@ extraComposer
 				premium_emoji("📊", "5877485980901971030") + bold(` Память:`),
 				[
 					"• " + bold(`RSS: `) + code(Math.floor(rssInMB)) + " мб",
+					bold(`Heap Total: `) + code(heapTotalInMB) + " мб",
+					bold(`Heap Used: `) + code(heapUsedInMB) + " мб",
 					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + " мб",
 					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + " мб",
 				].join("\n• "),
