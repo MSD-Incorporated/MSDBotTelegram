@@ -1,10 +1,11 @@
 import { im_here_banner } from "@msdbot/assets";
 import { Composer, InputFile } from "grammy";
+import { freemem, totalmem } from "os";
 
 import { env } from "@msdbot/env";
-import { pre } from "@msdbot/i18n";
+import { bold, code, pre, premium_emoji } from "@msdbot/i18n";
 import { $ } from "bun";
-import { random, type Context } from "../utils";
+import { formatTime, random, type Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();
 const banner = new InputFile(im_here_banner);
@@ -194,4 +195,37 @@ extraComposer
 					`Ошибка в коде\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
 				)
 			);
+	});
+
+extraComposer
+	.chatType(["private"])
+	.filter(({ from }) => from.id === 946070039)
+	.command("stats", async ctx => {
+		const memoryUsage = process.memoryUsage();
+		const rssInMB = Math.round((memoryUsage.rss / 1024 / 1024) * 100) / 100;
+		const freeMemInMB = Math.round((freemem() / 1024 / 1024) * 100) / 100;
+		const totalMemInMB = Math.round((totalmem() / 1024 / 1024) * 100) / 100;
+
+		const cpuUsage = process.cpuUsage();
+		const totalCPUTimeInSeconds = Math.round(((cpuUsage.user + cpuUsage.system) / 1e6) * 100) / 100;
+		const CPUUsagePercentage = Math.round((totalCPUTimeInSeconds / (process.uptime() || 1)) * 100 * 100) / 100;
+
+		const uptimeInHours = formatTime(process.uptime() * 1000);
+
+		return ctx.reply(
+			[
+				premium_emoji("📊", "5877485980901971030") + bold(` Память:`),
+				[
+					"• " + bold(`RSS: `) + code(Math.floor(rssInMB)) + " мб",
+					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + " мб",
+					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + " мб",
+				].join("\n• "),
+				premium_emoji("💻", "5967816500415827773") + bold(` CPU:`),
+				[
+					"• " + bold(`CPU Time: `) + code(totalCPUTimeInSeconds),
+					bold(`CPU Usage: `) + code(CPUUsagePercentage) + "%",
+				].join("\n• "),
+				bold(`Время работы: `) + code(uptimeInHours),
+			].join("\n\n")
+		);
 	});
