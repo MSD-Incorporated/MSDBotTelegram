@@ -221,8 +221,8 @@ extraComposer
 				premium_emoji("📊", "5877485980901971030") + bold(` Память:`),
 				[
 					"• " + bold(`RSS: `) + code(Math.floor(rssInMB)) + " мб",
-					bold(`Heap Total: `) + code(heapTotalInMB) + " мб",
-					bold(`Heap Used: `) + code(heapUsedInMB) + " мб",
+					bold(`Heap Total: `) + code(Math.floor(heapTotalInMB)) + " мб",
+					bold(`Heap Used: `) + code(Math.floor(heapUsedInMB)) + " мб",
 					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + " мб",
 					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + " мб",
 				].join("\n• "),
