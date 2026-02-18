@@ -2,6 +2,9 @@ name: 🧹 Format
 
 on:
     push:
+        paths:
+            - "packages/*/src/**"
+            - "apps/*/src/**"
     pull_request:
         branches:
             - main
