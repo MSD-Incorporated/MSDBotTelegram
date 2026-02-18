@@ -15,7 +15,7 @@
 
 	"overrides": [
 		{
-			"files": [".github/*.yml", ".github/*.yaml"],
+			"files": [".github/**/*.yml", ".github/**/*.yaml"],
 			"options": {
 				"parser": "yaml",
 				"tabWidth": 4,
