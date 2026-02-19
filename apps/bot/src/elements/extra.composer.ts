@@ -178,7 +178,7 @@ extraComposer
 	.filter(({ from }) => from.id === 946070039)
 	.command(["sh", "shell"], async ctx => {
 		const args = ctx.match.split(" ");
-		await $`${args}`
+		await $`${{ raw: ctx.match }}`
 			.quiet()
 			.then(async res => {
 				const cleaned = await clean(res.text());
