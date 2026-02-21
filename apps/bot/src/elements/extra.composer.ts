@@ -198,7 +198,6 @@ extraComposer
 	});
 
 extraComposer
-	.chatType(["private"])
 	.filter(({ from }) => from.id === 946070039)
 	.command("stats", async ctx => {
 		const memoryUsage = process.memoryUsage();
