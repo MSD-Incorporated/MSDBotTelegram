@@ -20,7 +20,7 @@ docker_database:
 	docker run \
 	--name database \
 	--network network \
-	--health-cmd="pg_isready -U postgres" \
+	--health-cmd="pg_isready -U root -d postgres" \
 	--health-interval=30s \
 	--health-timeout=10s \
 	--health-retries=5 \
