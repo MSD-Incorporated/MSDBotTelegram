@@ -198,8 +198,34 @@ extraComposer
 	});
 
 extraComposer
-	.filter(({ from }) => from.id === 946070039)
+	.chatType(["group", "supergroup", "private"])
+	.filter(({ from }) => from?.id === 946070039)
+	.command("stickers", async ctx => {
+		const stickerSetName = ctx.match.split(" ")[0];
+		if (!stickerSetName) return ctx.reply(`Введите название стикер пака!`);
+
+		const { stickers } = await ctx.api.getStickerSet(stickerSetName.replace("https://t.me/addemoji/", ""));
+		const stickersSet = stickers.map(
+			sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
+		);
+
+		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 169).join("\n") : "Ничего не найдено!");
+	});
+
+extraComposer
+	.chatType(["group", "supergroup", "private"])
+	.filter(({ from }) => from?.id === 946070039)
 	.command("stats", async ctx => {
+		const stickers = await ctx.api.getStickerSet("CUPSIZEMyFatherOutline");
+		await ctx.reply(
+			stickers.stickers
+				.map(
+					sticker =>
+						`${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — <code>${sticker.custom_emoji_id!}</code>`
+				)
+				.join("\n")
+		);
+
 		const memoryUsage = process.memoryUsage();
 		const rssInMB = Math.round((memoryUsage.rss / 1024 / 1024) * 100) / 100;
 
