@@ -21,8 +21,8 @@ docker_database:
 	--name database \
 	--network network \
 	--health-cmd="pg_isready -U postgres" \
-	--health-interval=10s \
-	--health-timeout=5s \
+	--health-interval=30s \
+	--health-timeout=10s \
 	--health-retries=5 \
 	--health-start-period=10s \
 	-itd \
@@ -35,6 +35,11 @@ docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
 	--network network \
+	--health-cmd="curl -sf http://localhost:8081/ || exit 1" \
+	--health-interval=30s \
+	--health-timeout=10s \
+	--health-retries=3 \
+	--health-start-period=30s \
 	-p 8081:8081 \
 	--env-file .env \
 	-v /etc/timezone:/etc/timezone \
