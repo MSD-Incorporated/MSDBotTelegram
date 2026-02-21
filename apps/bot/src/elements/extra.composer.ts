@@ -216,16 +216,6 @@ extraComposer
 	.chatType(["group", "supergroup", "private"])
 	.filter(({ from }) => from?.id === 946070039)
 	.command("stats", async ctx => {
-		const stickers = await ctx.api.getStickerSet("CUPSIZEMyFatherOutline");
-		await ctx.reply(
-			stickers.stickers
-				.map(
-					sticker =>
-						`${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — <code>${sticker.custom_emoji_id!}</code>`
-				)
-				.join("\n")
-		);
-
 		const memoryUsage = process.memoryUsage();
 		const rssInMB = Math.round((memoryUsage.rss / 1024 / 1024) * 100) / 100;
 
