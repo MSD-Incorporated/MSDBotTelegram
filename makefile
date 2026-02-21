@@ -35,11 +35,11 @@ docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
 	--network network \
-	--health-cmd="curl -sf http://localhost:8081/ || exit 1" \
-	--health-interval=30s \
+	--health-cmd="wget -S -O /dev/null http://127.0.0.1:8081/ 2>&1 | grep -q '404' || exit 1" \
+	--health-interval=60s \
 	--health-timeout=10s \
 	--health-retries=3 \
-	--health-start-period=30s \
+	--health-start-period=10s \
 	-p 8081:8081 \
 	--env-file .env \
 	-v /etc/timezone:/etc/timezone \
