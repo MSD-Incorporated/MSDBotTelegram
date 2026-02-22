@@ -234,22 +234,22 @@ dickComposer
 				chat.id === 6545869146)
 	)
 	.command(["roll", "dice", "di"], async ctx => {
-		const [balance, diceGuess] = ctx.match.split(" ");
+		const [balanceStr, diceGuessStr] = ctx.match.split(" ");
+		const balance = Number(balanceStr);
+		const diceGuess = Number(diceGuessStr);
 
 		if (
-			balance === undefined ||
-			balance === "0" ||
-			diceGuess === undefined ||
-			typeof Number(balance) !== "number" ||
-			typeof Number(diceGuess) !== "number" ||
-			isNaN(Number(balance)) ||
-			isNaN(Number(diceGuess)) ||
-			Number.isInteger(Number(balance)) === false ||
-			Number.isInteger(Number(diceGuess)) === false ||
-			Number(diceGuess) > 6 ||
-			Number(diceGuess) < 1
-		)
+			!balance ||
+			!diceGuess ||
+			isNaN(balance) ||
+			isNaN(diceGuess) ||
+			!Number.isInteger(balance) ||
+			!Number.isInteger(diceGuess) ||
+			diceGuess > 6 ||
+			diceGuess < 1
+		) {
 			return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/dice <ставка> <число кубика>`));
+		}
 
 		const { size } = await ctx.database.dicks.resolve(ctx.from, {
 			createIfNotExist: true,
@@ -258,53 +258,32 @@ dickComposer
 
 		if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
 
-		if (size < 0) {
-			if (Number(balance) > 0 || size > Number(balance))
-				return ctx.reply(bold(`Ваш pp меньше чем вы можете поставить`));
-
-			const { dice } = await ctx.replyWithDice("🎲");
-			await sleep(3000);
-
-			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance), "dice");
-				await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(balance) });
-				return ctx.reply(bold(`${premium_emoji("😔", "5370781385885751708")} Вы не угадали...`, false));
-			}
-
-			await ctx.database.dicks.addHistory(ctx.from, size, Number(balance) * 2, "dice");
-			await ctx.database.dicks.update(ctx.from, { size: size - -1 * Number(balance) * 2 });
-			return ctx.reply(
-				[
-					bold(`${premium_emoji("🤑", "5373303394976929925")} Вы угадали!\n`, false),
-					bold(`• Ваш текущий размер pp: `) + `${code(size - -1 * Number(balance) * 2)}` + bold(` см`),
-					bold(`• Ваша ставка была: `) + `${code(balance)}` + bold(` см`),
-				].join("\n")
-			);
+		const isNegative = size < 0;
+		if ((isNegative && (balance > 0 || size > balance)) || (!isNegative && (size < balance || balance < 0))) {
+			return ctx.reply(bold(`Ваш pp ${isNegative ? "меньше" : "больше"} чем вы можете поставить`));
 		}
 
-		if (size > 0) {
-			if (size < Number(balance) || Number(balance) < 0)
-				return ctx.reply(bold(`Ваш pp больше чем вы можете поставить`));
+		const { dice } = await ctx.replyWithDice("🎲");
+		await sleep(3000);
 
-			const { dice } = await ctx.replyWithDice("🎲");
-			await sleep(3000);
+		const isWin = diceGuess === dice.value;
+		const diff = isWin ? balance * 2 : -balance;
 
-			if (Number(diceGuess) !== dice.value) {
-				await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(balance), "dice");
-				await ctx.database.dicks.update(ctx.from, { size: size - Number(balance) });
-				return ctx.reply(bold("😔 Вы не угадали"));
-			}
+		await ctx.database.dicks.addHistory(ctx.from, size, diff, "dice");
+		await ctx.database.dicks.update(ctx.from, { size: size + diff });
 
-			await ctx.database.dicks.addHistory(ctx.from, size, Number(balance) * 2, "dice");
-			await ctx.database.dicks.update(ctx.from, { size: size + Number(balance) * 2 });
+		if (!isWin)
 			return ctx.reply(
-				[
-					bold("🤑 Вы угадали!\n"),
-					`• Ваш текущий размер pp: ${code(size + Number(balance) * 2)} см`,
-					`• Ваша ставка была: ${code(balance)} см`,
-				].join("\n")
+				bold(`${premium_emoji("😔", "5370781385885751708")} Вы не угадали${isNegative ? "..." : ""}`, false)
 			);
-		}
+
+		return ctx.reply(
+			[
+				bold(`${premium_emoji("🤑", "5373303394976929925")} Вы угадали!\n`, false),
+				bold(`• Ваш текущий размер pp: `) + `${code(size + diff)}` + bold(` см`),
+				bold(`• Ваша ставка была: `) + `${code(balance)}` + bold(` см`),
+			].join("\n")
+		);
 	});
 
 dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderboard_(asc|desc)_(\d+)/, async ctx => {
@@ -498,61 +477,36 @@ dickComposer
 	});
 
 dickComposer.chatType(["group", "supergroup", "private"]).command("send", async ctx => {
-	const [userToSendMention, amount]: string[] = ctx.match.split(" ");
+	const target = ctx.message.reply_to_message?.from;
+	const amount = Math.floor(Number(ctx.match));
 
-	if (userToSendMention === undefined || amount === undefined || isNaN(Number(amount)))
-		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/send <пользователь> <сумма>`));
-
-	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
-	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
-
-	const userToSend = (
-		isNaN(Number(userToSendMention))
-			? await ctx.database.users.find(
-					{ username: userToSendMention },
-					{ columns: { id: true, first_name: true, last_name: true } }
-				)
-			: await ctx.database.users.find(
-					{ id: Number(userToSendMention) },
-					{ columns: { id: true, first_name: true, last_name: true } }
-				)
-	)!;
-
-	const userToSendDick = await ctx.database.dicks.resolve(userToSend, {
-		createIfNotExist: false,
-		columns: { size: true },
-	});
-
-	if (!userToSendDick) return ctx.reply(bold(`Пользователь ${userToSendMention} не найден`));
-	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
-
-	if (size < 0) {
-		if (Number(amount) > 0 || size > Number(amount)) return ctx.reply(bold(`Ваш pp меньше чем вы можете отдать`));
-		if (userToSendDick.size > 0)
-			return ctx.reply("Вы не можете передать отрицательный размер pp пользователю с положительным pp");
-
-		await ctx.database.dicks.addHistory(ctx.from, size, Number(amount), "transfer");
-		await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(amount) });
-		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
-		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size - -1 * Number(amount) });
-
+	if (!target || isNaN(amount) || amount <= 0)
 		return ctx.reply(
-			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
+			bold("Использование: ") +
+				code("/send <количество>") +
+				bold("\nНужно ответить на сообщение того, кому вы хотите передать pp")
 		);
-	}
 
-	if (size > 0) {
-		if (size < Number(amount) || Number(amount) < 0) return ctx.reply(bold(`Ваш pp больше чем вы можете отдать`));
-		if (userToSendDick.size < 0)
-			return ctx.reply("Вы не можете передать положительный размер pp пользователю с отрицательным pp");
+	if (target.id === ctx.from.id) return ctx.reply(bold("Вы не можете передать pp самому себе"));
+	if (target.is_bot) return ctx.reply(bold("Вы не можете передать pp боту"));
 
-		await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(amount), "transfer");
-		await ctx.database.dicks.update(ctx.from, { size: size - Number(amount) });
-		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
-		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size + Number(amount) });
+	const sender = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	const receiver = await ctx.database.dicks.resolve(target, { createIfNotExist: true, columns: { size: true } });
 
-		return ctx.reply(
-			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
-		);
-	}
+	const isNegative = sender.size < 0;
+	const absSize = Math.abs(sender.size);
+
+	if (absSize < amount) return ctx.reply(bold(`У вас недостаточно pp для передачи (баланс: ${sender.size} см)`));
+
+	const transferValue = isNegative ? -amount : amount;
+
+	await ctx.database.dicks.update(ctx.from, { size: sender.size - transferValue });
+	await ctx.database.dicks.update(target, { size: receiver.size + transferValue });
+
+	return ctx.reply(
+		bold(`Вы успешно передали `) +
+			code(amount) +
+			bold(` см pp пользователю `) +
+			boldAndTextLink(target.first_name, `tg://user?id=${target.id}`)
+	);
 });

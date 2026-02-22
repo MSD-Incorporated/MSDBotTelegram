@@ -1,81 +1,105 @@
 import { env } from "@msdbot/env";
+import { bold, boldAndTextLink, premium_emoji } from "@msdbot/i18n";
 import { Composer, InputFile } from "grammy";
 import sagiri from "sagiri";
 
-import { bold, boldAndTextLink, premium_emoji } from "@msdbot/i18n";
 import type { Context } from "../utils";
 
 const channelID = -1001528929804 as const;
 const chatID = -1001765200223 as const;
 
 const urlParser = (urls: string[]) => {
-	const sortedURLs: [string, string][] = [];
+	const mapping: Record<string, string> = {
+		gelbooru: "Gelbooru",
+		danbooru: "Danbooru",
+		"yande.re": "Yandere",
+	};
 
-	urls.forEach(url => {
-		if (url.includes("gelbooru")) sortedURLs.push(["Gelbooru", url]);
-		if (url.includes("danbooru")) sortedURLs.push(["Danbooru", url]);
-		if (url.includes("x.com") || url.includes("twitter"))
-			sortedURLs.push(["Twitter", url.replace("twitter.com", "fxtwitter.com").replace("x.com", "fxtwitter.com")]);
-		if (url.includes("yande.re")) sortedURLs.push(["Yandere", url]);
-	});
+	return urls.reduce(
+		(acc, url) => {
+			for (const [key, name] of Object.entries(mapping)) {
+				if (url.includes(key)) acc.push([name, url]);
+			}
+			if (url.includes("x.com") || url.includes("twitter"))
+				acc.push(["Twitter", url.replace(/(twitter\.com|x\.com)/, "fxtwitter.com")]);
 
-	return sortedURLs;
+			return acc;
+		},
+		[] as [string, string][]
+	);
+};
+
+const getGelbooruTags = async (postId: string): Promise<string[]> => {
+	try {
+		const url = `https://gelbooru.com/index.php?page=dapi&q=index&json=1&s=post&id=${postId}&api_key=${env.GELBOORU_API_KEY}&user_id=${env.GELBOORU_USER_ID}`;
+		const res = await fetch(url);
+		const data = (await res.json()) as { post: Array<{ tags: string }> };
+		const tagList = data.post[0]?.tags.split(" ") || [];
+
+		const filtered: string[] = [];
+		if (tagList.includes("pussy")) filtered.push("#Pussy");
+		if (tagList.includes("breasts") || tagList.includes("ass")) filtered.push("#Boobs");
+		if (tagList.includes("ass")) filtered.push("#Ass");
+		return [...new Set(filtered)];
+	} catch {
+		return [];
+	}
 };
 
 const search_full = async (ctx: Context, file_id?: string) => {
-	const file = file_id === undefined ? await ctx.getFile() : await ctx.api.getFile(file_id);
+	const file = file_id ? await ctx.api.getFile(file_id) : await ctx.getFile();
+	const fileUrl = `https://api.telegram.org/file/bot${env.BOT_TOKEN}/${file.file_path!}`;
 
-	const bun_file =
-		env.NODE_ENV === "dev" || env.LOCAL_API === undefined
-			? await fetch(`https://api.telegram.org/file/bot${env.BOT_TOKEN}/${file.file_path!}`)
-			: Bun.file(file.file_path!);
+	const bun_file = env.NODE_ENV === "dev" || !env.LOCAL_API ? await fetch(fileUrl) : Bun.file(file.file_path!);
+
 	const image = Buffer.from(await bun_file.arrayBuffer());
-
 	if (env.LOCAL_API) (bun_file as unknown as Bun.BunFile).delete();
 
 	const sauceNao = sagiri(env.SAUCENAO_TOKEN);
 	const [res] = await sauceNao(image);
 
-	if (!res || !res.raw.data?.ext_urls?.length) return { text: ["Не удалось найти!"] };
+	if (!res?.raw?.data?.ext_urls?.length) return { text: ["Не удалось найти!"] };
 
-	const { author, creator, characters } = res.raw.data;
 	// @ts-ignore
-	const material = res.raw.data.material;
-	const urls = [...res.raw.data.ext_urls, res.raw.data.source].filter(val => val !== undefined);
+	const { author, creator, characters, material, gelbooru_id } = res.raw.data!;
+	const urls = [...(res.raw.data.ext_urls || []), res.raw.data.source].filter(Boolean) as string[];
+	const parsedUrls = urlParser(urls);
 
-	const tags: string[] = [];
+	if (parsedUrls.length === 0) return { text: ["Не удалось найти!"] };
 
-	if (urlParser(urls).length == 0) return { text: ["Не удалось найти!"] };
-
-	if (res.raw.data.gelbooru_id) {
-		const gelbooruPost = (await (
-			await fetch(
-				`https://gelbooru.com/index.php?page=dapi&q=index&json=1&s=post&id=${res.raw.data.gelbooru_id}&api_key=${env.GELBOORU_API_KEY}&user_id=${env.GELBOORU_USER_ID}`
-			)
-		).json()) as { post: Array<{ tags: string }> };
-		const tagList = gelbooruPost.post[0]?.tags.split(" ");
-
-		if (tagList?.includes("pussy")) tags.push("#Pussy");
-		if (tagList?.includes("breasts") || tagList?.includes("ass")) tags.push("#Boobs");
-		if (tagList?.includes("ass")) tags.push("#Ass");
-	}
+	const tags = gelbooru_id ? await getGelbooruTags(gelbooru_id) : [];
 
 	return {
 		text: [
 			`• <b>Автор:</b> <code>${author || creator || "Неизвестно"}</code>`,
-			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>") || "Неизвестно"}</code>`,
+			`• <b>Персонажи:</b> <code>${(characters || "Неизвестно").split(", ").join("</code>, <code>")}</code>`,
 			`• <b>Откуда:</b> <code>${material || "Неизвестно"}</code>\n`,
-			`• <b>Ссылки:</b> ${urlParser(urls)
-				.map(([name, url]) => `<b><a href="${url}">${name}</a></b>`)
-				.join(" | ")}`,
+			`• <b>Ссылки:</b> ${parsedUrls.map(([n, u]) => `<b><a href="${u}">${n}</a></b>`).join(" | ")}`,
 		],
 		author: author ?? creator ?? null,
 		characters: characters ?? null,
 		material: material ?? null,
 		tags: tags.length > 0 ? tags.join(" ") : null,
-
 		file: image,
 	};
+};
+
+const formatTag = (input: string | null | undefined, removePatreon = false): string => {
+	if (!input) return "";
+	let text = input.replace(/ \((.*)\)/, "").toLowerCase();
+
+	if (removePatreon) {
+		text = text
+			.split(", ")
+			.filter(val => val !== "patreon")
+			.join(", ");
+	}
+
+	const firstWord = text.split(", ")[0] || "";
+	if (!firstWord) return "";
+
+	const formatted = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+	return "#" + formatted.replace(/([ _-][a-z])/g, ltr => ltr.toUpperCase()).replace(/[^a-zA-Z0-9#]/g, "");
 };
 
 export const MSDIncComposer = new Composer<Context>();
@@ -100,76 +124,14 @@ MSDIncComposer.chatType("supergroup")
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
 
 		await ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
-		const author = `${
-			"#" +
-			(data.author
-				? (data.author.toLowerCase().charAt(0).toUpperCase() + data.author.slice(1))
-						.replace(/ \((.*)\)/, "")
-						.replace(/([-_][a-z])/g, ltr => ltr.toUpperCase())
-						.replace(/[^a-zA-Z0-9]/g, "")
-				: "Unknown")
-		}`;
 
-		const source =
-			(data.material
-				? `${
-						"#" +
-						(
-							data.material
-								.split(", ")
-								.filter(val => val !== "patreon")
-								.slice(0, 1)
-								.join("")
-								.replace(/ \((.*)\)/, "")
-								.toLowerCase()
-								.split(", ")
-								.slice(0, 1)
-								.join("")
-								.charAt(0)
-								.toUpperCase() +
-							data.material
-								.split(", ")
-								.filter(val => val !== "patreon")
-								.slice(0, 1)
-								.join("")
-								.replace(/ \((.*)\)/, "")
-								.toLowerCase()
-								.slice(1)
-						)
-							.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-							.replace(/[^a-zA-Z0-9]/g, "")
-					}`
-				: "") +
-			(data.characters.length >= 1
-				? ` ${
-						"#" +
-						(
-							data.characters
-								.split(", ")
-								.slice(0, 1)
-								.join("")
-								.replace(/ \((.*)\)/, "")
-								.toLowerCase()
-								.split(", ")
-								.slice(0, 1)
-								.join("")
-								.charAt(0)
-								.toUpperCase() +
-							data.characters
-								.split(", ")
-								.slice(0, 1)
-								.join("")
-								.replace(/ \((.*)\)/, "")
-								.toLowerCase()
-								.slice(1)
-						)
-							.replace(/([ _][a-z])/g, ltr => ltr.toUpperCase())
-							.replace(/[^a-zA-Z0-9]/g, "")
-					}`
-				: "");
+		const authorTag = data.author ? formatTag(data.author) : "#Unknown";
+		const sourceMaterial = formatTag(data.material, true);
+		const sourceCharacter = formatTag(data.characters);
+		const source = `${sourceMaterial} ${sourceCharacter}`.trim();
 
 		const text = [
-			premium_emoji("👤", "5879770735999717115") + " " + bold(`Author: `) + author,
+			premium_emoji("👤", "5879770735999717115") + " " + bold(`Author: `) + authorTag,
 			premium_emoji("🏷", "5854776233950188167") + " " + bold(`Tags: `) + data.tags,
 		];
 

@@ -136,40 +136,21 @@ extraComposer
 	.filter(({ from }) => from.id === 946070039)
 	.command("eval", async ctx => {
 		const args = ctx.match.split(" ");
-		try {
-			const evaled = eval(args.join(" "));
+		let result: unknown;
 
-			await clean(evaled)
-				.then(async cleaned => {
-					return ctx
-						.reply(pre((cleaned as string).slice(0, 4096), "typescript"))
-						.catch(err =>
-							ctx.reply(
-								`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
-							)
-						);
-				})
-				.catch(async err =>
-					ctx.reply(
-						`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
-					)
-				);
+		try {
+			result = eval(args.join(" "));
 		} catch (err) {
-			await clean((err as Error).message)
-				.then(async cleaned => {
-					return ctx
-						.reply(pre((cleaned as string).slice(0, 4096), "typescript"))
-						.catch(err =>
-							ctx.reply(
-								`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
-							)
-						);
-				})
-				.catch(async err =>
-					ctx.reply(
-						`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
-					)
-				);
+			result = (err as Error).message;
+		}
+
+		try {
+			const cleaned = await clean(result);
+			return ctx.reply(pre((cleaned as string).slice(0, 4096), "typescript"));
+		} catch (err) {
+			return ctx.reply(
+				`Ошибка\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
+			);
 		}
 	});
 
