@@ -5,8 +5,6 @@ on:
         branches:
             - main
         paths:
-            - ".github/workflows/docker.yml"
-            - "Dockerfile"
             - "packages/*/src/**"
             - "apps/*/src/**"
 
@@ -22,7 +20,7 @@ jobs:
             - name: 📥 Checkout repository
               uses: actions/checkout@v6
 
-            - name: #️⃣ Get short SHA
+            - name: 🔢 Get short SHA
               id: sha
               run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
@@ -47,11 +45,7 @@ jobs:
                       GIT_COMMIT=${{ steps.sha.outputs.short_sha }}
 
             - name: 🗜️ Install SlimToolkit
-              run: |
-                  curl -L -o ds.tar.gz https://github.com/slimtoolkit/slim/releases/download/1.40.11/dist_linux.tar.gz
-                  tar -xvf ds.tar.gz
-                  sudo mv dist_linux/docker-slim /usr/local/bin/slim
-                  sudo mv dist_linux/docker-slim-sensor /usr/local/bin/slim-sensor
+              run: curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sudo -E bash -
 
             - name: 🪄 Minify image
               run: slim build --http-probe=false --target ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:fat --tag ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
