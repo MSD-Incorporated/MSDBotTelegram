@@ -332,12 +332,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 	});
 
 	const keyboard = keyboardBuilder(ctx, "leaderboard", page, type, pagesLength);
+	const textToSend = await Promise.all(text);
 
 	return ctx.api
 		.editMessageText(
 			ctx.chat.id,
 			ctx.msgId!,
-			(await Promise.all(text)).join("\n") ?? ctx.t.dick_leaderboard_empty(),
+			textToSend.length > 0 ? textToSend.join("\n") : ctx.t.dick_leaderboard_empty(),
 			{ reply_markup: { inline_keyboard: keyboard } }
 		)
 		.catch(err => console.error(err));

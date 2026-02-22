@@ -1,4 +1,4 @@
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { asc, desc, eq, gt, lt, sql } from "drizzle-orm";
 
 import * as schema from "./drizzle";
 import Database from "./index";
@@ -169,6 +169,7 @@ export class DickSystem {
 		return await this.database
 			.select({ user_id: schema.dicks.user_id, size: schema.dicks.size })
 			.from(schema.dicks)
+			.where(({ size }) => (orderBy === "desc" ? gt(size, 0) : lt(size, 0)))
 			.orderBy(({ size }) => (orderBy === "asc" ? asc(size) : desc(size)))
 			.limit(limit)
 			.offset(offset);
