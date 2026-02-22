@@ -160,6 +160,7 @@ export class DickSystem {
 					.select({ count: sql`count(*)`.mapWith(Number), size: schema.dicks.size })
 					.from(schema.dicks)
 					.where(({ size }) => (orderBy === "desc" ? gt(size, 0) : lt(size, 0)))
+					.groupBy(schema.dicks.size)
 			)[0]?.count ?? 0
 		);
 	};
