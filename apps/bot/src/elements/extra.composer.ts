@@ -190,7 +190,7 @@ extraComposer
 			sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
 		);
 
-		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 169).join("\n") : "Ничего не найдено!");
+		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 160).join("\n") : "Ничего не найдено!");
 	});
 
 extraComposer
