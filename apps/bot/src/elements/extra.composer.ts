@@ -1,10 +1,10 @@
 import { im_here_banner } from "@msdbot/assets";
-import { Composer, InputFile } from "grammy";
-import { freemem, totalmem } from "os";
-
 import { env } from "@msdbot/env";
 import { bold, code, pre, premium_emoji } from "@msdbot/i18n";
 import { $ } from "bun";
+import { Composer, InputFile } from "grammy";
+import { freemem, totalmem } from "os";
+
 import { formatTime, keyboardBuilder, random, type Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();
@@ -157,9 +157,8 @@ extraComposer
 extraComposer
 	.chatType(["private"])
 	.filter(({ from }) => from.id === 946070039)
-	.command(["sh", "shell"], async ctx => {
-		const args = ctx.match.split(" ");
-		await $`${{ raw: ctx.match }}`
+	.command(["sh", "shell"], async ctx =>
+		$`${{ raw: ctx.match }}`
 			.quiet()
 			.then(async res => {
 				const cleaned = await clean(res.text());
@@ -175,8 +174,8 @@ extraComposer
 				ctx.reply(
 					`Ошибка в коде\n\n${pre(`[${(err as Error).name}] ` + (err as Error).message.slice(0, 3900), "sh")}`
 				)
-			);
-	});
+			)
+	);
 
 extraComposer
 	.chatType(["group", "supergroup", "private"])
