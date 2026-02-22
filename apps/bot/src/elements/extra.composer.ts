@@ -5,7 +5,7 @@ import { freemem, totalmem } from "os";
 import { env } from "@msdbot/env";
 import { bold, code, pre, premium_emoji } from "@msdbot/i18n";
 import { $ } from "bun";
-import { formatTime, random, type Context } from "../utils";
+import { formatTime, keyboardBuilder, random, type Context } from "../utils";
 
 export const extraComposer = new Composer<Context>();
 const banner = new InputFile(im_here_banner);
@@ -189,8 +189,50 @@ extraComposer
 		const stickersSet = stickers.map(
 			sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
 		);
+		const stickersPages = Math.ceil(stickersSet.length / 100);
 
-		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 160).join("\n") : "Ничего не найдено!");
+		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 100).join("\n") : "Ничего не найдено!", {
+			reply_markup: {
+				inline_keyboard:
+					stickersPages > 1
+						? keyboardBuilder(
+								ctx,
+								"stickers",
+								1,
+								stickerSetName.replace("https://t.me/addemoji/", ""),
+								stickersPages
+							)
+						: [],
+			},
+		});
+	});
+
+extraComposer
+	.chatType(["group", "supergroup", "private"])
+	.filter(({ from }) => from?.id === 946070039)
+	.callbackQuery(/stickers_(.*)_(\d+)/, async ctx => {
+		const stickerSetName = ctx.match[1];
+		const page = Number(ctx.match[2]);
+		const currentPage = Number(
+			ctx.callbackQuery.message?.reply_markup?.inline_keyboard[0]
+				?.find(({ text }) => text.includes("/"))
+				?.text.split("/")[0]
+		);
+
+		if (page === currentPage) return ctx.answerCallbackQuery(ctx.t.keyboard_same_page());
+
+		const { stickers } = await ctx.api.getStickerSet(stickerSetName!);
+		const stickersSet = stickers.map(
+			sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
+		);
+
+		const stickersPages = Math.ceil(stickersSet.length / 100);
+		const keyboard = keyboardBuilder(ctx, "stickers", page, stickerSetName!, stickersPages);
+
+		return ctx.editMessageText(
+			stickers.length > 0 ? stickersSet.slice((page - 1) * 100, page * 100).join("\n") : "Ничего не найдено!",
+			{ reply_markup: { inline_keyboard: keyboard } }
+		);
 	});
 
 extraComposer
