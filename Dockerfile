@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/root/.cache bun install --production
 COPY ./packages ./packages
 COPY ./apps/bot ./apps/bot
 
-RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --define --minify GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=bun-linux-x64
+RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --minify --define GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=bun-linux-x64
 
 # App
 FROM frolvlad/alpine-glibc:${ALPINE_VERSION} AS app
