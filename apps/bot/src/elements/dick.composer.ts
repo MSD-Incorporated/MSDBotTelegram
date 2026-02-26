@@ -58,15 +58,22 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	let min = -20;
 	let max = 20;
 	const scalingStep = 25;
+	const otherSideScalingStep = 35;
 
 	if (size < 0) {
 		const bonus = Math.floor(Math.abs(size) / scalingStep);
 		min -= bonus;
+
+		const bonus2 = Math.floor(Math.abs(size) / otherSideScalingStep);
+		max += bonus2;
 	}
 
 	if (size > 0) {
 		const bonus = Math.floor(size / scalingStep);
 		max += bonus;
+
+		const bonus2 = Math.floor(size / otherSideScalingStep);
+		min -= bonus2;
 	}
 
 	const difference = randomInt(min, max + 1);
