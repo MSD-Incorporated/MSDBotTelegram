@@ -52,8 +52,10 @@ docker_bot:
 	--name msdbot_telegram \
 	--network network \
 	--env-file .env \
-	-v telegram_api_data:/var/lib/telegram-bot-api \
-	-m 200m --cpus="2.5" \
+	--volume telegram_api_data:/var/lib/telegram-bot-api \
+	--memory="256m" \
+	--memory-swap="256m" \
+	--cpus="2.5" \
 	-e NODE_ENV=prod \
 	--restart=always \
 	-d mased/msdbot_telegram
