@@ -22,7 +22,7 @@ jobs:
             - name: 📥 Checkout repository
               uses: actions/checkout@v6
 
-            - name: #️⃣ Get short SHA
+            - name: 🏷️ Get short SHA
               id: sha
               run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
@@ -35,13 +35,22 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: 🔨 Build and push
+            - name: 🔨 Build local image
               uses: docker/build-push-action@v6
               with:
                   context: .
-                  push: true
-                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
+                  load: true
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:unslimmed
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   build-args: |
                       GIT_COMMIT=${{ steps.sha.outputs.short_sha }}
+
+            - name: 📦 Install docker-slim
+              run: curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sudo -E bash
+
+            - name: 🗜️ Slim image
+              run: slim build --http-probe=false --target ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:unslimmed --tag ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
+
+            - name: 🚀 Push image
+              run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
