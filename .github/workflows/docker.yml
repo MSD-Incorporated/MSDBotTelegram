@@ -50,7 +50,7 @@ jobs:
               run: curl -sL https://raw.githubusercontent.com/slimtoolkit/slim/master/scripts/install-slim.sh | sudo -E bash
 
             - name: 🗜️ Slim image
-              run: slim build --http-probe=false --include-bin /app/msdbot_telegram --include-path /usr/glibc-compat --include-path /lib --include-path /usr/lib --target ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:unslimmed --tag ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
+              run: docker-slim build --http-probe=false --target ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:unslimmed --tag ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
 
             - name: 🚀 Push image
               run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/msdbot_telegram:latest
