@@ -13,7 +13,7 @@
 		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
 	},
 	"dependencies": {
-		"typesafe-i18n": "^5.26.2"
+		"typesafe-i18n": "^5.27.1"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^"
