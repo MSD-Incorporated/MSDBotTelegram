@@ -63,7 +63,7 @@
       "name": "@msdbot/i18n",
       "version": "1.0.0",
       "dependencies": {
-        "typesafe-i18n": "^5.26.2",
+        "typesafe-i18n": "^5.27.1",
       },
       "devDependencies": {
         "@msdbot/tsconfig": "workspace:^",
@@ -269,7 +269,7 @@
 
     "typegram": ["typegram@5.2.0", "", {}, "sha512-QubWrgT+tVPpM3/KkT/Rdd2zTYUwx96hePKBSio8pAWUD847M6W6akZppFs5BKfLtzuHBeTgjps528LJ+H1k+w=="],
 
-    "typesafe-i18n": ["typesafe-i18n@5.26.2", "", { "peerDependencies": { "typescript": ">=3.5.1" }, "bin": { "typesafe-i18n": "cli/typesafe-i18n.mjs" } }, "sha512-2QAriFmiY5JwUAJtG7yufoE/XZ1aFBY++wj7YFS2yo89a3jLBfKoWSdq5JfQYk1V2BS7V2c/u+KEcaCQoE65hw=="],
+    "typesafe-i18n": ["typesafe-i18n@5.27.1", "", { "peerDependencies": { "typescript": ">=3.5.1" }, "bin": { "typesafe-i18n": "cli/typesafe-i18n.mjs" } }, "sha512-749uWo2ZXETT//kWjVYPm8QPYR8xLh8G0wLfoAyCAtAmysX67uCaAyLjAjAWojL6fuJpE5B6yIjwvO9orXzUPg=="],
 
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
