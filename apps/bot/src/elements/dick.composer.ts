@@ -484,36 +484,61 @@ dickComposer
 	});
 
 dickComposer.chatType(["group", "supergroup", "private"]).command("send", async ctx => {
-	const target = ctx.message.reply_to_message?.from;
-	const amount = Math.floor(Number(ctx.match));
+	const [userToSendMention, amount]: string[] = ctx.match.split(" ");
 
-	if (!target || isNaN(amount) || amount <= 0)
+	if (userToSendMention === undefined || amount === undefined || isNaN(Number(amount)))
+		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/send <пользователь> <сумма>`));
+
+	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
+
+	const userToSend = (
+		isNaN(Number(userToSendMention))
+			? await ctx.database.users.find(
+					{ username: userToSendMention },
+					{ columns: { id: true, first_name: true, last_name: true } }
+				)
+			: await ctx.database.users.find(
+					{ id: Number(userToSendMention) },
+					{ columns: { id: true, first_name: true, last_name: true } }
+				)
+	)!;
+
+	const userToSendDick = await ctx.database.dicks.resolve(userToSend, {
+		createIfNotExist: false,
+		columns: { size: true },
+	});
+
+	if (!userToSendDick) return ctx.reply(bold(`Пользователь ${userToSendMention} не найден`));
+	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
+
+	if (size < 0) {
+		if (Number(amount) > 0 || size > Number(amount)) return ctx.reply(bold(`Ваш pp меньше чем вы можете отдать`));
+		if (userToSendDick.size > 0)
+			return ctx.reply("Вы не можете передать отрицательный размер pp пользователю с положительным pp");
+
+		await ctx.database.dicks.addHistory(ctx.from, size, Number(amount), "transfer");
+		await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(amount) });
+		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
+		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size - -1 * Number(amount) });
+
 		return ctx.reply(
-			bold("Использование: ") +
-				code("/send <количество>") +
-				bold("\nНужно ответить на сообщение того, кому вы хотите передать pp")
+			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
 		);
+	}
 
-	if (target.id === ctx.from.id) return ctx.reply(bold("Вы не можете передать pp самому себе"));
-	if (target.is_bot) return ctx.reply(bold("Вы не можете передать pp боту"));
+	if (size > 0) {
+		if (size < Number(amount) || Number(amount) < 0) return ctx.reply(bold(`Ваш pp больше чем вы можете отдать`));
+		if (userToSendDick.size < 0)
+			return ctx.reply("Вы не можете передать положительный размер pp пользователю с отрицательным pp");
 
-	const sender = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
-	const receiver = await ctx.database.dicks.resolve(target, { createIfNotExist: true, columns: { size: true } });
+		await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(amount), "transfer");
+		await ctx.database.dicks.update(ctx.from, { size: size - Number(amount) });
+		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
+		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size + Number(amount) });
 
-	const isNegative = sender.size < 0;
-	const absSize = Math.abs(sender.size);
-
-	if (absSize < amount) return ctx.reply(bold(`У вас недостаточно pp для передачи (баланс: ${sender.size} см)`));
-
-	const transferValue = isNegative ? -amount : amount;
-
-	await ctx.database.dicks.update(ctx.from, { size: sender.size - transferValue });
-	await ctx.database.dicks.update(target, { size: receiver.size + transferValue });
-
-	return ctx.reply(
-		bold(`Вы успешно передали `) +
-			code(amount) +
-			bold(` см pp пользователю `) +
-			boldAndTextLink(target.first_name, `tg://user?id=${target.id}`)
-	);
+		return ctx.reply(
+			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
+		);
+	}
 });
