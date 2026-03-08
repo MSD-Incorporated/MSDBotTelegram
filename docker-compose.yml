@@ -1,0 +1,74 @@
+services:
+    database:
+        image: postgres:16-alpine
+        container_name: database
+        env_file: .env
+        volumes:
+            - database:/var/lib/postgresql/data
+        networks:
+            - msdbot_network
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 10s
+
+    telegram-bot-api:
+        image: aiogram/telegram-bot-api:latest
+        container_name: telegram-bot-api
+        env_file: .env
+        environment:
+            - TELEGRAM_LOCAL=true
+        volumes:
+            - /etc/timezone:/etc/timezone
+            - telegram_api_data:/var/lib/telegram-bot-api
+        networks:
+            - msdbot_network
+        healthcheck:
+            test: ["CMD-SHELL", "wget -S -O /dev/null http://127.0.0.1:8081/ 2>&1 | grep -q '404' || exit 1"]
+            interval: 60s
+            timeout: 10s
+            retries: 3
+            start_period: 10s
+
+    bot:
+        image: mased/msdbot_telegram
+        container_name: msdbot_telegram
+        env_file: .env
+        environment:
+            - NODE_ENV=prod
+        volumes:
+            - telegram_api_data:/var/lib/telegram-bot-api
+        deploy:
+            resources:
+                limits:
+                    cpus: "2.5"
+                    memory: 256M
+        restart: always
+        networks:
+            - msdbot_network
+        depends_on:
+            database:
+                condition: service_healthy
+            telegram-bot-api:
+                condition: service_healthy
+
+    watchtower:
+        image: containrrr/watchtower
+        container_name: watchtower
+        volumes:
+            - ${USERPROFILE:-~}/.docker/config.json:/config.json
+            - /var/run/docker.sock:/var/run/docker.sock
+        command: msdbot_telegram --cleanup --interval 60 --api-version 1.44
+
+networks:
+    msdbot_network:
+        name: msdbot_network
+        driver: bridge
+
+volumes:
+    database:
+        name: database
+    telegram_api_data:
+        name: telegram_api_data
