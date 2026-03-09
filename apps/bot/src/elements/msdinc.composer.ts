@@ -123,7 +123,11 @@ MSDIncComposer.chatType("supergroup")
 		};
 		if (!data.text || data.text[0] == "Не удалось найти!") return;
 
-		await ctx.reply(data.text.join("\n"), { parse_mode: "HTML" });
+		await ctx.reply(data.text.join("\n"), {
+			parse_mode: "HTML",
+			message_thread_id: 46052,
+			disable_notification: true,
+		});
 
 		const authorTag = data.author ? formatTag(data.author) : "#Unknown";
 		const sourceMaterial = formatTag(data.material, true);
@@ -149,6 +153,8 @@ MSDIncComposer.chatType("supergroup")
 
 		return ctx.replyWithPhoto(new InputFile(Buffer.from(data.file)), {
 			caption: text.join("\n"),
+			message_thread_id: 46048,
+			disable_notification: true,
 		});
 	});
 
