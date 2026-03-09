@@ -17,11 +17,11 @@
 	"dependencies": {
 		"@msdbot/env": "workspace:^",
 		"drizzle-orm": "^0.44.7",
-		"pg": "^8.16.3"
+		"pg": "^8.20.0"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^",
-		"@types/pg": "^8.15.6",
+		"@types/pg": "^8.18.0",
 		"drizzle-kit": "^0.31.7",
 		"typegram": "^5.2.0"
 	}
