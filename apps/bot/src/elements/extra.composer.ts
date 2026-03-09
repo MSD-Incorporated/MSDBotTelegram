@@ -261,7 +261,7 @@ extraComposer
 		const match = pingShell.match(
 			process.platform === "win32" ? /Average = (\d+)ms/ : /[\d.]+\/([\d.]+)\/[\d.]+\/[\d.]+/
 		);
-		const avgPing = match ? parseFloat(match[1]!).toFixed(0) : null;
+		const avgPing = parseFloat(match?.[1] ?? "1").toFixed(0);
 
 		const beforeQuery = Date.now();
 		await ctx.database.db.execute(sql`select 1`);
