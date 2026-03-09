@@ -253,6 +253,14 @@ extraComposer
 
 		const uptimeInHours = formatTime(process.uptime() * 1000);
 
+		const apiStart = Date.now();
+		const msg = await ctx.api.getMyName()
+		const apiLatency = Date.now() - apiStart;
+
+		const dbStart = Date.now();
+		await ctx.database.users.resolve({ id: ctx.from?.id ?? 0 });
+		const dbLatency = Date.now() - dbStart;
+
 		return ctx.reply(
 			[
 				premium_emoji("📊", "5877485980901971030") + bold(` Память:`),
@@ -262,13 +270,15 @@ extraComposer
 					bold(`Heap Used: `) + code(Math.floor(heapUsedInMB)) + " мб",
 					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + " мб",
 					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + " мб",
-				].join("\n• "),
+				].join("\n• ") + "\n",
 				premium_emoji("💻", "5967816500415827773") + bold(` CPU:`),
 				[
 					"• " + bold(`CPU Time: `) + code(totalCPUTimeInSeconds),
 					bold(`CPU Usage: `) + code(CPUUsagePercentage) + "%",
-				].join("\n• "),
+				].join("\n• ") + "\n",
+				bold(`API Latency: `) + code(`${apiLatency}ms`),
+				bold(`DB Latency: `) + code(`${dbLatency}ms`),
 				bold(`Время работы: `) + code(uptimeInHours),
-			].join("\n\n")
+			].join("\n")
 		);
 	});
