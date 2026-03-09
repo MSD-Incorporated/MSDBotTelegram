@@ -255,7 +255,7 @@ extraComposer
 		const uptimeInHours = formatTime(process.uptime() * 1000);
 
 		const pingShell =
-			await $`ping ${process.platform === "win32" ? "-n" : "-c"} 3 ${env.LOCAL_API ? "localhost:8081" : "api.telegram.org"}`
+			await $`ping ${process.platform === "win32" ? "-n" : "-c"} 3 ${env.LOCAL_API ? env.LOCAL_API.replace("http://", "") : "api.telegram.org"}`
 				.quiet()
 				.text();
 		const match = pingShell.match(
