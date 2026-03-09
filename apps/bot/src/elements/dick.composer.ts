@@ -1,11 +1,11 @@
+import { randomInt } from "node:crypto";
 import { and, count, countDistinct, desc, dick_history, eq, gte, inArray, referrals } from "@msdbot/database";
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
 import { Composer } from "grammy";
 import type { InlineKeyboardButton } from "grammy/types";
-import { randomInt } from "node:crypto";
 
-import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName, type Context } from "../utils";
+import { type Context, dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName } from "../utils";
 
 export const dickComposer = new Composer<Context>();
 export const timeout: number = 6 * 60 * 60 * 1000;

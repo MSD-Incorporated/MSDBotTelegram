@@ -5,7 +5,7 @@ import { $ } from "bun";
 import { Composer, InputFile } from "grammy";
 import { freemem, totalmem } from "os";
 
-import { formatTime, keyboardBuilder, random, type Context } from "../utils";
+import { type Context, formatTime, keyboardBuilder, random } from "../utils";
 
 export const extraComposer = new Composer<Context>();
 const banner = new InputFile(im_here_banner);
@@ -117,7 +117,7 @@ extraComposer
 	});
 
 const clean = async (text: string | Promise<string> | unknown) => {
-	if (text && text.constructor && text.constructor.name == "Promise") text = await text;
+	if (text && text.constructor && text.constructor.name === "Promise") text = await (text as Promise<string>);
 	if (typeof text !== "string") text = require("util").inspect(text, { depth: 2 });
 
 	text = (text as string)
