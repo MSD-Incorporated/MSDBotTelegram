@@ -254,7 +254,7 @@ extraComposer
 		const uptimeInHours = formatTime(process.uptime() * 1000);
 
 		const apiStart = Date.now();
-		const msg = await ctx.api.getMyName()
+		const msg = await ctx.api.getMyName();
 		const apiLatency = Date.now() - apiStart;
 
 		const dbStart = Date.now();
