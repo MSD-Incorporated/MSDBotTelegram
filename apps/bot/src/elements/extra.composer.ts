@@ -254,14 +254,19 @@ extraComposer
 
 		const uptimeInHours = formatTime(process.uptime() * 1000);
 
-		const pingShell = await $`ping ${process.platform === "win32" ? "-n" : "-c"} 3 ${env.LOCAL_API ? "localhost:8081" : "api.telegram.org"}`.quiet().text();
-		const match = pingShell.match(process.platform === "win32" ? /Average = (\d+)ms/ : /[\d.]+\/([\d.]+)\/[\d.]+\/[\d.]+/);
+		const pingShell =
+			await $`ping ${process.platform === "win32" ? "-n" : "-c"} 3 ${env.LOCAL_API ? "localhost:8081" : "api.telegram.org"}`
+				.quiet()
+				.text();
+		const match = pingShell.match(
+			process.platform === "win32" ? /Average = (\d+)ms/ : /[\d.]+\/([\d.]+)\/[\d.]+\/[\d.]+/
+		);
 		const avgPing = match ? parseFloat(match[1]!).toFixed(0) : null;
 
-		const beforeQuery = Date.now()
-		await ctx.database.db.execute(sql`select 1`)
-		const afterQuery = Date.now()
-		const latency = afterQuery - beforeQuery
+		const beforeQuery = Date.now();
+		await ctx.database.db.execute(sql`select 1`);
+		const afterQuery = Date.now();
+		const latency = afterQuery - beforeQuery;
 
 		return ctx.reply(
 			[
