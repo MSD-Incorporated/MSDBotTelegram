@@ -6,6 +6,7 @@ import { Composer, InputFile } from "grammy";
 import { freemem, totalmem } from "os";
 
 import { formatTime, keyboardBuilder, random, type Context } from "../utils";
+import { sql } from "drizzle-orm";
 
 export const extraComposer = new Composer<Context>();
 const banner = new InputFile(im_here_banner);
@@ -253,32 +254,33 @@ extraComposer
 
 		const uptimeInHours = formatTime(process.uptime() * 1000);
 
-		const apiStart = Date.now();
-		const msg = await ctx.api.getMyName();
-		const apiLatency = Date.now() - apiStart;
+		const pingShell = await $`ping ${process.platform === "win32" ? "-n" : "-c"} 3 ${env.LOCAL_API ? "localhost:8081" : "api.telegram.org"}`.quiet().text();
+		const match = pingShell.match(process.platform === "win32" ? /Average = (\d+)ms/ : /[\d.]+\/([\d.]+)\/[\d.]+\/[\d.]+/);
+		const avgPing = match ? parseFloat(match[1]!).toFixed(0) : null;
 
-		const dbStart = Date.now();
-		await ctx.database.users.resolve({ id: ctx.from?.id ?? 0 });
-		const dbLatency = Date.now() - dbStart;
+		const beforeQuery = Date.now()
+		await ctx.database.db.execute(sql`select 1`)
+		const afterQuery = Date.now()
+		const latency = afterQuery - beforeQuery
 
 		return ctx.reply(
 			[
 				premium_emoji("📊", "5877485980901971030") + bold(` Память:`),
 				[
-					"• " + bold(`RSS: `) + code(Math.floor(rssInMB)) + " мб",
-					bold(`Heap Total: `) + code(Math.floor(heapTotalInMB)) + " мб",
-					bold(`Heap Used: `) + code(Math.floor(heapUsedInMB)) + " мб",
-					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + " мб",
-					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + " мб",
+					"• " + bold(`RSS: `) + code(Math.floor(rssInMB)) + "мб",
+					bold(`Heap Total: `) + code(Math.floor(heapTotalInMB)) + "мб",
+					bold(`Heap Used: `) + code(Math.floor(heapUsedInMB)) + "мб",
+					bold(`Free Memory: `) + code(Math.floor(freeMemInMB)) + "мб",
+					bold(`Total Memory: `) + code(Math.floor(totalMemInMB)) + "мб",
 				].join("\n• ") + "\n",
 				premium_emoji("💻", "5967816500415827773") + bold(` CPU:`),
 				[
 					"• " + bold(`CPU Time: `) + code(totalCPUTimeInSeconds),
 					bold(`CPU Usage: `) + code(CPUUsagePercentage) + "%",
 				].join("\n• ") + "\n",
-				bold(`API Latency: `) + code(`${apiLatency}ms`),
-				bold(`DB Latency: `) + code(`${dbLatency}ms`),
-				bold(`Время работы: `) + code(uptimeInHours),
+				"• " + bold(`API Latency: `) + code(`${avgPing}`) + "мс",
+				"• " + bold(`DB Latency: `) + code(`${latency}`) + "мс",
+				"• " + bold(`Uptime: `) + code(uptimeInHours),
 			].join("\n")
 		);
 	});
