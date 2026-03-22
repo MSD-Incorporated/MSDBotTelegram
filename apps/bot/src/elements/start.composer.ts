@@ -7,7 +7,7 @@ import { normalizeName, type Context } from "../utils";
 
 const version = process.version;
 const bun_version = Bun.version;
-const git_commit = typeof GIT_COMMIT !== "undefined" ? GIT_COMMIT : await $`git rev-parse --short HEAD`.text();
+const git_commit: string = typeof GIT_COMMIT !== "undefined" ? GIT_COMMIT : await $`git rev-parse --short HEAD`.text();
 
 const ref_banner = new InputFile(referral_banner);
 

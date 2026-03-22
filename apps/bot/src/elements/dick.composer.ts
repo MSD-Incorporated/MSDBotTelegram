@@ -11,8 +11,8 @@ export const dickComposer = new Composer<Context>();
 export const timeout: number = 6 * 60 * 60 * 1000;
 export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
-const TYPES = ["dick", "dice", "referral", "transfer"] as const;
-const PAGE_SIZE = 10;
+const TYPES: ("dick" | "dice" | "referral" | "transfer")[] = ["dick", "dice", "referral", "transfer"] as const;
+const PAGE_SIZE: number = 10;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0)

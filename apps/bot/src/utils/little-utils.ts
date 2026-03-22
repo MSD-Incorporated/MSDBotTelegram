@@ -1,4 +1,5 @@
-import type { InlineKeyboardButton, UserFromGetMe } from "grammy/types";
+import type { ChatMember, InlineKeyboardButton, UserFromGetMe } from "grammy/types";
+
 import type { Context } from "./context";
 
 export const onStart = ({ id, username, first_name }: UserFromGetMe) =>
@@ -27,11 +28,12 @@ export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", 
 	timeZone: "+00:00",
 });
 
+const subscriberStatuses: Set<ChatMember["status"]> = new Set([ "creator", "administrator", "member"]);
 export const isSubscriber = async (ctx: Context, chat_id: number) =>
 	ctx.from &&
 	ctx.api
 		.getChatMember(chat_id, ctx.from.id)
-		.then(member => new Set(["creator", "administrator", "member"]).has(member.status))
+		.then(member => subscriberStatuses.has(member.status))
 		.catch(() => false);
 
 /**

@@ -1,6 +1,6 @@
 import env from "@msdbot/env";
 import { SQL } from "bun";
-import { type ExtractTablesWithRelations } from "drizzle-orm";
+import { type ExtractTablesWithRelations, type Logger } from "drizzle-orm";
 import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 
 import { DickSystem } from "./dick.system";
@@ -10,6 +10,26 @@ import { UserSystem } from "./user.system";
 
 export type Schema = typeof schema;
 export type TSchema = ExtractTablesWithRelations<Schema>;
+
+export class JsonLogger implements Logger {
+	private readonly pretty: boolean;
+
+	constructor(pretty: boolean = false) {
+		this.pretty = pretty;
+	}
+
+	logQuery(query: string, params: unknown[]): void {
+		const logEntry = {
+			timestamp: new Date().toISOString(),
+			level: "info",
+			component: "database",
+			query: query.replace(/\s+/g, " ").trim(),
+			params,
+		};
+
+		console.log(JSON.stringify(logEntry, null, this.pretty ? 4 : undefined));
+	}
+}
 
 export class Database {
 	/**
@@ -40,7 +60,10 @@ export class Database {
 			ssl: false,
 		});
 
-		this.db = drizzle({ client: this.client, schema });
+		this.db = drizzle(this.client, {
+			schema,
+			logger: new JsonLogger(env.NODE_ENV !== "prod"),
+		});
 		this.users = new UserSystem(this.db);
 		this.dicks = new DickSystem(this.db);
 		this.referrals = new ReferralSystem(this.db);

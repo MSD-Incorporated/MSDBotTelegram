@@ -2,11 +2,11 @@ import { im_here_banner } from "@msdbot/assets";
 import { env } from "@msdbot/env";
 import { bold, code, pre, premium_emoji } from "@msdbot/i18n";
 import { $ } from "bun";
+import { sql } from "drizzle-orm";
 import { Composer, InputFile } from "grammy";
 import { freemem, totalmem } from "os";
 
 import { formatTime, keyboardBuilder, random, type Context } from "../utils";
-import { sql } from "drizzle-orm";
 
 export const extraComposer = new Composer<Context>();
 const banner = new InputFile(im_here_banner);

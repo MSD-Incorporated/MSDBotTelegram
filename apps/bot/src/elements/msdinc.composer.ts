@@ -127,6 +127,7 @@ MSDIncComposer.chatType("supergroup")
 			parse_mode: "HTML",
 			message_thread_id: 46052,
 			disable_notification: true,
+			reply_parameters: undefined,
 		});
 
 		const authorTag = data.author ? formatTag(data.author) : "#Unknown";
@@ -155,6 +156,7 @@ MSDIncComposer.chatType("supergroup")
 			caption: text.join("\n"),
 			message_thread_id: 46048,
 			disable_notification: true,
+			reply_parameters: undefined,
 		});
 	});
 
