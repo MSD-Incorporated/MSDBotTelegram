@@ -28,7 +28,7 @@ export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", 
 	timeZone: "+00:00",
 });
 
-const subscriberStatuses: Set<ChatMember["status"]> = new Set([ "creator", "administrator", "member"]);
+const subscriberStatuses: Set<ChatMember["status"]> = new Set(["creator", "administrator", "member"]);
 export const isSubscriber = async (ctx: Context, chat_id: number) =>
 	ctx.from &&
 	ctx.api
