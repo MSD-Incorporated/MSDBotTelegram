@@ -39,6 +39,7 @@ watchtower:
 docker_database:
 	docker run \
 	--name database \
+	--network $(NETWORK) \
 	--health-cmd="pg_isready -U $(POSTGRES_USER) -d postgres" \
 	--health-interval=30s \
 	--health-timeout=10s \
@@ -55,6 +56,7 @@ docker_database:
 docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
+	--network $(NETWORK) \
 	--health-cmd="wget -S -O /dev/null http://127.0.0.1:8081/ 2>&1 | grep -q '404' || exit 1" \
 	--health-interval=60s \
 	--health-timeout=10s \
