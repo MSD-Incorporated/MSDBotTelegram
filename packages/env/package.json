@@ -13,7 +13,7 @@
 		"build": "bun build --entrypoint ./src/**.ts --outdir dist --target bun"
 	},
 	"dependencies": {
-		"@t3-oss/env-core": "^0.13.10",
+		"@t3-oss/env-core": "^0.13.11",
 		"zod": "^4.1.12"
 	},
 	"devDependencies": {
