@@ -178,34 +178,31 @@ extraComposer
 			)
 	);
 
-extraComposer
-	.chatType(["group", "supergroup", "private"])
-	.filter(({ from }) => from?.id === 946070039)
-	.command("stickers", async ctx => {
-		const stickerSetName = ctx.match.split(" ")[0];
-		if (!stickerSetName) return ctx.reply(`Введите название стикер пака!`);
+extraComposer.chatType(["group", "supergroup", "private"]).command("stickers", async ctx => {
+	const stickerSetName = ctx.match.split(" ")[0];
+	if (!stickerSetName) return ctx.reply(`Введите название стикер пака!`);
 
-		const { stickers } = await ctx.api.getStickerSet(stickerSetName.replace("https://t.me/addemoji/", ""));
-		const stickersSet = stickers.map(
-			sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
-		);
-		const stickersPages = Math.ceil(stickersSet.length / 100);
+	const { stickers } = await ctx.api.getStickerSet(stickerSetName.replace("https://t.me/addemoji/", ""));
+	const stickersSet = stickers.map(
+		sticker => `${premium_emoji(sticker.emoji!, sticker.custom_emoji_id!)} — ${code(sticker.custom_emoji_id!)}`
+	);
+	const stickersPages = Math.ceil(stickersSet.length / 100);
 
-		return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 100).join("\n") : "Ничего не найдено!", {
-			reply_markup: {
-				inline_keyboard:
-					stickersPages > 1
-						? keyboardBuilder(
-								ctx,
-								"stickers",
-								1,
-								stickerSetName.replace("https://t.me/addemoji/", ""),
-								stickersPages
-							)
-						: [],
-			},
-		});
+	return ctx.reply(stickers.length > 0 ? stickersSet.slice(0, 100).join("\n") : "Ничего не найдено!", {
+		reply_markup: {
+			inline_keyboard:
+				stickersPages > 1
+					? keyboardBuilder(
+							ctx,
+							"stickers",
+							1,
+							stickerSetName.replace("https://t.me/addemoji/", ""),
+							stickersPages
+						)
+					: [],
+		},
 	});
+});
 
 extraComposer
 	.chatType(["group", "supergroup", "private"])
