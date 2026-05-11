@@ -65,6 +65,11 @@ export function addReplyParam<C extends Context>(ctx: C, options?: AutoQuoteOpti
 				reply_parameters: {
 					message_id: (payload as any).reply_parameters?.message_id ?? ctx.msg?.message_id,
 					chat_id: (payload as any).reply_parameters?.chat_id ?? ctx.chat?.id,
+					quote: (payload as any).reply_parameters?.quote ?? ctx.msg?.caption ?? ctx.msg?.text,
+					quote_entities:
+						(payload as any).reply_parameters?.quote_entities ??
+						ctx.msg?.caption_entities ??
+						ctx.msg?.entities,
 					allow_sending_without_reply: options?.allowSendingWithoutReply,
 					...(payload as any).reply_parameters,
 				},
