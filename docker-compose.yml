@@ -76,10 +76,17 @@ services:
                 condition: service_healthy
 
     watchtower:
-        image: containrrr/watchtower
+        image: containrrr/watchtower:1.7.1
         container_name: watchtower
+        read_only: true
+        tmpfs:
+            - /tmp:mode=1777,size=16m
+        security_opt:
+            - no-new-privileges:true
+        cap_drop:
+            - ALL
         volumes:
-            - ${USERPROFILE:-~}/.docker/config.json:/config.json
+            - ${USERPROFILE:-~}/.docker/config.json:/config.json:ro
             - /var/run/docker.sock:/var/run/docker.sock
         command: msdbot_telegram --cleanup --interval 60 --api-version 1.44
 
