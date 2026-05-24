@@ -69,7 +69,7 @@ services:
             - GELBOORU_API_KEY=${GELBOORU_API_KEY}
 
             - NODE_ENV=prod
-            - TZ=${TZ}
+            - TZ=${TZ-Europe/Moscow}
         user: "10001:10001"
         tmpfs:
             - /tmp:mode=1777,size=128m
