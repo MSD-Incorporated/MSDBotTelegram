@@ -9,7 +9,6 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - POSTGRES_DATABASE=${POSTGRES_DATABASE}
         volumes:
-            - /etc/timezone:/etc/timezone:ro
             - database:/var/lib/postgresql/data
         networks:
             - msdbot_network
