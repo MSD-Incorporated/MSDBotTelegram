@@ -52,7 +52,7 @@ const createConfig = () => ({
 		DATABASE: env.POSTGRES_DB,
 		HOST: env.POSTGRES_HOST ?? "localhost",
 		PORT: env.POSTGRES_PORT ?? 5432,
-		URL: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST?? "localhost"}:${env.POSTGRES_PORT ?? 5432}/${env.POSTGRES_DB}`,
+		URL: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST ?? "localhost"}:${env.POSTGRES_PORT ?? 5432}/${env.POSTGRES_DB}`,
 	},
 	NODE_ENV: process.env.NODE_ENV,
 	TZ: env.TZ,
