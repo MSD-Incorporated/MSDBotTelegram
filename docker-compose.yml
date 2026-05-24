@@ -51,8 +51,16 @@ services:
         env_file: .env
         environment:
             - NODE_ENV=prod
+        user: "10001:10001"
+        read_only: true
+        tmpfs:
+            - /tmp:mode=1777,size=64m
+        security_opt:
+            - no-new-privileges:true
+        cap_drop:
+            - ALL
         volumes:
-            - telegram_api_data:/var/lib/telegram-bot-api
+            - telegram_api_data:/var/lib/telegram-bot-api:ro
         deploy:
             resources:
                 limits:
