@@ -26,8 +26,16 @@ RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --minify --define GIT_
 
 # App
 FROM frolvlad/alpine-glibc:${ALPINE_VERSION} AS app
+
+RUN addgroup -g 10001 -S appgroup && \
+    adduser -u 10001 -S appuser -G appgroup -H -s /sbin/nologin
+
 WORKDIR /app
 
-COPY --from=build /app/dist /app
+COPY --from=build --chown=appuser:appgroup /app/dist /app
+
+RUN chmod 500 /app/msdbot_telegram
+
+USER 10001:10001
 
 CMD [ "./msdbot_telegram" ]

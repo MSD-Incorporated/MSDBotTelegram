@@ -8,7 +8,7 @@ import { type Context } from "../utils";
 
 const config: BackupConfig = {
 	verbose: true,
-	outputPath: "./backups",
+	outputPath: "/tmp/backups",
 	databases: [
 		{
 			type: BackupType.POSTGRESQL,
@@ -49,7 +49,7 @@ export class BackupElement {
 		const summary = await createBackup(config);
 
 		if (summary.databaseBackups.length > 0 && summary.databaseBackups[0]?.filename) {
-			const backupFile = Bun.file(`./backups/${summary.databaseBackups[0]!.filename}`);
+			const backupFile = Bun.file(`/tmp/backups/${summary.databaseBackups[0]!.filename}`);
 
 			const [usersCount, dicksCount, referralsCount] = await Promise.all([
 				database.db

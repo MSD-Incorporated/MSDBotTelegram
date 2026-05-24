@@ -7,13 +7,16 @@ services:
         environment:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_DATABASE=${POSTGRES_DATABASE}
-        ports:
-            - 127.0.0.1:5432:5432
+            - POSTGRES_DB=${POSTGRES_DB}
         volumes:
             - database:/var/lib/postgresql/data
         networks:
             - msdbot_network
+        deploy:
+            resources:
+                limits:
+                    cpus: "1.0"
+                    memory: 512M
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d postgres"]
             interval: 30s
@@ -24,17 +27,20 @@ services:
     telegram-bot-api:
         image: aiogram/telegram-bot-api:latest
         container_name: telegram-bot-api
-        ports:
-            - 127.0.0.1:8081:8081
         environment:
             - TELEGRAM_API_ID=${TELEGRAM_API_ID}
             - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
             - TELEGRAM_LOCAL=true
         volumes:
-            - /etc/timezone:/etc/timezone
+            - /etc/timezone:/etc/timezone:ro
             - telegram_api_data:/var/lib/telegram-bot-api
         networks:
             - msdbot_network
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: 256M
         healthcheck:
             test: ["CMD-SHELL", "wget -S -O /dev/null http://127.0.0.1:8081/ 2>&1 | grep -q '404' || exit 1"]
             interval: 60s
@@ -48,15 +54,35 @@ services:
             dockerfile: ./Dockerfile
         image: mased/msdbot_telegram
         container_name: msdbot_telegram
-        env_file: .env
         environment:
+            - BOT_TOKEN=${BOT_TOKEN}
+            - LOCAL_API
+
+            - POSTGRES_HOST=${POSTGRES_HOST:-database}
+            - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+
+            - SAUCENAO_TOKEN=${SAUCENAO_TOKEN}
+            - GELBOORU_USER_ID=${GELBOORU_USER_ID}
+            - GELBOORU_API_KEY=${GELBOORU_API_KEY}
+
             - NODE_ENV=prod
+            - TZ=${TZ}
+        user: "10001:10001"
+        tmpfs:
+            - /tmp:mode=1777,size=128m
+        security_opt:
+            - no-new-privileges:true
+        cap_drop:
+            - ALL
         volumes:
             - telegram_api_data:/var/lib/telegram-bot-api
         deploy:
             resources:
                 limits:
-                    cpus: "2.5"
+                    cpus: "1"
                     memory: 256M
         restart: always
         networks:
@@ -68,11 +94,23 @@ services:
                 condition: service_healthy
 
     watchtower:
-        image: containrrr/watchtower
+        image: containrrr/watchtower:1.7.1
         container_name: watchtower
+        read_only: true
+        tmpfs:
+            - /tmp:mode=1777,size=16m
+        security_opt:
+            - no-new-privileges:true
+        cap_drop:
+            - ALL
         volumes:
-            - ${USERPROFILE:-~}/.docker/config.json:/config.json
+            - ${HOME-~}/.docker/config.json:/config.json:ro
             - /var/run/docker.sock:/var/run/docker.sock
+        deploy:
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: 128M
         command: msdbot_telegram --cleanup --interval 60 --api-version 1.44
 
 networks:
