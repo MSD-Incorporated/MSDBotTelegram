@@ -9,6 +9,7 @@ services:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - POSTGRES_DATABASE=${POSTGRES_DATABASE}
         volumes:
+            - /etc/timezone:/etc/timezone:ro
             - database:/var/lib/postgresql/data
         networks:
             - msdbot_network
@@ -27,7 +28,7 @@ services:
             - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
             - TELEGRAM_LOCAL=true
         volumes:
-            - /etc/timezone:/etc/timezone
+            - /etc/timezone:/etc/timezone:ro
             - telegram_api_data:/var/lib/telegram-bot-api
         networks:
             - msdbot_network
@@ -94,7 +95,7 @@ services:
         cap_drop:
             - ALL
         volumes:
-            - ${USERPROFILE:-~}/.docker/config.json:/config.json:ro
+            - ${HOME}/.docker/config.json:/config.json:ro
             - /var/run/docker.sock:/var/run/docker.sock
         command: msdbot_telegram --cleanup --interval 60 --api-version 1.44
 
