@@ -42,3 +42,9 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 		}),
 	});
 });
+
+startComposer.command("test", async ctx => {
+	ctx.replyWithRichMessage({
+		markdown: `## <a name="hello-world"></a> Hello world \n\n${"123".repeat(1000)}\n\n# Testing Testing this sh#t no [way](#hello-world)`,
+	});
+});
