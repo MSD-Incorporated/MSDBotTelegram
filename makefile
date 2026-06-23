@@ -97,6 +97,7 @@ docker_bot:
 	-e NODE_ENV=prod \
 	-e TZ=$(or $(TZ),Europe/Moscow) \
 	--user 10001:10001 \
+	--read-only \
 	--tmpfs /tmp:mode=1777,size=128m \
 	--security-opt no-new-privileges:true \
 	--cap-drop ALL \

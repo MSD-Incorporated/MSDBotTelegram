@@ -71,6 +71,7 @@ services:
             - NODE_ENV=prod
             - TZ=${TZ-Europe/Moscow}
         user: "10001:10001"
+        read_only: true
         tmpfs:
             - /tmp:mode=1777,size=128m
         security_opt:

@@ -43,8 +43,19 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 	});
 });
 
-startComposer.command("test", async ctx => {
-	ctx.replyWithRichMessage({
-		markdown: `## <a name="hello-world"></a> Hello world \n\n${"123".repeat(1000)}\n\n# Testing Testing this sh#t no [way](#hello-world)`,
+startComposer.chatType(["group", "supergroup", "private"]).on("msg:document", async ctx => {
+	const file = await ctx.getFile();
+	if (!file) return;
+
+	const fileURL = `${process.env.LOCAL_API ?? "https://api.telegram.org"}/file/bot${process.env.BOT_TOKEN}/${file.file_path}`;
+	console.log(fileURL);
+	const fileContent = await fetch(fileURL).then(res => res.arrayBuffer());
+	const fileText = new TextDecoder().decode(fileContent);
+
+	// Process the file content as needed
+	console.log("Received file content:", fileText);
+
+	return ctx.replyWithRichMessage({
+		markdown: fileText,
 	});
 });
