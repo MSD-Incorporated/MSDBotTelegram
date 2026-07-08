@@ -43,19 +43,19 @@ startComposer.chatType(["group", "supergroup", "private"]).command("start", asyn
 	});
 });
 
-startComposer.chatType(["group", "supergroup", "private"]).on("msg:document", async ctx => {
-	const file = await ctx.getFile();
-	if (!file) return;
+startComposer
+	.chatType(["group", "supergroup", "private"])
+	.filter(({ from }) => from !== undefined && from.id === 946070039)
+	.on("msg:document", async ctx => {
+		const file = await ctx.getFile();
+		if (!file) return;
 
-	const fileURL = `${process.env.LOCAL_API ?? "https://api.telegram.org"}/file/bot${process.env.BOT_TOKEN}/${file.file_path}`;
-	console.log(fileURL);
-	const fileContent = await fetch(fileURL).then(res => res.arrayBuffer());
-	const fileText = new TextDecoder().decode(fileContent);
+		const fileURL = `${process.env.LOCAL_API ?? "https://api.telegram.org"}/file/bot${process.env.BOT_TOKEN}/${file.file_path}`;
+		const fileContent = await fetch(fileURL).then(res => res.arrayBuffer());
+		const fileText = new TextDecoder().decode(fileContent);
 
-	// Process the file content as needed
-	console.log("Received file content:", fileText);
+		// Process the file content as needed
+		console.log("Received file content:", fileText);
 
-	return ctx.replyWithRichMessage({
-		markdown: fileText,
+		return ctx.replyWithRichMessage({ markdown: fileText });
 	});
-});
