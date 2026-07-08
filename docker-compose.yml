@@ -27,10 +27,29 @@ services:
     telegram-bot-api:
         image: aiogram/telegram-bot-api:latest
         container_name: telegram-bot-api
+        entrypoint: ["sh", "-c"]
+        command:
+            - |
+                sed -i 's/^telegram-bot-api:x:[0-9]*:[0-9]*:/telegram-bot-api:x:10001:10001:/' /etc/passwd &&
+                sed -i 's/^telegram-bot-api:x:[0-9]*:/telegram-bot-api:x:10001:/' /etc/group &&
+                chown -R 10001:10001 /var/lib/telegram-bot-api &&
+                exec /docker-entrypoint.sh
         environment:
             - TELEGRAM_API_ID=${TELEGRAM_API_ID}
             - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
             - TELEGRAM_LOCAL=true
+        tmpfs:
+            - /tmp/telegram-bot-api:uid=10001,gid=10001,mode=1770,size=64m
+        security_opt:
+            - no-new-privileges:true
+        cap_drop:
+            - ALL
+        cap_add:
+            - CHOWN
+            - SETUID
+            - SETGID
+            - DAC_OVERRIDE
+            - FOWNER
         volumes:
             - /etc/timezone:/etc/timezone:ro
             - telegram_api_data:/var/lib/telegram-bot-api

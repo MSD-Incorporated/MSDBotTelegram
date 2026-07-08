@@ -9,6 +9,8 @@ NETWORK = msdbot_network
 DATABASE_VOLUME = database
 TELEGRAM_API_VOLUME = telegram_api_data
 NAME = msdbot_telegram
+BOT_UID = 10001
+BOT_GID = 10001
 
 env_up:
 	docker compose up -d
@@ -56,7 +58,6 @@ docker_database:
 	-itd \
 	-e POSTGRES_USER=$(POSTGRES_USER) \
 	-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
-	-e POSTGRES_DB=$(POSTGRES_DB) \
 	-v $(DATABASE_VOLUME):/var/lib/postgresql/data \
 	-p 127.0.0.1:5432:5432 \
 	postgres:16-alpine
@@ -65,6 +66,15 @@ docker_bot_api:
 	docker run \
 	--name telegram-bot-api \
 	--network $(NETWORK) \
+	--entrypoint sh \
+	--tmpfs /tmp/telegram-bot-api:uid=$(BOT_UID),gid=$(BOT_GID),mode=1770,size=64m \
+	--security-opt no-new-privileges:true \
+	--cap-drop ALL \
+	--cap-add CHOWN \
+	--cap-add SETUID \
+	--cap-add SETGID \
+	--cap-add DAC_OVERRIDE \
+	--cap-add FOWNER \
 	--health-cmd="wget -S -O /dev/null http://127.0.0.1:8081/ 2>&1 | grep -q '404' || exit 1" \
 	--health-interval=60s \
 	--health-timeout=10s \
@@ -77,8 +87,11 @@ docker_bot_api:
 	-e TELEGRAM_API_ID=$(TELEGRAM_API_ID) \
 	-e TELEGRAM_API_HASH=$(TELEGRAM_API_HASH) \
 	-e TELEGRAM_LOCAL=true \
-	-p 127.0.0.1:8081:8081 \
-	-d aiogram/telegram-bot-api:latest
+	-d aiogram/telegram-bot-api:latest \
+	-c "sed -i 's/^telegram-bot-api:x:[0-9]*:[0-9]*:/telegram-bot-api:x:$(BOT_UID):$(BOT_GID):/' /etc/passwd && \
+	    sed -i 's/^telegram-bot-api:x:[0-9]*:/telegram-bot-api:x:$(BOT_GID):/' /etc/group && \
+	    chown -R $(BOT_UID):$(BOT_GID) /var/lib/telegram-bot-api && \
+	    exec /docker-entrypoint.sh"
 
 docker_bot:
 	docker run \
@@ -96,7 +109,7 @@ docker_bot:
 	-e GELBOORU_API_KEY=$(GELBOORU_API_KEY) \
 	-e NODE_ENV=prod \
 	-e TZ=$(or $(TZ),Europe/Moscow) \
-	--user 10001:10001 \
+	--user $(BOT_UID):$(BOT_GID) \
 	--read-only \
 	--tmpfs /tmp:mode=1777,size=128m \
 	--security-opt no-new-privileges:true \

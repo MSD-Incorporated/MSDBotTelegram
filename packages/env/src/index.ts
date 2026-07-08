@@ -13,7 +13,7 @@ export const env = createEnv({
 		POSTGRES_USER: z.string().min(1),
 		POSTGRES_PASSWORD: z.string().min(1),
 		POSTGRES_DB: z.string().min(1),
-		POSTGRES_HOST: z.string().min(1),
+		POSTGRES_HOST: z.string().default("localhost"),
 		POSTGRES_PORT: z.coerce.number().default(5432),
 
 		NODE_ENV: z.enum(["dev", "prod"]),

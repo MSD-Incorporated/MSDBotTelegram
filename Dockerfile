@@ -6,6 +6,7 @@ FROM oven/bun:${BUN_VERSION} AS build
 WORKDIR /app
 
 ARG GIT_COMMIT
+ARG TARGETARCH
 ENV NODE_ENV=prod
 
 COPY package.json bun.lock bunfig.toml ./
@@ -22,7 +23,12 @@ RUN --mount=type=cache,target=/root/.cache bun install --production
 COPY ./packages ./packages
 COPY ./apps/bot ./apps/bot
 
-RUN bun build --entrypoint ./apps/bot/src/**.ts --compile --minify --define GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=bun-linux-x64
+RUN case "${TARGETARCH}" in \
+      amd64) BUN_TARGET=bun-linux-x64 ;; \
+      arm64) BUN_TARGET=bun-linux-arm64 ;; \
+      *) echo "unsupported TARGETARCH: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    bun build --entrypoint ./apps/bot/src/**.ts --compile --minify --define GIT_COMMIT="\"${GIT_COMMIT}\"" --outfile dist/msdbot_telegram --target=$BUN_TARGET
 
 # App
 FROM frolvlad/alpine-glibc:${ALPINE_VERSION} AS app

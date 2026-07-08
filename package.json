@@ -20,7 +20,7 @@
 		"format": "prettier --write --cache '{.github,apps,packages}/**/*.{js,ts,json,md,yml,yaml}'"
 	},
 	"workspaces": [
-		"apps/*",
-		"packages/*"
+		"apps/**",
+		"packages/**"
 	]
 }
