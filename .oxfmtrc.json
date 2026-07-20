@@ -1,5 +1,5 @@
 {
-	"$schema": "https://json.schemastore.org/prettierrc.json",
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
 
 	"tabWidth": 4,
 	"useTabs": true,
