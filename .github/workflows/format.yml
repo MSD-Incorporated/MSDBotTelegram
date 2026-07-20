@@ -32,7 +32,7 @@ jobs:
               uses: oven-sh/setup-bun@v2
 
             - name: 🧹 Format
-              run: bunx prettier --write --cache '{.github,apps,packages}/**/*.{js,ts,json,md,yml,yaml}'
+              run: bunx oxfmt --write '{.github,apps,packages}/**/*.{js,ts,json,md,yml,yaml}'
 
             - name: 💾 Commit changes
               uses: stefanzweifel/git-auto-commit-action@v6
