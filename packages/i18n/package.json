@@ -16,6 +16,7 @@
 		"typesafe-i18n": "^5.27.1"
 	},
 	"devDependencies": {
-		"@msdbot/tsconfig": "workspace:^"
+		"@msdbot/tsconfig": "workspace:^",
+		"@msdbot/utils": "workspace:^"
 	}
 }

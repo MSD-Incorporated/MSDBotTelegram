@@ -150,8 +150,26 @@ export const premium_emoji = <E extends string, I extends string | number>(
 	return `<tg-emoji emoji-id="${id}">${emoji}</tg-emoji>`;
 };
 
+/**
+ * Formats dates in the format "DD.MM.YYYY HH:mm:ss" and with the time zone "+00:00".
+ *
+ * @type {Intl.DateTimeFormat}
+ */
+export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", {
+	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
+	hour: "numeric",
+	minute: "numeric",
+	second: "numeric",
+	timeZone: "UTC",
+});
+
 export const initFormatters: FormattersInitializer<Locales, Formatters> = (_locale: Locales) => {
-	const formatters: Formatters = {};
+	const formatters: Formatters = {
+        // 'value' will receive the actual number timestamp at runtime
+        formatDate: (value: number) => dateFormatter.format(new Date(value)),
+    };
 
 	return formatters;
 };

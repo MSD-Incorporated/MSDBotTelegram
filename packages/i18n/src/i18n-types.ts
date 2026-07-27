@@ -160,7 +160,7 @@ type RootTranslation = {
 	 */
 	dick_leaderboard_empty: string
 	/**
-	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​<​t​g​-​t​i​m​e​ ​u​n​i​x​=​"​{​d​a​t​e​}​"​ ​f​o​r​m​a​t​=​"​r​"​>​t​i​m​e​<​/​t​g​-​t​i​m​e​>​
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​<​t​g​-​t​i​m​e​ ​u​n​i​x​=​"​{​d​a​t​e​}​"​ ​f​o​r​m​a​t​=​"​r​"​>​t​i​m​e​<​/​t​g​-​t​i​m​e​>​ ​[​d​a​t​e​:​n​u​m​b​e​r​|​f​o​r​m​a​t​D​a​t​e​]​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​о​л​у​ч​е​н​о​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​i​f​f​e​r​e​n​c​e​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​с​е​г​о​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​o​t​a​l​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​Т​и​п​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​y​p​e​}​<​/​c​o​d​e​>
@@ -335,7 +335,7 @@ export type TranslationFunctions = {
 	 */
 	dick_leaderboard_empty: () => LocalizedString
 	/**
-	 * <b class="tg-bold">{rank}.</b> <tg-time unix="{date}" format="r">time</tg-time>
+	 * <b class="tg-bold">{rank}.</b> <tg-time unix="{date}" format="r">time</tg-time> [date:number|formatDate]
 • <b class="tg-bold">Получено:</b> <code class="tg-code">{difference}</code>
 • <b class="tg-bold">Всего:</b> <code class="tg-code">{total}</code>
 • <b class="tg-bold">Тип:</b> <code class="tg-code">{type}</code>
