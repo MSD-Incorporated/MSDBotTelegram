@@ -160,7 +160,7 @@ type RootTranslation = {
 	 */
 	dick_leaderboard_empty: string
 	/**
-	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​<​t​g​-​t​i​m​e​ ​u​n​i​x​=​"​{​d​a​t​e​}​"​ ​f​o​r​m​a​t​=​"​r​"​>​t​i​m​e​<​/​t​g​-​t​i​m​e​>​ ​[​d​a​t​e​:​n​u​m​b​e​r​|​f​o​r​m​a​t​D​a​t​e​]​
+	 * <​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​{​r​a​n​k​}​.​<​/​b​>​ ​<​t​g​-​t​i​m​e​ ​u​n​i​x​=​"​{​d​a​t​e​}​"​ ​f​o​r​m​a​t​=​"​r​"​>​t​i​m​e​<​/​t​g​-​t​i​m​e​>​ ​[​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​a​t​e​|​f​o​r​m​a​t​D​a​t​e​}​<​/​c​o​d​e​>​]​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​П​о​л​у​ч​е​н​о​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​d​i​f​f​e​r​e​n​c​e​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​В​с​е​г​о​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​o​t​a​l​}​<​/​c​o​d​e​>​
 ​•​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​Т​и​п​:​<​/​b​>​ ​<​c​o​d​e​ ​c​l​a​s​s​=​"​t​g​-​c​o​d​e​"​>​{​t​y​p​e​}​<​/​c​o​d​e​>
@@ -170,7 +170,7 @@ type RootTranslation = {
 	 * @param {number} total
 	 * @param {string} type
 	 */
-	dick_history_user: RequiredParams<'date' | 'difference' | 'rank' | 'total' | 'type'>
+	dick_history_user: RequiredParams<'date' | 'date|formatDate' | 'difference' | 'rank' | 'total' | 'type'>
 	/**
 	 * Н​а​ш​а​ ​р​е​ф​е​р​а​л​ь​н​а​я​ ​с​и​с​т​е​м​а​ ​п​о​з​в​о​л​я​е​т​ ​п​о​л​у​ч​а​т​ь​ ​д​о​п​о​л​н​и​т​е​л​ь​н​ы​е​ ​с​а​н​т​и​м​е​т​р​ы​ ​к​ ​d​i​c​k​
 ​О​д​н​а​к​о​ ​т​о​л​ь​к​о​ ​в​ ​т​о​м​ ​с​л​у​ч​а​е​,​ ​е​с​л​и​ ​в​ы​ ​п​р​и​г​л​а​с​и​л​и​ ​у​ч​а​с​т​н​и​к​а​ ​и​л​и​ ​п​о​д​п​и​с​а​л​и​с​ь​ ​н​а​ ​<​b​ ​c​l​a​s​s​=​"​t​g​-​b​o​l​d​"​>​<​a​ ​c​l​a​s​s​=​"​t​g​-​t​e​x​t​-​l​i​n​k​"​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​.​m​e​/​m​s​d​b​o​t​_​i​n​f​o​r​m​a​t​i​o​n​"​>​к​а​н​а​л​<​/​a​>​<​/​b​>​!​
@@ -335,7 +335,7 @@ export type TranslationFunctions = {
 	 */
 	dick_leaderboard_empty: () => LocalizedString
 	/**
-	 * <b class="tg-bold">{rank}.</b> <tg-time unix="{date}" format="r">time</tg-time> [date:number|formatDate]
+	 * <b class="tg-bold">{rank}.</b> <tg-time unix="{date}" format="r">time</tg-time> [<code class="tg-code">{date|formatDate}</code>]
 • <b class="tg-bold">Получено:</b> <code class="tg-code">{difference}</code>
 • <b class="tg-bold">Всего:</b> <code class="tg-code">{total}</code>
 • <b class="tg-bold">Тип:</b> <code class="tg-code">{type}</code>
@@ -368,4 +368,6 @@ export type TranslationFunctions = {
 	dick_referral_success: (arg: { type: string, value: number }) => LocalizedString
 }
 
-export type Formatters = {}
+export type Formatters = {
+	formatDate: (value: number) => unknown
+}

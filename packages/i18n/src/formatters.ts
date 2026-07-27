@@ -168,7 +168,7 @@ export const dateFormatter: Intl.DateTimeFormat = new Intl.DateTimeFormat("ru", 
 export const initFormatters: FormattersInitializer<Locales, Formatters> = (_locale: Locales) => {
 	const formatters: Formatters = {
         // 'value' will receive the actual number timestamp at runtime
-        formatDate: (value: number) => dateFormatter.format(new Date(value)),
+        formatDate: (value: number) => dateFormatter.format(new Date(value * 1000)),
     };
 
 	return formatters;
