@@ -145,7 +145,7 @@ dickComposer
 					.map(({ size, difference, created_at, type }, index) => {
 						return ctx.t.dick_history_user({
 							rank: page * 10 - 10 + index + 1,
-							date: dateFormatter.format(created_at!).slice(0, 17),
+							date: created_at.getTime() / 1000,
 							difference,
 							type: ctx.t.dick_history_types[(type ?? "dick") as keyof typeof ctx.t.dick_history_types](),
 							total: size + difference,

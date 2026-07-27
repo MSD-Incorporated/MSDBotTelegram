@@ -75,7 +75,7 @@ const ru = {
 	dick_leaderboard_descending_button: "По убыванию",
 	dick_leaderboard_empty: "Таблица лидеров пуста",
 	dick_history_user: [
-		`${bold("{rank:number}.")} ${code("{date:string} UTC")}`,
+		`${bold("{rank:number}.")} <tg-time unix="{date:number}" format="r">time</tg-time>`,
 		`• ${bold("Получено:")} ${code("{difference:number}")}`,
 		`• ${bold("Всего:")} ${code("{total:number}")}`,
 		`• ${bold("Тип:")} ${code("{type:string}")}`,
