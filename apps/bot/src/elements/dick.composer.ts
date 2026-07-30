@@ -604,7 +604,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 		}))
 	);
 
-	return ctx.reply(`Выбирай одну из ячеек, в половине увеличение, в половину проигрыш`, {
+	return ctx.reply(`Выбирай одну из ячеек, в 4 выигрыш, в остальных проигрыш`, {
 		reply_markup: { inline_keyboard },
 	});
 });
