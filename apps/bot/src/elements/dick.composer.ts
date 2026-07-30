@@ -1,4 +1,15 @@
-import { and, count, countDistinct, desc, dick_history, eq, gte, inArray, referrals } from "@msdbot/database";
+import {
+	and,
+	count,
+	countDistinct,
+	desc,
+	dick_history,
+	eq,
+	gte,
+	inArray,
+	lotterySessions,
+	referrals,
+} from "@msdbot/database";
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
 import { Composer } from "grammy";
@@ -14,6 +25,8 @@ export const referral_timeout: number = 24 * 60 * 60 * 1000;
 const TYPES: ("dick" | "dice" | "referral" | "transfer")[] = ["dick", "dice", "referral", "transfer"] as const;
 const HISTORY_PAGE_SZE: number = 15;
 const LEADERBOARD_PAGE_SIZE: number = 20;
+
+type PRIZES = "mine" | string;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0)
@@ -306,7 +319,11 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 	if (allUsersCount === 0) return ctx.answerCallbackQuery(ctx.t.dick_leaderboard_empty());
 
 	const type = ctx.callbackQuery.data.includes("leaderboard_asc") ? "asc" : "desc";
-	const allUsers = await ctx.database.dicks.getLeaderboard({ limit: LEADERBOARD_PAGE_SIZE, offset: (page - 1) * LEADERBOARD_PAGE_SIZE, orderBy: type });
+	const allUsers = await ctx.database.dicks.getLeaderboard({
+		limit: LEADERBOARD_PAGE_SIZE,
+		offset: (page - 1) * LEADERBOARD_PAGE_SIZE,
+		orderBy: type,
+	});
 
 	const pagesLength = Math.ceil(allUsersCount / LEADERBOARD_PAGE_SIZE);
 	const text = allUsers.map(async ({ user_id, size }, index) => {
@@ -315,7 +332,11 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 			{ columns: { first_name: true, last_name: true } }
 		))!;
 
-		return ctx.t.dick_leaderboard_user({ rank: page * LEADERBOARD_PAGE_SIZE - LEADERBOARD_PAGE_SIZE + index + 1, name: normalizeName(user), size });
+		return ctx.t.dick_leaderboard_user({
+			rank: page * LEADERBOARD_PAGE_SIZE - LEADERBOARD_PAGE_SIZE + index + 1,
+			name: normalizeName(user),
+			size,
+		});
 	});
 
 	const keyboard = keyboardBuilder(ctx, "leaderboard", page, type, pagesLength);
@@ -542,4 +563,114 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
 		);
 	}
+});
+
+dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", async (ctx, next) => {
+	await next();
+
+	const [amount]: string[] = ctx.match.split(" ");
+	if (!amount || amount === undefined || isNaN(Number(amount)))
+		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/lottery <сумма>`));
+
+	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
+
+	if (size < 0)
+		if (Number(amount) > 0 || size > Number(amount)) return ctx.reply(bold(`Ваш pp меньше чем вы можете отдать`));
+
+	if (size > 0)
+		if (size < Number(amount) || Number(amount) < 0) return ctx.reply(bold(`Ваш pp больше чем вы можете отдать`));
+
+	const session_id = crypto.randomUUID();
+	const prizes = ([] as ("mine" | `${string}`)[])
+
+	for (let i = 0; i < 25; i++) prizes.push("mine");
+	for (let i = 0; i < 5; i++) prizes.push(amount);
+
+	for (let i = prizes.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[prizes[i], prizes[j]] = [prizes[j]!, prizes[i]!];
+	}
+
+	await ctx.database.db
+		.insert(lotterySessions)
+		.values({ id: session_id, user_id: ctx.from.id, prizes, active: true });
+
+	const inline_keyboard: InlineKeyboardButton[][] = Array.from({ length: 5 }, (_, row) =>
+		Array.from({ length: 5 }, (_, col) => ({
+			text: "❓",
+			callback_data: `pick_${session_id}_${row * 5 + col}`,
+			style: "primary",
+		}))
+	);
+
+	return ctx.reply(`Выбирай одну из ячеек, в половине увеличение, в половину проигрыш`, {
+		reply_markup: { inline_keyboard },
+	});
+});
+
+dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(.+)_(.+)$/, async ctx => {
+	const [, session_id, index_str] = ctx.match;
+	if (!session_id || !index_str) return ctx.answerCallbackQuery({ text: "Неверный запрос", show_alert: true });
+
+	const index = parseInt(index_str, 10);
+	const deactivated = await ctx.database.db
+		.update(lotterySessions)
+		.set({ active: false })
+		.where(
+			and(
+				eq(lotterySessions.id, session_id),
+				eq(lotterySessions.active, true),
+				eq(lotterySessions.user_id, ctx.from.id)
+			)
+		)
+		.returning({ prizes: lotterySessions.prizes, user_id: lotterySessions.user_id });
+
+	const session = deactivated[0];
+	if (!session) {
+		const existing = await ctx.database.db.query.lotterySessions.findFirst({
+			columns: { user_id: true },
+			where: (t, { eq }) => eq(t.id, session_id),
+		});
+
+		if (existing && existing.user_id !== ctx.from.id)
+			return ctx.answerCallbackQuery({ text: "Это не ваша сессия", show_alert: true });
+
+		return ctx.answerCallbackQuery({ text: "Сессия завершена", show_alert: true });
+	}
+
+	const inline_keyboard: InlineKeyboardButton[][] = Array.from({ length: 5 }, (_, row) =>
+		Array.from({ length: 5 }, (_, col) => {
+			const prize = session.prizes[row * 5 + col]!;
+
+			return {
+				text: prize === "mine" ? "💣" : "💰",
+				callback_data: `ignore`,
+				style: index === row * 5 + col ? "success" : "danger",
+				icon_custom_emoji_id: (index === row * 5 + col && prize !== "mine" ) ? "5325547803936572038" : undefined,
+			} as InlineKeyboardButton.CallbackButton;
+		})
+	);
+
+	const prize: PRIZES = session.prizes[index]! as PRIZES;
+	const amount = Number(session.prizes.find(val => val !== "mine"));
+
+	const isWin = prize !== "mine";
+	const diff = isWin ? amount : -amount;
+
+	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+
+	await ctx.database.dicks.addHistory(ctx.from, size, diff, "dice");
+	await ctx.database.dicks.update(ctx.from, { size: size + diff });
+
+	if (prize === "mine")
+		return ctx.editMessageText(
+			`Вы выбрали ячейку с проигрышем. Вы потеряли ${amount} см. Ваш текущий размер pp: ${size + diff} см`,
+			{ reply_markup: { inline_keyboard } }
+		);
+
+	return ctx.editMessageText(
+		`Вы выбрали ячейку с выигрышем! Вы выиграли ${amount * 2} см. Ваш текущий размер pp: ${size + diff} см`,
+		{ reply_markup: { inline_keyboard } }
+	);
 });
