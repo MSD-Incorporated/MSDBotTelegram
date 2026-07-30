@@ -574,6 +574,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 
 	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
 	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
+	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
 
 	if (size < 0)
 		if (Number(amount) > 0 || size > Number(amount)) return ctx.reply(bold(`Ваш pp меньше чем вы можете отдать`));
