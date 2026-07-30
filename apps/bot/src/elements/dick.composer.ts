@@ -1,14 +1,14 @@
 import {
-    and,
-    count,
-    countDistinct,
-    desc,
-    dick_history,
-    eq,
-    gte,
-    inArray,
-    lotterySessions,
-    referrals,
+	and,
+	count,
+	countDistinct,
+	desc,
+	dick_history,
+	eq,
+	gte,
+	inArray,
+	lotterySessions,
+	referrals,
 } from "@msdbot/database";
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
