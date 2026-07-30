@@ -1,3 +1,5 @@
+import type { InlineKeyboardButton } from "grammy/types";
+
 import {
 	and,
 	count,
@@ -13,7 +15,6 @@ import {
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
 import { Composer } from "grammy";
-import type { InlineKeyboardButton } from "grammy/types";
 import { randomInt } from "node:crypto";
 
 import { dateFormatter, formatTime, isSubscriber, keyboardBuilder, normalizeName, type Context } from "../utils";

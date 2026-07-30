@@ -1,10 +1,12 @@
-import { eq } from "drizzle-orm";
 import type { User } from "typegram";
 
-import * as schema from "./drizzle";
+import { eq } from "drizzle-orm";
+
 import type { TUserInsert } from "./drizzle/types";
-import Database from "./index";
 import type { ColumnRelation, IncludeRelation, TSchema } from "./typings/types";
+
+import * as schema from "./drizzle";
+import Database from "./index";
 
 export type TelegramUser = Omit<User, "is_bot" | "language_code" | "added_to_attachment_menu">;
 export type UserParams<

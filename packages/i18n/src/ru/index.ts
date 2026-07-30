@@ -1,6 +1,7 @@
+import type { BaseTranslation } from "../i18n-types";
+
 import { BUN_URL, DEVELOPER, INFOMRATION_CHANNEL, MSDBOT_URL, NODEJS_URL } from "../constants";
 import { blockquote, bold, boldAndTextLink, code, premium_emoji } from "../formatters";
-import type { BaseTranslation } from "../i18n-types";
 
 const dick_history_types = {
 	dick: "Команда /dick",
