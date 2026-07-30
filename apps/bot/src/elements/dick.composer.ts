@@ -12,7 +12,8 @@ export const timeout: number = 6 * 60 * 60 * 1000;
 export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const TYPES: ("dick" | "dice" | "referral" | "transfer")[] = ["dick", "dice", "referral", "transfer"] as const;
-const PAGE_SIZE: number = 10;
+const HISTORY_PAGE_SZE: number = 15;
+const LEADERBOARD_PAGE_SIZE: number = 20;
 
 const getPhrase = (difference: number, t: TranslationFunctions) => {
 	if (difference < 0)
@@ -130,21 +131,21 @@ dickComposer
 			.from(dick_history)
 			.where(and(...conditions));
 
-		const totalPages = Math.ceil((totalCount?.value ?? 0) / PAGE_SIZE);
+		const totalPages = Math.ceil((totalCount?.value ?? 0) / HISTORY_PAGE_SZE);
 
 		const history = await ctx.database.db
 			.select()
 			.from(dick_history)
 			.where(and(...conditions))
 			.orderBy(desc(dick_history.created_at))
-			.limit(PAGE_SIZE)
-			.offset((page - 1) * PAGE_SIZE);
+			.limit(HISTORY_PAGE_SZE)
+			.offset((page - 1) * HISTORY_PAGE_SZE);
 
 		const text = history.length
 			? history
 					.map(({ size, difference, created_at, type }, index) => {
 						return ctx.t.dick_history_user({
-							rank: page * 10 - 10 + index + 1,
+							rank: page * HISTORY_PAGE_SZE - HISTORY_PAGE_SZE + index + 1,
 							date: created_at.getTime() / 1000,
 							difference,
 							type: ctx.t.dick_history_types[(type ?? "dick") as keyof typeof ctx.t.dick_history_types](),
@@ -305,16 +306,16 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/leaderb
 	if (allUsersCount === 0) return ctx.answerCallbackQuery(ctx.t.dick_leaderboard_empty());
 
 	const type = ctx.callbackQuery.data.includes("leaderboard_asc") ? "asc" : "desc";
-	const allUsers = await ctx.database.dicks.getLeaderboard({ limit: 10, offset: (page - 1) * 10, orderBy: type });
+	const allUsers = await ctx.database.dicks.getLeaderboard({ limit: LEADERBOARD_PAGE_SIZE, offset: (page - 1) * LEADERBOARD_PAGE_SIZE, orderBy: type });
 
-	const pagesLength = Math.ceil(allUsersCount / 10);
+	const pagesLength = Math.ceil(allUsersCount / LEADERBOARD_PAGE_SIZE);
 	const text = allUsers.map(async ({ user_id, size }, index) => {
 		const user = (await ctx.database.users.resolve(
 			{ id: user_id },
 			{ columns: { first_name: true, last_name: true } }
 		))!;
 
-		return ctx.t.dick_leaderboard_user({ rank: page * 10 - 10 + index + 1, name: normalizeName(user), size });
+		return ctx.t.dick_leaderboard_user({ rank: page * LEADERBOARD_PAGE_SIZE - LEADERBOARD_PAGE_SIZE + index + 1, name: normalizeName(user), size });
 	});
 
 	const keyboard = keyboardBuilder(ctx, "leaderboard", page, type, pagesLength);
