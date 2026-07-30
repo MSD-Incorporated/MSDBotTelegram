@@ -582,7 +582,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 		if (size < Number(amount) || Number(amount) < 0) return ctx.reply(bold(`Ваш pp больше чем вы можете отдать`));
 
 	const session_id = crypto.randomUUID();
-	const prizes = ([] as ("mine" | `${string}`)[])
+	const prizes = [] as ("mine" | `${string}`)[];
 
 	for (let i = 0; i < 25; i++) prizes.push("mine");
 	for (let i = 0; i < 5; i++) prizes.push(amount);
@@ -647,7 +647,7 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(
 				text: prize === "mine" ? "💣" : "💰",
 				callback_data: `ignore`,
 				style: index === row * 5 + col ? "success" : "danger",
-				icon_custom_emoji_id: (index === row * 5 + col && prize !== "mine" ) ? "5325547803936572038" : undefined,
+				icon_custom_emoji_id: index === row * 5 + col && prize !== "mine" ? "5325547803936572038" : undefined,
 			} as InlineKeyboardButton.CallbackButton;
 		})
 	);
