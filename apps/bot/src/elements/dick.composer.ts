@@ -1,14 +1,14 @@
 import {
-	and,
-	count,
-	countDistinct,
-	desc,
-	dick_history,
-	eq,
-	gte,
-	inArray,
-	lotterySessions,
-	referrals,
+    and,
+    count,
+    countDistinct,
+    desc,
+    dick_history,
+    eq,
+    gte,
+    inArray,
+    lotterySessions,
+    referrals,
 } from "@msdbot/database";
 import { bold, boldAndTextLink, code, premium_emoji, type TranslationFunctions } from "@msdbot/i18n";
 import { sleep } from "bun";
@@ -24,7 +24,7 @@ export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const TYPES: ("dick" | "dice" | "referral" | "transfer")[] = ["dick", "dice", "referral", "transfer"] as const;
 const HISTORY_PAGE_SZE: number = 15;
-const LEADERBOARD_PAGE_SIZE: number = 20;
+const LEADERBOARD_PAGE_SIZE: number = 50;
 
 type PRIZES = "mine" | string;
 
