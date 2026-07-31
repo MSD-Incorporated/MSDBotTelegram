@@ -40,7 +40,10 @@ const getPhrase = (difference: number, t: TranslationFunctions) => {
 			text: t.dick_increased({ difference: difference.toString() }),
 			emoji: premium_emoji("📈", "5244837092042750681"),
 		};
-	return { text: t.dick_not_changed(), emoji: premium_emoji("😔", "5370781385885751708") };
+	return {
+		text: t.dick_not_changed(),
+		emoji: premium_emoji("😔", "5370781385885751708"),
+	};
 };
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock"], async ctx => {
@@ -94,7 +97,10 @@ dickComposer.chatType(["group", "supergroup", "private"]).command(["dick", "cock
 	const difference = randomInt(min, max + 1);
 	const newSize = size + difference;
 
-	await ctx.database.dicks.update(ctx.from, { size: newSize, timestamp: new Date() });
+	await ctx.database.dicks.update(ctx.from, {
+		size: newSize,
+		timestamp: new Date(),
+	});
 	await ctx.database.dicks.addHistory(ctx.from, size, difference);
 
 	const { text: phrase, emoji } = getPhrase(difference, ctx.t);
@@ -180,7 +186,10 @@ dickComposer
 					callback_data: `dick_history_${userId}_${page - 1}_${mask}`,
 				});
 
-			paginationRow.push({ text: `${page}/${totalPages}`, callback_data: `dick_history_${userId}_${page}_` });
+			paginationRow.push({
+				text: `${page}/${totalPages}`,
+				callback_data: `dick_history_${userId}_${page}_`,
+			});
 
 			if (page < totalPages)
 				paginationRow.push({
@@ -218,31 +227,38 @@ dickComposer
 			]
 		);
 
-		return ctx.editMessageText(text, { reply_markup: { inline_keyboard: buttons } });
+		return ctx.editMessageText(text, {
+			reply_markup: { inline_keyboard: buttons },
+		});
 	});
 
 dickComposer.chatType(["group", "supergroup", "private"]).command(["lb", "leaderboard"], async ctx => {
 	const { dick_leaderboard_choose_text, dick_leaderboard_ascending_button, dick_leaderboard_descending_button } =
 		ctx.t;
 
-	return ctx.reply(dick_leaderboard_choose_text({ emoji: premium_emoji("📊", "5231200819986047254") }), {
-		reply_markup: {
-			inline_keyboard: [
-				[
-					{
-						text: dick_leaderboard_ascending_button(),
-						callback_data: "leaderboard_asc_1",
-						icon_custom_emoji_id: "5244837092042750681",
-					},
-					{
-						text: dick_leaderboard_descending_button(),
-						callback_data: "leaderboard_desc_1",
-						icon_custom_emoji_id: "5246762912428603768",
-					},
+	return ctx.reply(
+		dick_leaderboard_choose_text({
+			emoji: premium_emoji("📊", "5231200819986047254"),
+		}),
+		{
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{
+							text: dick_leaderboard_ascending_button(),
+							callback_data: "leaderboard_asc_1",
+							icon_custom_emoji_id: "5244837092042750681",
+						},
+						{
+							text: dick_leaderboard_descending_button(),
+							callback_data: "leaderboard_desc_1",
+							icon_custom_emoji_id: "5246762912428603768",
+						},
+					],
 				],
-			],
-		},
-	});
+			},
+		}
+	);
 });
 
 dickComposer
@@ -410,7 +426,9 @@ dickComposer
 								{
 									text: "Скопировать ссылку",
 									icon_custom_emoji_id: "5271604874419647061",
-									copy_text: { text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}` },
+									copy_text: {
+										text: `https://t.me/${ctx.me.username}?start=ref_${ctx.from.id}`,
+									},
 								},
 							],
 						],
@@ -502,7 +520,10 @@ dickComposer
 		await ctx.database.dicks.addHistory(ctx.from, size, type == "add" ? value : Number(`-${value}`), "referral");
 
 		return ctx.editMessageText(
-			ctx.t.dick_referral_success({ type: type == "add" ? "увеличили" : "уменьшили", value })
+			ctx.t.dick_referral_success({
+				type: type == "add" ? "увеличили" : "уменьшили",
+				value,
+			})
 		);
 	});
 
@@ -512,7 +533,10 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 	if (userToSendMention === undefined || amount === undefined || isNaN(Number(amount)))
 		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/send <пользователь> <сумма>`));
 
-	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	const { size } = await ctx.database.dicks.resolve(ctx.from, {
+		createIfNotExist: true,
+		columns: { size: true },
+	});
 	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
 
 	const userToSend = (
@@ -541,9 +565,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 			return ctx.reply("Вы не можете передать отрицательный размер pp пользователю с положительным pp");
 
 		await ctx.database.dicks.addHistory(ctx.from, size, Number(amount), "transfer");
-		await ctx.database.dicks.update(ctx.from, { size: size + -1 * Number(amount) });
+		await ctx.database.dicks.update(ctx.from, {
+			size: size + -1 * Number(amount),
+		});
 		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
-		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size - -1 * Number(amount) });
+		await ctx.database.dicks.update(userToSend, {
+			size: userToSendDick.size - -1 * Number(amount),
+		});
 
 		return ctx.reply(
 			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
@@ -556,9 +584,13 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("send", async 
 			return ctx.reply("Вы не можете передать положительный размер pp пользователю с отрицательным pp");
 
 		await ctx.database.dicks.addHistory(ctx.from, size, -1 * Number(amount), "transfer");
-		await ctx.database.dicks.update(ctx.from, { size: size - Number(amount) });
+		await ctx.database.dicks.update(ctx.from, {
+			size: size - Number(amount),
+		});
 		await ctx.database.dicks.addHistory(userToSend, userToSendDick.size, Number(amount), "transfer");
-		await ctx.database.dicks.update(userToSend, { size: userToSendDick.size + Number(amount) });
+		await ctx.database.dicks.update(userToSend, {
+			size: userToSendDick.size + Number(amount),
+		});
 
 		return ctx.reply(
 			`Вы успешно передали ${amount} см пользователю ${boldAndTextLink(normalizeName(userToSend), `tg://openmessage?user_id=${userToSend.id}`)}`
@@ -573,7 +605,10 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 	if (!amount || amount === undefined || isNaN(Number(amount)))
 		return ctx.reply(bold(`Неправильный ввод чисел, должно быть:\n`) + code(`/lottery <сумма>`));
 
-	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	const { size } = await ctx.database.dicks.resolve(ctx.from, {
+		createIfNotExist: true,
+		columns: { size: true },
+	});
 	if (size === 0) return ctx.reply(bold("🥲 У вас нулевой размер pp"));
 	if (Number(amount) === 0) return ctx.reply("Рофлишь?");
 
@@ -613,7 +648,11 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 
 dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(.+)_(.+)$/, async ctx => {
 	const [, session_id, index_str] = ctx.match;
-	if (!session_id || !index_str) return ctx.answerCallbackQuery({ text: "Неверный запрос", show_alert: true });
+	if (!session_id || !index_str)
+		return ctx.answerCallbackQuery({
+			text: "Неверный запрос",
+			show_alert: true,
+		});
 
 	const index = parseInt(index_str, 10);
 	const deactivated = await ctx.database.db
@@ -626,7 +665,10 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(
 				eq(lotterySessions.user_id, ctx.from.id)
 			)
 		)
-		.returning({ prizes: lotterySessions.prizes, user_id: lotterySessions.user_id });
+		.returning({
+			prizes: lotterySessions.prizes,
+			user_id: lotterySessions.user_id,
+		});
 
 	const session = deactivated[0];
 	if (!session) {
@@ -636,9 +678,15 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(
 		});
 
 		if (existing && existing.user_id !== ctx.from.id)
-			return ctx.answerCallbackQuery({ text: "Это не ваша сессия", show_alert: true });
+			return ctx.answerCallbackQuery({
+				text: "Это не ваша сессия",
+				show_alert: true,
+			});
 
-		return ctx.answerCallbackQuery({ text: "Сессия завершена", show_alert: true });
+		return ctx.answerCallbackQuery({
+			text: "Сессия завершена",
+			show_alert: true,
+		});
 	}
 
 	const inline_keyboard: InlineKeyboardButton[][] = Array.from({ length: 5 }, (_, row) =>
@@ -658,21 +706,37 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(
 	const amount = Number(session.prizes.find(val => val !== "mine"));
 
 	const isWin = prize !== "mine";
-	const diff = isWin ? amount : -amount;
 
-	const { size } = await ctx.database.dicks.resolve(ctx.from, { createIfNotExist: true, columns: { size: true } });
+	const { size } = await ctx.database.dicks.resolve(ctx.from, {
+		createIfNotExist: true,
+		columns: { size: true },
+	});
+
+	if (size === 0)
+		return ctx.answerCallbackQuery({
+			text: "🥲 У вас нулевой размер pp, играть нельзя",
+			show_alert: true,
+		});
+
+	let diff = isWin ? amount : -amount;
+	if (!isWin) {
+		if (size > 0) diff = Math.max(diff, -size);
+		else if (size < 0) diff = Math.min(diff, -size);
+	}
+
+	const newSize = size + diff;
 
 	await ctx.database.dicks.addHistory(ctx.from, size, diff, "dice");
-	await ctx.database.dicks.update(ctx.from, { size: size + diff });
+	await ctx.database.dicks.update(ctx.from, { size: newSize });
 
 	if (prize === "mine")
 		return ctx.editMessageText(
-			`Вы выбрали ячейку с проигрышем. Вы потеряли ${amount} см. Ваш текущий размер pp: ${size + diff} см`,
+			`Вы выбрали ячейку с проигрышем. Вы потеряли ${Math.abs(diff)} см. Ваш текущий размер pp: ${newSize} см`,
 			{ reply_markup: { inline_keyboard } }
 		);
 
 	return ctx.editMessageText(
-		`Вы выбрали ячейку с выигрышем! Вы выиграли ${amount * 2} см. Ваш текущий размер pp: ${size + diff} см`,
+		`Вы выбрали ячейку с выигрышем! Вы выиграли ${amount * 2} см. Ваш текущий размер pp: ${newSize} см`,
 		{ reply_markup: { inline_keyboard } }
 	);
 });
