@@ -713,9 +713,8 @@ dickComposer.chatType(["group", "supergroup", "private"]).callbackQuery(/^pick_(
 	});
 
 	if (size === 0)
-		return ctx.answerCallbackQuery({
-			text: "🥲 У вас нулевой размер pp, играть нельзя",
-			show_alert: true,
+		return ctx.editMessageText(bold("🥲 У вас нулевой размер pp, играть нельзя"), {
+			reply_markup: { inline_keyboard },
 		});
 
 	let diff = isWin ? amount : -amount;
