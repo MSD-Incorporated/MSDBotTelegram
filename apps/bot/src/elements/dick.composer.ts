@@ -621,8 +621,8 @@ dickComposer.chatType(["group", "supergroup", "private"]).command("lottery", asy
 	const session_id = crypto.randomUUID();
 	const prizes = [] as ("mine" | `${string}`)[];
 
-	for (let i = 0; i < 25; i++) prizes.push("mine");
-	for (let i = 0; i < 5; i++) prizes.push(amount);
+	for (let i = 0; i < 21; i++) prizes.push("mine");
+	for (let i = 0; i < 4; i++) prizes.push(amount);
 
 	for (let i = prizes.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
