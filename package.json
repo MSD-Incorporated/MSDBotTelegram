@@ -16,7 +16,7 @@
 	],
 	"scripts": {
 		"build:bot": "bun build --entrypoint ./apps/bot/src/**.ts --compile --outfile dist/msdbot_telegram --target=bun-linux-x64",
-		"build:web": "bun build ./apps/web/src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+		"build:web": "bun build ./apps/web/src/index.html --outdir=./apps/web/dist --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
 		"watch:bot": "bun --watch run ./apps/bot/src/index.ts",
 		"watch:web": "bun --hot run ./apps/web/src/index.ts",
 		"format": "oxfmt --write '{.github,apps,packages}/**/*.{js,ts,json,md,yml,yaml,css,html}'"
