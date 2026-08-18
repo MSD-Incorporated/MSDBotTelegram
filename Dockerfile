@@ -18,7 +18,7 @@ COPY packages/i18n/package.json ./packages/i18n/package.json
 COPY packages/tsconfig/package.json ./packages/tsconfig/package.json
 COPY apps/bot/package.json ./apps/bot/package.json
 
-RUN --mount=type=cache,target=/root/.cache bun install --production
+RUN --mount=type=cache,target=/root/.bun/install/cache bun install --production
 
 COPY ./packages ./packages
 COPY ./apps/bot ./apps/bot
