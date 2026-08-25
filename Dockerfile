@@ -1,5 +1,5 @@
-ARG BUN_VERSION="latest"
-ARG ALPINE_VERSION="latest"
+ARG BUN_VERSION="1.3.14"
+ARG ALPINE_VERSION="alpine-3.22"
 
 # Build app
 FROM oven/bun:${BUN_VERSION} AS build

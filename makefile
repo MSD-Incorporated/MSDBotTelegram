@@ -57,6 +57,11 @@ docker_database:
 	--health-start-period=10s \
 	--memory="512m" \
 	--cpus="1.0" \
+	--read-only \
+	--tmpfs /var/run/postgresql:mode=1777,size=32m \
+	--tmpfs /tmp:mode=1777,size=128m \
+	--security-opt no-new-privileges:true \
+	--cap-drop ALL \
 	-itd \
 	-e POSTGRES_USER=$(POSTGRES_USER) \
 	-e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
