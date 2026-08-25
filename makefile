@@ -6,6 +6,7 @@ GIT_COMMIT = $(GIT_SHA_FETCH)
 
 IMAGE_AUTHOR = mased
 NETWORK = msdbot_network
+DB_NETWORK = db_internal
 DATABASE_VOLUME = database
 TELEGRAM_API_VOLUME = telegram_api_data
 NAME = msdbot_telegram
@@ -20,6 +21,7 @@ env_down:
 
 docker_network:
 	-docker network create $(NETWORK)
+	-docker network create --internal $(DB_NETWORK)
 
 docker_build_bot:
 	docker build --build-arg GIT_COMMIT=$(GIT_COMMIT) -t $(IMAGE_AUTHOR)/$(NAME) .
@@ -47,7 +49,7 @@ watchtower:
 docker_database:
 	docker run \
 	--name database \
-	--network $(NETWORK) \
+	--network $(DB_NETWORK) \
 	--health-cmd="pg_isready -U $(POSTGRES_USER) -d postgres" \
 	--health-interval=30s \
 	--health-timeout=10s \
@@ -120,3 +122,4 @@ docker_bot:
 	--cpus="1" \
 	--restart=always \
 	-d $(IMAGE_AUTHOR)/$(NAME)
+	docker network connect $(DB_NETWORK) $(NAME)

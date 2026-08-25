@@ -11,7 +11,7 @@ services:
         volumes:
             - database:/var/lib/postgresql/data
         networks:
-            - msdbot_network
+            - db_internal
         deploy:
             resources:
                 limits:
@@ -107,6 +107,7 @@ services:
         restart: always
         networks:
             - msdbot_network
+            - db_internal
         depends_on:
             database:
                 condition: service_healthy
@@ -137,6 +138,10 @@ networks:
     msdbot_network:
         name: msdbot_network
         driver: bridge
+    db_internal:
+        name: db_internal
+        driver: bridge
+        internal: true
 
 volumes:
     database:
