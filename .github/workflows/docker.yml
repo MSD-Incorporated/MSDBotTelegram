@@ -39,7 +39,7 @@ jobs:
 
             - name: 📦 Cache RUN --mount=type=cache dirs
               id: cache-mounts
-              uses: actions/cache@v4
+              uses: actions/cache@v6
               with:
                   path: cache-mounts
                   key: cache-mounts-${{ hashFiles('Dockerfile', 'bun.lock') }}
