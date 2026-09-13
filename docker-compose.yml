@@ -94,6 +94,8 @@ services:
             - SAUCENAO_TOKEN=${SAUCENAO_TOKEN}
             - GELBOORU_USER_ID=${GELBOORU_USER_ID}
             - GELBOORU_API_KEY=${GELBOORU_API_KEY}
+            - DANBOORU_LOGIN=${DANBOORU_LOGIN}
+            - DANBOORU_API_KEY=${DANBOORU_API_KEY}
 
             - NODE_ENV=prod
             - TZ=${TZ-Europe/Moscow}

@@ -29,18 +29,33 @@ const urlParser = (urls: string[]) => {
 	);
 };
 
+const tagsFromList = (tagList: string[]): string[] => {
+	const filtered: string[] = [];
+	if (tagList.includes("pussy")) filtered.push("#Pussy");
+	if (tagList.includes("breasts") || tagList.includes("ass")) filtered.push("#Boobs");
+	if (tagList.includes("ass")) filtered.push("#Ass");
+	return [...new Set(filtered)];
+};
+
 const getGelbooruTags = async (postId: string): Promise<string[]> => {
 	try {
 		const url = `https://gelbooru.com/index.php?page=dapi&q=index&json=1&s=post&id=${postId}&api_key=${env.GELBOORU_API_KEY}&user_id=${env.GELBOORU_USER_ID}`;
 		const res = await fetch(url);
 		const data = (await res.json()) as { post: Array<{ tags: string }> };
 		const tagList = data.post[0]?.tags.split(" ") || [];
+		return tagsFromList(tagList);
+	} catch {
+		return [];
+	}
+};
 
-		const filtered: string[] = [];
-		if (tagList.includes("pussy")) filtered.push("#Pussy");
-		if (tagList.includes("breasts") || tagList.includes("ass")) filtered.push("#Boobs");
-		if (tagList.includes("ass")) filtered.push("#Ass");
-		return [...new Set(filtered)];
+const getDanbooruTags = async (postId: string): Promise<string[]> => {
+	try {
+		const url = `https://danbooru.donmai.us/posts/${postId}.json?login=${env.DANBOORU_LOGIN}&api_key=${env.DANBOORU_API_KEY}`;
+		const res = await fetch(url);
+		const data = (await res.json()) as { tag_string?: string };
+		const tagList = data.tag_string?.split(" ") || [];
+		return tagsFromList(tagList);
 	} catch {
 		return [];
 	}
@@ -61,13 +76,14 @@ const search_full = async (ctx: Context, file_id?: string) => {
 	if (!res?.raw?.data?.ext_urls?.length) return { text: ["Не удалось найти!"] };
 
 	// @ts-ignore
-	const { author, creator, characters, material, gelbooru_id } = res.raw.data!;
+	const { author, creator, characters, material, gelbooru_id, danbooru_id } = res.raw.data!;
 	const urls = [...(res.raw.data.ext_urls || []), res.raw.data.source].filter(Boolean) as string[];
 	const parsedUrls = urlParser(urls);
 
 	if (parsedUrls.length === 0) return { text: ["Не удалось найти!"] };
 
-	const tags = gelbooru_id ? await getGelbooruTags(gelbooru_id) : [];
+	let tags = gelbooru_id ? await getGelbooruTags(gelbooru_id) : [];
+	if (tags.length === 0 && danbooru_id) tags = await getDanbooruTags(danbooru_id);
 
 	return {
 		text: [
