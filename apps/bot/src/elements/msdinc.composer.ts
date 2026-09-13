@@ -167,8 +167,7 @@ MSDIncComposer.chatType("supergroup")
 			premium_emoji("🏷", "5854776233950188167") + " " + bold(`Tags: `) + data.tags,
 		];
 
-		if (source)
-			text.push(premium_emoji("🌐", "5879585266426973039") + " " + bold(`Source: `) + source);
+		if (source) text.push(premium_emoji("🌐", "5879585266426973039") + " " + bold(`Source: `) + source);
 
 		text.push(
 			"\n" +
