@@ -29,11 +29,23 @@ const urlParser = (urls: string[]) => {
 	);
 };
 
+const tagCategories: [string, string[]][] = [
+	["#Pussy", ["pussy"]],
+	["#Boobs", ["breasts", "boobs"]],
+	["#Ass", ["ass"]],
+	["#Panties", ["panties"]],
+	["#Thighs", ["thighhighs", "thighs"]],
+	["#Anal", ["anal"]],
+	["#Skirt", ["skirt"]],
+	["#Censored", ["censored"]],
+	["#Yuri", ["yuri", "lesbian"]],
+	["#BDSM", ["bondage", "bdsm"]],
+];
+
 const tagsFromList = (tagList: string[]): string[] => {
-	const filtered: string[] = [];
-	if (tagList.includes("pussy")) filtered.push("#Pussy");
-	if (tagList.includes("breasts") || tagList.includes("ass")) filtered.push("#Boobs");
-	if (tagList.includes("ass")) filtered.push("#Ass");
+	const filtered = tagCategories
+		.filter(([, tags]) => tags.some(tag => tagList.includes(tag)))
+		.map(([label]) => label);
 	return [...new Set(filtered)];
 };
 
@@ -52,7 +64,7 @@ const getGelbooruTags = async (postId: string): Promise<string[]> => {
 const getDanbooruTags = async (postId: string): Promise<string[]> => {
 	try {
 		const url = `https://danbooru.donmai.us/posts/${postId}.json?login=${env.DANBOORU_LOGIN}&api_key=${env.DANBOORU_API_KEY}`;
-		const res = await fetch(url);
+		const res = await fetch(url, { headers: { "User-Agent": "curl/8.7.1" } });
 		const data = (await res.json()) as { tag_string?: string };
 		const tagList = data.tag_string?.split(" ") || [];
 		return tagsFromList(tagList);
@@ -82,8 +94,10 @@ const search_full = async (ctx: Context, file_id?: string) => {
 
 	if (parsedUrls.length === 0) return { text: ["Не удалось найти!"] };
 
+	const danbooruId = danbooru_id ?? urls.find(u => u.includes("danbooru.donmai.us"))?.match(/\/posts\/(\d+)/)?.[1];
+
 	let tags = gelbooru_id ? await getGelbooruTags(gelbooru_id) : [];
-	if (tags.length === 0 && danbooru_id) tags = await getDanbooruTags(danbooru_id);
+	if (tags.length === 0 && danbooruId) tags = await getDanbooruTags(danbooruId);
 
 	return {
 		text: [
