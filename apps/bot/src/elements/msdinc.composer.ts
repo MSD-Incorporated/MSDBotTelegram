@@ -114,22 +114,18 @@ const search_full = async (ctx: Context, file_id?: string) => {
 	};
 };
 
-const formatTag = (input: string | null | undefined, removePatreon = false): string => {
-	if (!input) return "";
-	let text = input.replace(/ \((.*)\)/, "").toLowerCase();
-
-	if (removePatreon) {
-		text = text
-			.split(", ")
-			.filter(val => val !== "patreon")
-			.join(", ");
-	}
-
-	const firstWord = text.split(", ")[0] || "";
-	if (!firstWord) return "";
-
-	const formatted = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+const toTag = (name: string): string => {
+	const formatted = name.charAt(0).toUpperCase() + name.slice(1);
 	return "#" + formatted.replace(/([ _-][a-z])/g, ltr => ltr.toUpperCase()).replace(/[^a-zA-Z0-9#]/g, "");
+};
+
+const formatTags = (input: string | null | undefined, removePatreon = false): string[] => {
+	if (!input) return [];
+
+	let names = input.split(", ").map(name => name.replace(/ \(.*\)$/, "").toLowerCase());
+	if (removePatreon) names = names.filter(name => name !== "patreon");
+
+	return names.filter(Boolean).map(toTag);
 };
 
 export const MSDIncComposer = new Composer<Context>();
@@ -160,17 +156,18 @@ MSDIncComposer.chatType("supergroup")
 			reply_parameters: undefined,
 		});
 
-		const authorTag = data.author ? formatTag(data.author) : "#Unknown";
-		const sourceMaterial = formatTag(data.material, true);
-		const sourceCharacter = formatTag(data.characters);
-		const source = `${sourceMaterial} ${sourceCharacter}`.trim();
+		const authorTag = data.author ? toTag(data.author.replace(/ \(.*\)$/, "").toLowerCase()) : "#Unknown";
+		const sourceTags = [...new Set([...formatTags(data.material, true), ...formatTags(data.characters)])].filter(
+			tag => tag !== "#Original"
+		);
+		const source = sourceTags.join(" ");
 
 		const text = [
 			premium_emoji("👤", "5879770735999717115") + " " + bold(`Author: `) + authorTag,
 			premium_emoji("🏷", "5854776233950188167") + " " + bold(`Tags: `) + data.tags,
 		];
 
-		if (source && source !== "#Original")
+		if (source)
 			text.push(premium_emoji("🌐", "5879585266426973039") + " " + bold(`Source: `) + source);
 
 		text.push(
