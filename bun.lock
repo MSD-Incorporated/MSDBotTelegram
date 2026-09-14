@@ -19,7 +19,7 @@
         "backupx": "^0.1.2",
         "grammy": "^1.44.0",
         "node-cron": "^4.2.1",
-        "sagiri": "^4.3.0",
+        "sagiri": "^5.0.0",
       },
       "devDependencies": {
         "@msdbot/tsconfig": "workspace:^",
@@ -331,7 +331,7 @@
 
     "resolve-pkg-maps": ["resolve-pkg-maps@1.0.0", "", {}, "sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw=="],
 
-    "sagiri": ["sagiri@4.3.0", "", { "dependencies": { "form-data": "^4.0.0" }, "optionalDependencies": { "node-fetch": "^2.6.7" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-0aBnbm/Bjlva+pCQq5r8bDN6q3FmcWG4JUOjPsRfM1DZ/1FQD1tBLn+8Imvio4rPqe+9/KkPEKQQw8EoJ5g6LQ=="],
+    "sagiri": ["sagiri@5.0.0", "", { "dependencies": { "form-data": "^4.0.0" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-djGGMKfRaFanaBLIeuMOyMO3ttQJ7gGm9q+BdgxGr3CrkKr7lS8XG4SOvqgyuHBL57OBEMPAdadd+5RagH1HcQ=="],
 
     "source-map": ["source-map@0.6.1", "", {}, "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="],
 
