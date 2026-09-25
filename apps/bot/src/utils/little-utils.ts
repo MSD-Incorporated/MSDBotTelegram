@@ -5,13 +5,19 @@ import type { Context } from "./context";
 export const onStart = ({ id, username, first_name }: UserFromGetMe) =>
 	console.log(`${first_name} | @${username} [${id}] started!`);
 
+const stripUnsupportedChars = (name: string) => name.replace(/[\p{Cc}\p{Cf}]/gu, "").trim();
+
 export const normalizeName = ({
 	first_name,
 	last_name,
 }: {
 	first_name: string;
 	last_name?: string | undefined | null;
-}) => (last_name ? `${first_name} ${last_name}` : first_name);
+}) => {
+	const first = stripUnsupportedChars(first_name);
+	const last = last_name ? stripUnsupportedChars(last_name) : "";
+	return last ? `${first} ${last}` : first || "Пользователь";
+};
 
 /**
  * Formats dates in the format "DD.MM.YYYY HH:mm:ss" and with the time zone "+00:00".
