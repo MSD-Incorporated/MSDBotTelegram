@@ -5,7 +5,15 @@ import type { Context } from "./context";
 export const onStart = ({ id, username, first_name }: UserFromGetMe) =>
 	console.log(`${first_name} | @${username} [${id}] started!`);
 
-const stripUnsupportedChars = (name: string) => name.replace(/[\p{Cc}\p{Cf}]/gu, "").trim();
+// Strips control/format chars and default-ignorable marks (e.g. Khmer combining marks)
+// that spammers use to make a name render as blank.
+const sanitizeName = (name: string | null | undefined) => {
+	if (!name) return "";
+
+	const stripped = name.replace(/[\p{Cc}\p{Cf}\p{Default_Ignorable_Code_Point}]/gu, "").trim();
+
+	return /[\p{L}\p{N}\p{P}\p{S}]/u.test(stripped) ? stripped : "";
+};
 
 export const normalizeName = ({
 	first_name,
@@ -14,9 +22,9 @@ export const normalizeName = ({
 	first_name: string;
 	last_name?: string | undefined | null;
 }) => {
-	const first = stripUnsupportedChars(first_name);
-	const last = last_name ? stripUnsupportedChars(last_name) : "";
-	return last ? `${first} ${last}` : first || "Пользователь";
+	const first = sanitizeName(first_name);
+	const last = sanitizeName(last_name);
+	return first && last ? `${first} ${last}` : first || "Пользователь";
 };
 
 /**
