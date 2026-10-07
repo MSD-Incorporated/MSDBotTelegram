@@ -25,7 +25,7 @@ export const referral_timeout: number = 24 * 60 * 60 * 1000;
 
 const TYPES: ("dick" | "dice" | "referral" | "transfer")[] = ["dick", "dice", "referral", "transfer"] as const;
 const HISTORY_PAGE_SZE: number = 15;
-const LEADERBOARD_PAGE_SIZE: number = 50;
+const LEADERBOARD_PAGE_SIZE: number = 25;
 
 type PRIZES = "mine" | string;
 
