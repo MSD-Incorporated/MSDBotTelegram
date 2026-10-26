@@ -17,7 +17,7 @@
 	"dependencies": {
 		"@msdbot/env": "workspace:^",
 		"drizzle-orm": "^0.45.2",
-		"pg": "^8.16.3"
+		"pg": "^8.23.1"
 	},
 	"devDependencies": {
 		"@msdbot/tsconfig": "workspace:^",
